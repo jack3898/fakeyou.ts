@@ -9,7 +9,7 @@ const writeFile = promisify(fs.writeFile);
 export default class TtsAudioFile {
 	readonly data: TtsRequestStatusDoneResponse;
 	readonly url: URL;
-	private buffer?: Buffer;
+	#buffer?: Buffer;
 
 	constructor(data: TtsRequestStatusDoneResponse) {
 		this.data = data;
@@ -17,8 +17,8 @@ export default class TtsAudioFile {
 	}
 
 	async toBuffer(): Promise<Buffer | null> {
-		if (this.buffer) {
-			return this.buffer;
+		if (this.#buffer) {
+			return this.#buffer;
 		}
 
 		const headers = new Headers();
@@ -36,22 +36,22 @@ export default class TtsAudioFile {
 
 		const arrayBuffer = await result.blob().then((b) => b?.arrayBuffer());
 
-		this.buffer = Buffer.from(arrayBuffer);
+		this.#buffer = Buffer.from(arrayBuffer);
 
-		return this.buffer;
+		return this.#buffer;
 	}
 
 	async toBase64(): Promise<string | null> {
-		const arrayBuffer = await this.toBuffer();
+		const buffer = await this.toBuffer();
 
-		return arrayBuffer ? Buffer.from(arrayBuffer).toString('base64') : null;
+		return buffer ? Buffer.from(buffer).toString('base64') : null;
 	}
 
 	async toDisk(location: `${string}.wav`): Promise<void> {
-		const arrayBuffer = await this.toBuffer();
+		const buffer = await this.toBuffer();
 
-		if (arrayBuffer) {
-			return writeFile(path.resolve(location), Buffer.from(arrayBuffer));
+		if (buffer) {
+			return writeFile(path.resolve(location), buffer);
 		}
 	}
 }

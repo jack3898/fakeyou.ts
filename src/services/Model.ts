@@ -7,57 +7,50 @@ import {
 	type TtsModel,
 	type TtsRequestStatusDoneResponse
 } from '../util/validation.js';
+import Client from './Client.js';
 import TtsAudioFile from './TtsAudioFile.js';
 
 export default class Model {
 	readonly data: TtsModel;
-	private static cache?: Map<string, Model>;
+	static #cache?: Map<string, Model>;
 
 	constructor(data: TtsModel) {
 		this.data = data;
 	}
 
 	static async fetchModels() {
-		if (this.cache) {
-			return this.cache;
+		if (this.#cache) {
+			return this.#cache;
 		}
 
-		const headers = new Headers();
-
-		headers.append('content-type', 'application/json');
-
-		const response = await fetch(`${apiUrl}/tts/list`, { method: 'GET', headers });
+		const response = await Client.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
 		const json = ttsListVoiceResponse.parse(await response.json());
 
-		this.cache = new Map();
+		this.#cache = new Map();
 
 		for (const modelData of json.models) {
-			this.cache.set(modelData.model_token, new Model(modelData));
+			this.#cache.set(modelData.model_token, new Model(modelData));
 		}
 
-		return this.cache;
+		return this.#cache;
 	}
 
 	/**
-	 * This is the fastest method to find the model you need.
+	 * This is the fastest method to find the model you need, the token is unique to each model and
+	 * can be found in the URL of the model's more details page on fakeyou.com.
 	 */
 	static async fetchModelByToken(token: string): Promise<Model | undefined> {
 		return (await this.fetchModels()).get(token);
 	}
 
 	private async fetchInference(text: string) {
-		const headers = new Headers();
-
-		headers.append('content-type', 'application/json');
-
-		const response = await fetch(`${apiUrl}/tts/inference`, {
+		const response = await Client.fetch(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.data.model_token,
 				uuid_idempotency_token: crypto.randomUUID(),
 				inference_text: text
-			}),
-			headers
+			})
 		});
 
 		return ttsInferenceResponse.parse(await response.json());
@@ -65,7 +58,7 @@ export default class Model {
 
 	private getAudioUrl(inferenceJobToken: string): Promise<TtsRequestStatusDoneResponse | null> {
 		return poll(async () => {
-			const response = await fetch(`${apiUrl}/tts/job/${inferenceJobToken}`, { method: 'GET' });
+			const response = await Client.fetch(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
 			const result = ttsRequestStatusResponse.parse(await response.json());
 
 			switch (result.state.status) {
