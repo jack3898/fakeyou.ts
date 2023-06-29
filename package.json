@@ -1,6 +1,6 @@
 {
     "name": "fakeyou.ts",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "FakeYou API made easy, with ESM and TypeScript support!",
     "type": "module",
     "main": "dist/index.js",
@@ -10,11 +10,15 @@
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts"
     },
-    "keywords": ["fakeyou", "api", "tts"],
+    "keywords": [
+        "fakeyou",
+        "api",
+        "tts"
+    ],
     "author": "Jack Wright",
     "license": "ISC",
     "devDependencies": {
-        "@types/node": "^20.3.2",
+        "@types/node": "^18.16.18",
         "@typescript-eslint/eslint-plugin": "^5.59.11",
         "@typescript-eslint/parser": "^5.59.11",
         "eslint": "^8.42.0",
