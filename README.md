@@ -77,3 +77,11 @@ I have not tested anything above Node.JS LTS (v18 as of writing).
 7. Does it work in the browser?
 
 No, unfortunately. 😔 It is best you create your own web server that uses this package to build your app.
+
+8. Why this over fakeyou.js?
+
+First thing I should clear up is I did not develop fakeyou.js! It's a separate library by a separate author.
+
+I found that it was buggy and its lack of type-safety made it harder to use. It also hasn't been maintained in a while, relies on functionality in third-party packages that node can do out of the box and I did try to fork it and convert it to TypeScript but in the end it just seemed like a good idea to just write my own library!
+
+That being said, fakeyou.js does have more features as of writing, so if there is something you need that this library does not yet have feel free to use fakeyou.js and/or raise an issue and I will add it to my backlog!
