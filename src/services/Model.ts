@@ -9,6 +9,7 @@ import {
 } from '../util/validation.js';
 import Client from './Client.js';
 import TtsAudioFile from './TtsAudioFile.js';
+import crypto from 'node:crypto';
 
 export default class Model {
 	readonly data: TtsModel;
