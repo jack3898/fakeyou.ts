@@ -1,20 +1,22 @@
 import { promisify } from 'node:util';
 import { googleStorageUrl } from '../util/constants.js';
-import type { TtsRequestStatusDoneResponse } from '../util/validation.js';
+import type { TtsInferenceStatusDoneSchema } from '../util/validation.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
 const writeFile = promisify(fs.writeFile);
 
 export default class TtsAudioFile {
-	readonly data: TtsRequestStatusDoneResponse;
-	readonly url: URL;
-	#buffer?: Buffer;
-
-	constructor(data: TtsRequestStatusDoneResponse) {
+	constructor(data: TtsInferenceStatusDoneSchema) {
 		this.data = data;
 		this.url = new URL(`${googleStorageUrl}${this.data.maybe_public_bucket_wav_audio_path}`);
 	}
+
+	#buffer?: Buffer;
+
+	readonly data: TtsInferenceStatusDoneSchema;
+
+	readonly url: URL;
 
 	async toBuffer(): Promise<Buffer | null> {
 		if (this.#buffer) {

@@ -12,26 +12,22 @@ import { z } from 'zod';
 
 //////////
 
-export const requiredLogin = z.object({
+export const credentialsSchema = z.object({
 	username: z.string(),
 	password: z.string()
 });
 
-export type RequiredLogin = z.infer<typeof requiredLogin>;
+export type CredentialsSchema = z.infer<typeof credentialsSchema>;
 
-export const optionalLogin = requiredLogin.optional();
-
-export type OptionalLogin = z.infer<typeof optionalLogin>;
-
-export const loginResponse = z.object({
+export const loginSchema = z.object({
 	success: z.boolean()
 });
 
-export type LoginResponse = z.infer<typeof loginResponse>;
+export type LoginSchema = z.infer<typeof loginSchema>;
 
 //////////
 
-export const ttsModel = z.object({
+export const ttsModelSchema = z.object({
 	model_token: z.string(),
 	tts_model_type: z.string(),
 	creator_user_token: z.string(),
@@ -49,28 +45,28 @@ export const ttsModel = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export type TtsModel = z.infer<typeof ttsModel>;
+export type TtsModelSchema = z.infer<typeof ttsModelSchema>;
 
-export const ttsListVoiceResponse = z.object({
+export const ttsModelListSchema = z.object({
 	success: z.boolean(),
-	models: z.array(ttsModel)
+	models: z.array(ttsModelSchema)
 });
 
-export type TtsListVoiceResponse = z.infer<typeof ttsListVoiceResponse>;
+export type TtsModelListSchema = z.infer<typeof ttsModelListSchema>;
 
 //////////
 
-export const ttsInferenceResponse = z.object({
+export const ttsInferenceSchena = z.object({
 	success: z.boolean(),
 	inference_job_token: z.string()
 });
 
-export type ttsInferenceResponse = z.infer<typeof ttsInferenceResponse>;
+export type TtsInferenceSchema = z.infer<typeof ttsInferenceSchena>;
 
-export const ttsRequestStatusDoneResponse = z.object({
+export const ttsInferenceStatusDoneSchema = z.object({
 	job_token: z.string(),
 	status: z.literal('complete_success'),
-	maybe_extra_status_description: z.union([z.literal('done'), z.literal(null)]),
+	maybe_extra_status_description: z.union([z.literal('done'), z.null()]),
 	attempt_count: z.number(),
 	maybe_result_token: z.string(),
 	maybe_public_bucket_wav_audio_path: z.string(),
@@ -82,9 +78,9 @@ export const ttsRequestStatusDoneResponse = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export type TtsRequestStatusDoneResponse = z.infer<typeof ttsRequestStatusDoneResponse>;
+export type TtsInferenceStatusDoneSchema = z.infer<typeof ttsInferenceStatusDoneSchema>;
 
-export const ttsRequestStatusPendingResponse = z.object({
+export const ttsInferenceStatusSchema = z.object({
 	status: z.union([
 		z.literal('pending'),
 		z.literal('attempt_failed'),
@@ -93,7 +89,7 @@ export const ttsRequestStatusPendingResponse = z.object({
 		z.literal('dead'),
 		z.literal('started')
 	]),
-	maybe_extra_status_description: z.literal(null),
+	maybe_extra_status_description: z.null(),
 	attempt_count: z.number(),
 	maybe_result_token: z.null(),
 	maybe_public_bucket_wav_audio_path: z.null(),
@@ -105,11 +101,65 @@ export const ttsRequestStatusPendingResponse = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export type TtsRequestStatusPendingResponse = z.infer<typeof ttsRequestStatusPendingResponse>;
+export type TtsInferenceStatusSchema = z.infer<typeof ttsInferenceStatusSchema>;
 
-export const ttsRequestStatusResponse = z.object({
+export const ttsRequestStatusResponseSchema = z.object({
 	success: z.boolean(),
-	state: z.union([ttsRequestStatusPendingResponse, ttsRequestStatusDoneResponse])
+	state: z.union([ttsInferenceStatusSchema, ttsInferenceStatusDoneSchema])
 });
 
-export type TtsRequestStatusResponse = z.infer<typeof ttsRequestStatusResponse>;
+export type TtsRequestStatusResponseSchema = z.infer<typeof ttsRequestStatusResponseSchema>;
+
+//////////
+
+export const sessionUserSchema = z.object({
+	user_token: z.string(),
+	username: z.string(),
+	display_name: z.string(),
+	email_gravatar_hash: z.string(),
+	fakeyou_plan: z.string(),
+	storyteller_stream_plan: z.string(),
+	can_use_tts: z.boolean(),
+	can_use_w2l: z.boolean(),
+	can_delete_own_tts_results: z.boolean(),
+	can_delete_own_w2l_results: z.boolean(),
+	can_delete_own_account: z.boolean(),
+	can_upload_tts_models: z.boolean(),
+	can_upload_w2l_templates: z.boolean(),
+	can_delete_own_tts_models: z.boolean(),
+	can_delete_own_w2l_templates: z.boolean(),
+	can_approve_w2l_templates: z.boolean(),
+	can_edit_other_users_profiles: z.boolean(),
+	can_edit_other_users_tts_models: z.boolean(),
+	can_edit_other_users_w2l_templates: z.boolean(),
+	can_delete_other_users_tts_models: z.boolean(),
+	can_delete_other_users_tts_results: z.boolean(),
+	can_delete_other_users_w2l_templates: z.boolean(),
+	can_delete_other_users_w2l_results: z.boolean(),
+	can_ban_users: z.boolean(),
+	can_delete_users: z.boolean()
+});
+
+export type SessionUserSchema = z.infer<typeof sessionUserSchema>;
+
+export const sessionUserResponseSchema = z.object({
+	success: z.boolean(),
+	user: sessionUserSchema
+});
+
+export type SessionUserResponseSchema = z.infer<typeof sessionUserResponseSchema>;
+
+export const loggedInUserProfileResponseSchema = z.union([
+	z.object({
+		success: z.boolean(),
+		logged_in: z.literal(true),
+		user: sessionUserSchema
+	}),
+	z.object({
+		success: z.boolean(),
+		logged_in: z.literal(false),
+		user: z.null()
+	})
+]);
+
+export type LoggedInUserProfileResponseSchema = z.infer<typeof loggedInUserProfileResponseSchema>;

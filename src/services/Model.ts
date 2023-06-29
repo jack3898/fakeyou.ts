@@ -1,36 +1,40 @@
 import { apiUrl } from '../util/constants.js';
 import { poll } from '../util/functions.js';
 import {
-	ttsInferenceResponse,
-	ttsListVoiceResponse,
-	ttsRequestStatusResponse,
-	type TtsModel,
-	type TtsRequestStatusDoneResponse
+	ttsInferenceSchena,
+	ttsModelListSchema,
+	ttsRequestStatusResponseSchema,
+	type TtsModelSchema,
+	type TtsInferenceStatusDoneSchema
 } from '../util/validation.js';
-import Client from './Client.js';
 import TtsAudioFile from './TtsAudioFile.js';
 import crypto from 'node:crypto';
+import Rest from './Rest.js';
 
 export default class Model {
-	readonly data: TtsModel;
+	constructor(data: TtsModelSchema) {
+		this.data = data;
+		this;
+	}
+
+	readonly data: TtsModelSchema;
+
 	static #cache?: Map<string, Model>;
 
-	constructor(data: TtsModel) {
-		this.data = data;
-	}
+	static rest = Rest;
 
 	static async fetchModels() {
 		if (this.#cache) {
 			return this.#cache;
 		}
 
-		const response = await Client.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
-		const json = ttsListVoiceResponse.parse(await response.json());
+		const response = await this.rest.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
+		const json = ttsModelListSchema.parse(await response.json());
 
 		this.#cache = new Map();
 
 		for (const modelData of json.models) {
-			this.#cache.set(modelData.model_token, new Model(modelData));
+			this.#cache.set(modelData.model_token, new this(modelData));
 		}
 
 		return this.#cache;
@@ -45,7 +49,7 @@ export default class Model {
 	}
 
 	private async fetchInference(text: string) {
-		const response = await Client.fetch(new URL(`${apiUrl}/tts/inference`), {
+		const response = await Model.rest.fetch(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.data.model_token,
@@ -54,13 +58,13 @@ export default class Model {
 			})
 		});
 
-		return ttsInferenceResponse.parse(await response.json());
+		return ttsInferenceSchena.parse(await response.json());
 	}
 
-	private getAudioUrl(inferenceJobToken: string): Promise<TtsRequestStatusDoneResponse | null> {
+	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
 		return poll(async () => {
-			const response = await Client.fetch(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
-			const result = ttsRequestStatusResponse.parse(await response.json());
+			const response = await Model.rest.fetch(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
+			const result = ttsRequestStatusResponseSchema.parse(await response.json());
 
 			switch (result.state.status) {
 				case 'complete_success':

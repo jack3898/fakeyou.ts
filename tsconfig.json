@@ -7,7 +7,9 @@
         "esModuleInterop": true,
         "outDir": "dist",
         "rootDir": "src",
-        "types": ["node"]
+        "types": ["node"],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
     },
     "exclude": ["dist"]
 }
