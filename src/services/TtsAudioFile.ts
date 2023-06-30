@@ -7,14 +7,11 @@ import path from 'node:path';
 const writeFile = promisify(fs.writeFile);
 
 export default class TtsAudioFile {
-	constructor(data: TtsInferenceStatusDoneSchema) {
-		this.data = data;
+	constructor(public data: TtsInferenceStatusDoneSchema) {
 		this.url = new URL(`${googleStorageUrl}${this.data.maybe_public_bucket_wav_audio_path}`);
 	}
 
 	#buffer?: Buffer;
-
-	readonly data: TtsInferenceStatusDoneSchema;
 
 	readonly url: URL;
 

@@ -12,23 +12,16 @@ import crypto from 'node:crypto';
 import Rest from './Rest.js';
 
 export default class Model {
-	constructor(data: TtsModelSchema) {
-		this.data = data;
-		this;
-	}
-
-	readonly data: TtsModelSchema;
+	constructor(public data: TtsModelSchema) {}
 
 	static #cache?: Map<string, Model>;
-
-	static rest = Rest;
 
 	static async fetchModels() {
 		if (this.#cache) {
 			return this.#cache;
 		}
 
-		const response = await this.rest.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
+		const response = await Rest.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
 		const json = ttsModelListSchema.parse(await response.json());
 
 		this.#cache = new Map();
@@ -49,7 +42,7 @@ export default class Model {
 	}
 
 	private async fetchInference(text: string) {
-		const response = await Model.rest.fetch(new URL(`${apiUrl}/tts/inference`), {
+		const response = await Rest.fetch(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.data.model_token,
@@ -63,7 +56,7 @@ export default class Model {
 
 	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
 		return poll(async () => {
-			const response = await Model.rest.fetch(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
+			const response = await Rest.fetch(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());
 
 			switch (result.state.status) {
