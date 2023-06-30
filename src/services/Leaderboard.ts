@@ -4,6 +4,7 @@ import {
 	type LeaderboardResponseSchema,
 	type LeaderboardUserSchema
 } from '../util/validation.js';
+import Cache from './Cache.js';
 import LeaderboardUser from './LeaderboardUser.js';
 import Rest from './Rest.js';
 
@@ -18,8 +19,10 @@ export default class Leaderboard {
 	#w2lLeaderboardData: LeaderboardUserSchema[];
 
 	static async fetchLeaderboard() {
-		const response = await Rest.fetch(new URL(`${apiUrl}/leaderboard`), { method: 'GET' });
-		const json = leaderboardResponseSchema.parse(await response.json());
+		const json = await Cache.wrap('fetch-leaderboard', async () => {
+			const response = await Rest.fetch(new URL(`${apiUrl}/leaderboard`), { method: 'GET' });
+			return leaderboardResponseSchema.parse(await response.json());
+		});
 
 		return new this(json);
 	}

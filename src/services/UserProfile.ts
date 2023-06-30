@@ -1,14 +1,17 @@
 import { apiUrl } from '../util/constants.js';
 import { userProfileResponseSchema, type UserProfileSchema } from '../util/validation.js';
 import Badge from './Badge.js';
+import Cache from './Cache.js';
 import Rest from './Rest.js';
 
 export default class UserProfile {
 	constructor(public data: UserProfileSchema) {}
 
 	static async fetchUserProfile(username: string) {
-		const response = await Rest.fetch(new URL(`${apiUrl}/user/${username}/profile`), { method: 'GET' });
-		const json = userProfileResponseSchema.parse(await response.json());
+		const json = await Cache.wrap('fetch-user-profile', async () => {
+			const response = await Rest.fetch(new URL(`${apiUrl}/user/${username}/profile`), { method: 'GET' });
+			return userProfileResponseSchema.parse(await response.json());
+		});
 
 		return new this(json.user);
 	}

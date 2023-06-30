@@ -10,27 +10,24 @@ import {
 import TtsAudioFile from './TtsAudioFile.js';
 import crypto from 'node:crypto';
 import Rest from './Rest.js';
+import Cache from './Cache.js';
 
 export default class Model {
 	constructor(public data: TtsModelSchema) {}
 
-	static #cache?: Map<string, Model>;
+	static fetchModels() {
+		return Cache.wrap('fetch-models', async () => {
+			const response = await Rest.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
+			const json = ttsModelListSchema.parse(await response.json());
 
-	static async fetchModels() {
-		if (this.#cache) {
-			return this.#cache;
-		}
+			const map = new Map<string, Model>();
 
-		const response = await Rest.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
-		const json = ttsModelListSchema.parse(await response.json());
+			for (const modelData of json.models) {
+				map.set(modelData.model_token, new this(modelData));
+			}
 
-		this.#cache = new Map();
-
-		for (const modelData of json.models) {
-			this.#cache.set(modelData.model_token, new this(modelData));
-		}
-
-		return this.#cache;
+			return map;
+		});
 	}
 
 	/**
