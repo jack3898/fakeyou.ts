@@ -5,14 +5,14 @@ import Model from './Model.js';
 import FakeYouError from '../error/FakeYouError.js';
 import SessionUser from './SessionUser.js';
 import Rest from './Rest.js';
-import Community from './Community.js';
+import Leaderboard from './Leaderboard.js';
 
 export default class Client {
 	model = Model;
 
 	sessionUser = SessionUser;
 
-	community = Community;
+	leaderboard = Leaderboard;
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.

@@ -163,3 +163,25 @@ export const loggedInUserProfileResponseSchema = z.union([
 ]);
 
 export type LoggedInUserProfileResponseSchema = z.infer<typeof loggedInUserProfileResponseSchema>;
+
+//////////
+
+export const leaderboardUserSchema = z.object({
+	creator_user_token: z.string(),
+	username: z.string(),
+	display_name: z.string(),
+	gravatar_hash: z.string(),
+	default_avatar_index: z.number(),
+	default_avatar_color_index: z.number(),
+	uploaded_count: z.number()
+});
+
+export type LeaderboardUserSchema = z.infer<typeof leaderboardUserSchema>;
+
+export const leaderboardResponseSchema = z.object({
+	success: z.boolean(),
+	tts_leaderboard: z.array(leaderboardUserSchema),
+	w2l_leaderboard: z.array(leaderboardUserSchema)
+});
+
+export type LeaderboardResponseSchema = z.infer<typeof leaderboardResponseSchema>;
