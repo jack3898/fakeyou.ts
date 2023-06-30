@@ -7,6 +7,7 @@ import SessionUser from './SessionUser.js';
 import Rest from './Rest.js';
 import Leaderboard from './Leaderboard.js';
 import UserProfile from './UserProfile.js';
+import Category from './Category.js';
 
 export default class Client {
 	model = Model;
@@ -16,6 +17,8 @@ export default class Client {
 	leaderboard = Leaderboard;
 
 	userProfile = UserProfile;
+
+	category = Category;
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.

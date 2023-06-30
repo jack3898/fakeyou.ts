@@ -80,4 +80,48 @@ export default class Model {
 
 		return null;
 	}
+
+	get title(): string {
+		return this.data.title;
+	}
+
+	get token(): string {
+		return this.data.model_token;
+	}
+
+	get categoryTokens(): string[] {
+		return this.categoryTokens;
+	}
+
+	get createdAt(): Date {
+		return this.data.created_at;
+	}
+
+	get updatedAt(): Date {
+		return this.updatedAt;
+	}
+
+	get ttsModelType(): string {
+		return this.data.tts_model_type;
+	}
+
+	get creatorUsername(): string {
+		return this.data.creator_username;
+	}
+
+	get creatorToken(): string {
+		return this.data.creator_user_token;
+	}
+
+	get creatorGravatarHash(): string {
+		return this.data.creator_gravatar_hash;
+	}
+
+	get ietfLanguageTag(): string {
+		return this.data.ietf_language_tag;
+	}
+
+	get ietfPrimaryLanguageSubtag(): string {
+		return this.data.ietf_primary_language_subtag;
+	}
 }
