@@ -3,11 +3,7 @@ import Rest from './Rest.js';
 import { apiUrl } from '../util/constants.js';
 
 export default class SessionUser {
-	constructor(data: SessionUserSchema) {
-		this.data = data;
-	}
-
-	readonly data: SessionUserSchema;
+	constructor(public data: SessionUserSchema) {}
 
 	static async getLoggedInUser(): Promise<SessionUser | null> {
 		const response = await Rest.fetch(new URL(`${apiUrl}/session`), { method: 'GET' });
