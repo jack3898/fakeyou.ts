@@ -3,6 +3,9 @@ export default class Cache {
 
 	/**
 	 * Using a key, cache the result of an async function!
+	 *
+	 * NOTE: Global cache use only. I.e. data that is useful for tne entire lifetime of the application.
+	 * E.g. models, categories etc.
 	 */
 	static async wrap<T>(key: string, operation: () => Promise<T>, expiresInSeconds = 600): Promise<T> {
 		const cacheItem = this.#cacheMap.get(key);

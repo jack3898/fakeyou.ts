@@ -4,7 +4,7 @@ import Badge from './Badge.js';
 import Cache from './Cache.js';
 import Rest from './Rest.js';
 
-export default class UserProfile {
+export default class ProfileUser {
 	constructor(public data: UserProfileSchema) {}
 
 	static async fetchUserProfile(username: string) {

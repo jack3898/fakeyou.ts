@@ -11,6 +11,7 @@ import TtsAudioFile from './TtsAudioFile.js';
 import crypto from 'node:crypto';
 import Rest from './Rest.js';
 import Cache from './Cache.js';
+import Category from './Category.js';
 
 export default class Model {
 	constructor(public data: TtsModelSchema) {}
@@ -78,6 +79,12 @@ export default class Model {
 		return null;
 	}
 
+	async fetchParentCategories(): Promise<Category[]> {
+		const categories = await Category.fetchCategories();
+
+		return categories.filter((category) => this.categoryTokens.includes(category.token));
+	}
+
 	get title(): string {
 		return this.data.title;
 	}
@@ -87,7 +94,7 @@ export default class Model {
 	}
 
 	get categoryTokens(): string[] {
-		return this.categoryTokens;
+		return this.data.category_tokens;
 	}
 
 	get createdAt(): Date {

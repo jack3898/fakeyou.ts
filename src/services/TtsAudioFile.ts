@@ -3,7 +3,6 @@ import { googleStorageUrl } from '../util/constants.js';
 import type { TtsInferenceStatusDoneSchema } from '../util/validation.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import Cache from './Cache.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -12,29 +11,33 @@ export default class TtsAudioFile {
 		this.url = new URL(`${googleStorageUrl}${this.data.maybe_public_bucket_wav_audio_path}`);
 	}
 
+	#buffer?: Buffer;
+
 	readonly url: URL;
 
 	async toBuffer(): Promise<Buffer | null> {
-		const buffer = Cache.wrap(`tts-to-buffer:${this.data.job_token}`, async () => {
-			const headers = new Headers();
+		if (this.#buffer) {
+			return this.#buffer;
+		}
 
-			headers.append('content-type', 'audio/x-wav');
+		const headers = new Headers();
 
-			const result = await fetch(this.url, {
-				method: 'GET',
-				headers
-			});
+		headers.append('content-type', 'audio/x-wav');
 
-			if (result.type === 'opaque') {
-				return null;
-			}
-
-			const arrayBuffer = await result.blob().then((b) => b?.arrayBuffer());
-
-			return Buffer.from(arrayBuffer);
+		const result = await fetch(this.url, {
+			method: 'GET',
+			headers
 		});
 
-		return buffer;
+		if (result.type === 'opaque') {
+			return null;
+		}
+
+		const arrayBuffer = await result.blob().then((b) => b?.arrayBuffer());
+
+		this.#buffer = Buffer.from(arrayBuffer);
+
+		return this.#buffer;
 	}
 
 	async toBase64(): Promise<string | null> {
