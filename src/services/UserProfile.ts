@@ -1,5 +1,6 @@
 import { apiUrl } from '../util/constants.js';
 import { userProfileResponseSchema, type UserProfileSchema } from '../util/validation.js';
+import Badge from './Badge.js';
 import Rest from './Rest.js';
 
 export default class UserProfile {
@@ -54,5 +55,9 @@ export default class UserProfile {
 
 	get bio(): string {
 		return this.data.profile_markdown;
+	}
+
+	get badges(): Badge[] {
+		return this.data.badges.map((badge) => new Badge(badge));
 	}
 }

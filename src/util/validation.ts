@@ -188,6 +188,16 @@ export type LeaderboardResponseSchema = z.infer<typeof leaderboardResponseSchema
 
 //////////
 
+export const userBadgeSchema = z.object({
+	slug: z.string(),
+	title: z.string(),
+	description: z.string(),
+	image_url: z.string(),
+	granted_at: z.date({ coerce: true })
+});
+
+export type UserBadgeSchema = z.infer<typeof userBadgeSchema>;
+
 export const userProfileSchema = z.object({
 	user_token: z.string(),
 	username: z.string(),
@@ -208,16 +218,7 @@ export const userProfileSchema = z.object({
 	github_username: z.string().nullable(),
 	cashapp_username: z.string().nullable(),
 	website_url: z.string().nullable(),
-	// TODO, whenever there is a new object, its best to create a new service class so badges are not yet supported.
-	// badges: z.array(
-	// 	z.object({
-	// 		slug: z.string(),
-	// 		title: z.string(),
-	// 		description: z.string(),
-	// 		image_url: z.string(),
-	// 		granted_at: z.date({ coerce: true })
-	// 	})
-	// ),
+	badges: z.array(userBadgeSchema),
 	created_at: z.date({ coerce: true }),
 	maybe_moderator_fields: z.string().nullable()
 });
