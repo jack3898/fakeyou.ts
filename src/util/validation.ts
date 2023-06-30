@@ -185,3 +185,48 @@ export const leaderboardResponseSchema = z.object({
 });
 
 export type LeaderboardResponseSchema = z.infer<typeof leaderboardResponseSchema>;
+
+//////////
+
+export const userProfileSchema = z.object({
+	user_token: z.string(),
+	username: z.string(),
+	display_name: z.string(),
+	email_gravatar_hash: z.string(),
+	default_avatar_index: z.number(),
+	default_avatar_color_index: z.number(),
+	profile_markdown: z.string(),
+	profile_rendered_html: z.string(),
+	user_role_slug: z.string(),
+	disable_gravatar: z.boolean(),
+	preferred_tts_result_visibility: z.union([z.literal('hidden'), z.literal('public')]),
+	preferred_w2l_result_visibility: z.union([z.literal('hidden'), z.literal('public')]),
+	discord_username: z.string().nullable(),
+	twitch_username: z.string().nullable(),
+	twitter_username: z.string().nullable(),
+	patreon_username: z.string().nullable(),
+	github_username: z.string().nullable(),
+	cashapp_username: z.string().nullable(),
+	website_url: z.string().nullable(),
+	// TODO, whenever there is a new object, its best to create a new service class so badges are not yet supported.
+	// badges: z.array(
+	// 	z.object({
+	// 		slug: z.string(),
+	// 		title: z.string(),
+	// 		description: z.string(),
+	// 		image_url: z.string(),
+	// 		granted_at: z.date({ coerce: true })
+	// 	})
+	// ),
+	created_at: z.date({ coerce: true }),
+	maybe_moderator_fields: z.string().nullable()
+});
+
+export type UserProfileSchema = z.infer<typeof userProfileSchema>;
+
+export const userProfileResponseSchema = z.object({
+	success: z.boolean(),
+	user: userProfileSchema
+});
+
+export type UserProfileResponseSchema = z.infer<typeof userProfileResponseSchema>;
