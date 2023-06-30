@@ -6,7 +6,7 @@ import UserProfile from './UserProfile.js';
 export default class SessionUser {
 	constructor(public data: SessionUserSchema) {}
 
-	static async getLoggedInUser(): Promise<SessionUser | null> {
+	static async fetchLoggedInUser(): Promise<SessionUser | null> {
 		const response = await Rest.fetch(new URL(`${apiUrl}/session`), { method: 'GET' });
 		const loggedInUser = loggedInUserProfileResponseSchema.parse(await response.json());
 
