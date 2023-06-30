@@ -6,6 +6,7 @@ import FakeYouError from '../error/FakeYouError.js';
 import SessionUser from './SessionUser.js';
 import Rest from './Rest.js';
 import Leaderboard from './Leaderboard.js';
+import UserProfile from './UserProfile.js';
 
 export default class Client {
 	model = Model;
@@ -13,6 +14,8 @@ export default class Client {
 	sessionUser = SessionUser;
 
 	leaderboard = Leaderboard;
+
+	userProfile = UserProfile;
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.

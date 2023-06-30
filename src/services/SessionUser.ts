@@ -1,6 +1,7 @@
 import { type SessionUserSchema, loggedInUserProfileResponseSchema } from '../util/validation.js';
 import Rest from './Rest.js';
 import { apiUrl } from '../util/constants.js';
+import UserProfile from './UserProfile.js';
 
 export default class SessionUser {
 	constructor(public data: SessionUserSchema) {}
@@ -14,6 +15,10 @@ export default class SessionUser {
 		}
 
 		return null;
+	}
+
+	fetchProfile(): Promise<UserProfile> {
+		return UserProfile.fetchUserProfile(this.username);
 	}
 
 	get userToken(): string {
