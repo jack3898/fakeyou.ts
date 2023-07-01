@@ -295,3 +295,16 @@ export const activeSubscriptionsResponseSchema = z.object({
 });
 
 export type ActiveSubscriptionsResponseSchema = z.infer<typeof activeSubscriptionsResponseSchema>;
+
+//////////
+
+export const ratingSchema = z.union([z.literal('positive'), z.literal('negative'), z.literal('neutral')]);
+
+export type RatingSchema = z.infer<typeof ratingSchema>;
+
+export const userRatingResponseSchema = z.object({
+	success: z.boolean(),
+	maybe_rating_value: ratingSchema
+});
+
+export type UserRatingResponseSchema = z.infer<typeof userRatingResponseSchema>;
