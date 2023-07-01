@@ -1,25 +1,21 @@
 import type { UserBadgeSchema } from '../util/validation.js';
 
 export default class Badge {
-	constructor(public data: UserBadgeSchema) {}
-
-	get slug(): string {
-		return this.data.slug;
+	constructor(data: UserBadgeSchema) {
+		this.slug = data.slug;
+		this.title = data.title;
+		this.description = data.description;
+		this.imageUrl = data.image_url;
+		this.grantedAt = data.granted_at;
 	}
 
-	get title(): string {
-		return this.data.title;
-	}
+	readonly slug: string;
 
-	get description(): string {
-		return this.data.description;
-	}
+	readonly title: string;
 
-	get imageUrl(): string {
-		return this.data.image_url;
-	}
+	readonly description: string;
 
-	get grantedAt(): Date {
-		return this.data.granted_at;
-	}
+	readonly imageUrl: string;
+
+	readonly grantedAt: Date;
 }

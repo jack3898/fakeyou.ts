@@ -5,7 +5,50 @@ import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema 
 import Model from './Model.js';
 
 export default class Category {
-	constructor(public data: CategorySchema) {}
+	constructor(data: CategorySchema) {
+		this.token = data.category_token;
+		this.parentToken = data.maybe_super_category_token;
+		this.modelType = data.model_type;
+		this.name = data.name.trim();
+		this.nameForDropdown = data.name_for_dropdown.trim();
+		this.canDirectlyHaveModels = data.can_directly_have_models;
+		this.canHaveSubcategories = data.can_have_subcategories;
+		this.canOnlyModsApply = data.can_only_mods_apply;
+		this.isModApproved = data.is_mod_approved;
+		this.isSynthetic = data.is_synthetic;
+		this.shouldBeSorted = data.should_be_sorted;
+		this.createdAt = data.created_at;
+		this.updatedAt = data.updated_at;
+		this.deletedAt = data.deleted_at;
+	}
+
+	readonly token: string;
+
+	readonly parentToken: string | null;
+
+	readonly modelType: string;
+
+	readonly name: string;
+
+	readonly nameForDropdown: string;
+
+	readonly canDirectlyHaveModels: boolean;
+
+	readonly canHaveSubcategories: boolean;
+
+	readonly canOnlyModsApply: boolean;
+
+	readonly isModApproved: boolean | null;
+
+	readonly isSynthetic: boolean;
+
+	readonly shouldBeSorted: boolean;
+
+	readonly createdAt: Date;
+
+	readonly updatedAt: Date;
+
+	readonly deletedAt: Date | null;
 
 	static async fetchCategories(): Promise<Category[]> {
 		return cache('fetch-categories', async () => {
@@ -51,25 +94,5 @@ export default class Category {
 		const categories = await Category.fetchCategories();
 
 		return categories.filter((categoryFromCache) => categoryFromCache.parentToken === this.token);
-	}
-
-	get name(): string {
-		return this.data.name.trim();
-	}
-
-	get token(): string {
-		return this.data.category_token;
-	}
-
-	get parentToken(): string | null {
-		return this.data.maybe_super_category_token;
-	}
-
-	get createdAt(): Date {
-		return this.data.created_at;
-	}
-
-	get deletedAt(): Date | null {
-		return this.data.deleted_at;
 	}
 }
