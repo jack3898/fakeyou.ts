@@ -7,6 +7,7 @@ import { request } from '../util/request.js';
 import { userTtsListResponseSchema, type UserTtsSchema } from '../util/validation.js';
 import { promisify } from 'node:util';
 import { downloadWav } from '../util/downloadWav.js';
+import Model from './Model.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -15,7 +16,7 @@ export default class UserAudioFile implements AudioFile {
 		this.ttsResultToken = data.tts_result_token;
 		this.ttsModelToken = data.tts_model_token;
 		this.ttsModelTitle = data.tts_model_title;
-		this.rawInferenceTest = data.raw_inference_text;
+		this.rawInferenceText = data.raw_inference_text;
 		this.publicBucketWavAudioPath = data.public_bucket_wav_audio_path;
 		this.creatorUserToken = data.maybe_creator_user_token;
 		this.creatorUsername = data.maybe_creator_username;
@@ -35,7 +36,7 @@ export default class UserAudioFile implements AudioFile {
 
 	readonly ttsModelTitle: string;
 
-	readonly rawInferenceTest: string;
+	readonly rawInferenceText: string;
 
 	readonly publicBucketWavAudioPath: string;
 
@@ -123,5 +124,9 @@ export default class UserAudioFile implements AudioFile {
 		if (buffer) {
 			return writeFile(path.resolve(location), buffer);
 		}
+	}
+
+	fetchTtsModel(): Promise<Model | null> {
+		return Model.fetchModelByToken(this.ttsModelToken);
 	}
 }

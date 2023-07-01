@@ -84,8 +84,8 @@ export default class Model {
 	 * This is the fastest method to find the model you need, the token is unique to each model and
 	 * can be found in the URL of the model's more details page on fakeyou.com.
 	 */
-	static async fetchModelByToken(token: string): Promise<Model | undefined> {
-		return (await this.fetchModels()).get(token);
+	static async fetchModelByToken(token: string): Promise<Model | null> {
+		return (await this.fetchModels()).get(token) || null;
 	}
 
 	private async fetchInference(text: string) {

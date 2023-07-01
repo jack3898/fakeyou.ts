@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { AudioFile } from '../interface/AudioFile.js';
 import { downloadWav } from '../util/downloadWav.js';
+import Model from './Model.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -81,5 +82,9 @@ export default class TtsAudioFile implements AudioFile {
 		if (buffer) {
 			return writeFile(path.resolve(location), buffer);
 		}
+	}
+
+	async fetchModel(): Promise<Model | null> {
+		return Model.fetchModelByToken(this.modelToken);
 	}
 }
