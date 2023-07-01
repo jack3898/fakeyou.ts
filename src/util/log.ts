@@ -2,6 +2,8 @@ import chalk from 'chalk';
 
 let enabled = false;
 
+// Dead simple production logging
+// For debugging, just use console.log or a debugger! 🤣
 export const log = {
 	error(message: string) {
 		if (enabled) {

@@ -1,6 +1,6 @@
 # FakeYou.ts
 
-A modern, light (1 dependency) and easy-to-use API wrapper for FakeYou. Get your app up and running with FakeYou in minutes!
+A modern, light and easy-to-use API wrapper for FakeYou. Get your app up and running with FakeYou in minutes!
 
 NOTE: This library is a work in progress and is in pre-release, that being said, it should have enough features to suit a basic TTS application! Things are of course subject to change.
 
@@ -18,7 +18,7 @@ npm install fakeyou.ts
 }
 ```
 
-`tsconfig.json` must include:
+If you use TypeScript `tsconfig.json` must include:
 
 ```json
 {
