@@ -40,7 +40,10 @@ export const ttsModelSchema = z.object({
 	is_front_page_featured: z.boolean(),
 	is_twitch_featured: z.boolean(),
 	maybe_suggested_unique_bot_command: z.string().nullable(),
-	category_tokens: z.array(z.string()),
+	category_tokens: z
+		.array(z.string())
+		.nullish()
+		.transform((x) => x ?? null),
 	created_at: z.date({ coerce: true }),
 	updated_at: z.date({ coerce: true })
 });
