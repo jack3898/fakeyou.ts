@@ -83,11 +83,10 @@ export type TtsInferenceStatusDoneSchema = z.infer<typeof ttsInferenceStatusDone
 export const ttsInferenceStatusSchema = z.object({
 	status: z.union([
 		z.literal('pending'),
+		z.literal('started'),
+		z.literal('complete_failure'),
 		z.literal('attempt_failed'),
-		z.literal('complete'),
-		z.literal('failed'),
-		z.literal('dead'),
-		z.literal('started')
+		z.literal('dead')
 	]),
 	maybe_extra_status_description: z.null(),
 	attempt_count: z.number(),

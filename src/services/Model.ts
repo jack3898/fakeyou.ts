@@ -58,8 +58,16 @@ export default class Model {
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());
 
 			switch (result.state.status) {
+				case 'pending':
+					return poll.Status.Retry;
+				case 'started':
+					return poll.Status.Retry;
 				case 'complete_success':
 					return result.state;
+				case 'attempt_failed':
+					return poll.Status.Retry;
+				case 'complete_failure':
+					return poll.Status.Abort;
 				case 'dead':
 					return poll.Status.Abort;
 				default:

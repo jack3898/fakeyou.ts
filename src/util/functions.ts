@@ -18,8 +18,6 @@ export async function poll<T>(callback: () => Promise<T | PollStatus>, interval 
 	// eslint-disable-next-line no-constant-condition
 	while (true) {
 		try {
-			await sleep(interval);
-
 			if (attempts >= maxTries) {
 				throw Error(`Too many poll attempts. ${attempts} attempts have been made.`);
 			}
@@ -32,6 +30,7 @@ export async function poll<T>(callback: () => Promise<T | PollStatus>, interval 
 				case PollStatus.Abort:
 					return null;
 				case PollStatus.Retry:
+					await sleep(interval);
 					continue;
 				default:
 					return result;
