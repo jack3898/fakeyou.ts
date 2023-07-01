@@ -63,6 +63,7 @@ const download = await audio.toDisk("./local/name.wav"); // or toBuffer, toBase6
 | Global FakeYou queue stats         | Simple fetch of queue statistics                                                             | ✅     |
 | Subscription details               | View your subscription details and loyalty status                                            | ✅     |
 | View TTS audio history on profiles | View profile TTS audio history, and get associated model details, re-download audio and more | ✅     |
+| View user models on profiles       | Get a lits of the user's models from their profile                                           | ✅     |
 
 ... and I will keep this list up to date with more features to come.
 

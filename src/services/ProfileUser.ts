@@ -1,3 +1,4 @@
+import FakeYouError from '../error/FakeYouError.js';
 import { cache } from '../util/cache.js';
 import { apiUrl } from '../util/constants.js';
 import { log } from '../util/log.js';
@@ -10,6 +11,7 @@ import {
 	editUserProfileResponseSchema
 } from '../util/validation.js';
 import Badge from './Badge.js';
+import Model from './Model.js';
 import UserAudioFile from './UserAudioFile.js';
 
 export default class ProfileUser {
@@ -140,5 +142,15 @@ export default class ProfileUser {
 		results: UserAudioFile[];
 	} | null> {
 		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
+	}
+
+	async fetchUserModels(): Promise<Model[]> {
+		const userModels = await Model.fetchModelsByUser(this.username);
+
+		if (userModels) {
+			return userModels;
+		}
+
+		throw new FakeYouError('Fetch of user profile models failed.');
 	}
 }

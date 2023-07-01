@@ -28,7 +28,7 @@ export default class Model {
 		this.ietfLanguageTag = data.ietf_language_tag;
 		this.ietfPrimaryLanguageSubtag = data.ietf_primary_language_subtag;
 		this.isFrontPageFeatured = data.is_front_page_featured;
-		this.isTwitchFeatures = data.is_twitch_featured;
+		this.isTwitchFeatured = data.is_twitch_featured;
 		this.suggestedUniqueBotCommand = data.maybe_suggested_unique_bot_command;
 		this.categoryTokens = data.category_tokens;
 		this.createdAt = data.created_at;
@@ -55,11 +55,11 @@ export default class Model {
 
 	isFrontPageFeatured: boolean;
 
-	isTwitchFeatures: boolean;
+	isTwitchFeatured: boolean;
 
 	suggestedUniqueBotCommand: string | null;
 
-	categoryTokens: string[];
+	categoryTokens: string[] | null;
 
 	createdAt: Date;
 
@@ -86,6 +86,19 @@ export default class Model {
 	 */
 	static async fetchModelByToken(token: string): Promise<Model | null> {
 		return (await this.fetchModels()).get(token) || null;
+	}
+
+	static async fetchModelsByUser(username: string): Promise<Model[] | null> {
+		try {
+			const response = await request(new URL(`${apiUrl}/user/${username}/tts_models`));
+			const json = ttsModelListSchema.parse(await response.json());
+
+			return json.models.map((model) => new this(model));
+		} catch (error) {
+			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
+
+			return null;
+		}
 	}
 
 	private async fetchInference(text: string) {
@@ -171,6 +184,10 @@ export default class Model {
 	async fetchParentCategories(): Promise<Category[]> {
 		const categories = await Category.fetchCategories();
 
-		return categories.filter((category) => this.categoryTokens.includes(category.token));
+		if (this.categoryTokens) {
+			return [];
+		}
+
+		return categories.filter((category) => this.categoryTokens?.includes(category.token));
 	}
 }
