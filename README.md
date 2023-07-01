@@ -1,8 +1,10 @@
 # FakeYou.ts
 
+![FakeYou.ts logo](https://github.com/jack3898/fakeyou.ts/assets/28375223/c76748e2-0456-4ed9-af06-6a84139e8f51)
+
 A modern, light and easy-to-use API wrapper for FakeYou. Get your app up and running with FakeYou in minutes!
 
-NOTE: This library is a work in progress and is in pre-release, that being said, it should have enough features to suit a basic TTS application! Things are of course subject to change.
+NOTE: This library is a work in progress and is in pre-release, that being said, it should have enough features to suit a TTS application! Things are of course subject to change.
 
 ## Installation
 
@@ -48,6 +50,22 @@ const audio = await model?.infer("hello!");
 const download = await audio.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw url!
 ```
 
+## Features
+
+| Name                               | Description                                                                                  | Status |
+| ---------------------------------- | -------------------------------------------------------------------------------------------- | ------ |
+| FakeYou login support              | Ability to take advantage of any potential premium benefits                                  | ✅     |
+| Fetch models                       | Fetch models, and view their info, and do your own TTS                                       | ✅     |
+| Model TTS download                 | Download as buffer, base64, or directly to disk                                              | ✅     |
+| Fetch model categories             | Fetch categories, child categories and parent categories and their models                    | ✅     |
+| View and edit user profiles        | View user profiles, and edit profiles you are privileged to edit (like your own)             | ✅     |
+| Leaderboards                       | Fetch users from the leaderboard                                                             | ✅     |
+| Global FakeYou queue stats         | Simple fetch of queue statistics                                                             | ✅     |
+| Subscription details               | View your subscription details and loyalty status                                            | ✅     |
+| View TTS audio history on profiles | View profile TTS audio history, and get associated model details, re-download audio and more | ✅     |
+
+... and I will keep this list up to date with more features to come.
+
 ## Q&A
 
 ### My project uses CommonJS (`require` instead of `import`), will this package work?
@@ -77,11 +95,3 @@ I have not tested anything above Node.JS LTS (v18 as of writing).
 ### Does it work in the browser?
 
 No, unfortunately. 😔 It is best you create your own web server that uses this package to build your app.
-
-### Why this over fakeyou.js?
-
-First thing I should clear up is I did not develop fakeyou.js! It's a separate library by a separate author.
-
-I found that it was buggy and its lack of type-safety made it harder to use. It also hasn't been maintained in a while, relies on functionality in third-party packages that node can do out of the box and I did try to fork it and convert it to TypeScript but in the end it just seemed like a good idea to just write my own library!
-
-That being said, fakeyou.js does have more features as of writing, so if there is something you need that this library does not yet have feel free to use fakeyou.js and/or raise an issue and I will add it to my backlog!
