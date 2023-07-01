@@ -1,13 +1,13 @@
 import { type SessionUserSchema, loggedInUserProfileResponseSchema } from '../util/validation.js';
-import Rest from './Rest.js';
 import { apiUrl } from '../util/constants.js';
 import ProfileUser from './ProfileUser.js';
+import { request } from '../util/request.js';
 
 export default class SessionUser {
 	constructor(public data: SessionUserSchema) {}
 
 	static async fetchLoggedInUser(): Promise<SessionUser | null> {
-		const response = await Rest.fetch(new URL(`${apiUrl}/session`), { method: 'GET' });
+		const response = await request(new URL(`${apiUrl}/session`), { method: 'GET' });
 		const loggedInUser = loggedInUserProfileResponseSchema.parse(await response.json());
 
 		if (loggedInUser.logged_in) {

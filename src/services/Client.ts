@@ -4,11 +4,11 @@ import AuthorisationError from '../error/AuthorisationError.js';
 import Model from './Model.js';
 import FakeYouError from '../error/FakeYouError.js';
 import SessionUser from './SessionUser.js';
-import Rest from './Rest.js';
 import Leaderboard from './Leaderboard.js';
 import ProfileUser from './ProfileUser.js';
 import Category from './Category.js';
-import Cache from './Cache.js';
+import { cache, dispose } from '../util/cache.js';
+import { request, setCookie } from '../util/request.js';
 
 export default class Client {
 	model = Model;
@@ -25,10 +25,10 @@ export default class Client {
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.
 	 */
 	async login(credentials: CredentialsSchema): Promise<void> {
-		const cookie = await Cache.wrap('login', async () => {
+		const cookie = await cache('login', async () => {
 			const validatedCredentials = credentialsSchema.parse(credentials);
 
-			const response = await Rest.fetch(new URL(`${apiUrl}/login`), {
+			const response = await request(new URL(`${apiUrl}/login`), {
 				method: 'POST',
 				body: JSON.stringify({
 					username_or_email: validatedCredentials.username,
@@ -52,14 +52,11 @@ export default class Client {
 			throw new FakeYouError('Login succeeded but there was a problem processing your session token.');
 		}
 
-		Rest.cookie = cookie;
-
-		setTimeout(() => {
-			Cache.dispose('fetch-models');
-		}, 5000);
+		setCookie(cookie);
 	}
 
 	logout() {
-		Rest.cookie = undefined;
+		dispose('login');
+		setCookie(undefined);
 	}
 }

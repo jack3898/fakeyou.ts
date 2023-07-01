@@ -1,16 +1,10 @@
-/**
- * Promise wrapper over setTimeout. Useful for pausing an asynchronous operation for that time.
- */
-export function sleep(ms: number): Promise<void> {
-	return new Promise<void>((res) => {
-		setTimeout(() => {
-			res();
-		}, ms);
-	});
-}
+import { sleep } from './sleep.js';
 
 /**
- * Run a promise over and over again until the result is truthy.
+ * Run a promise over and over again until you have the right result!
+ *
+ * NOTE: You need to explicitly control the polling behaviour with a variant of the poll enum. `poll.Status.X`.
+ * For safety reasons, this function will return the result of the callback by default if it has not been told explicitly to retry.
  */
 export async function poll<T>(callback: () => Promise<T | PollStatus>, interval = 1000, maxTries = 60): Promise<T | null> {
 	let attempts = 0;

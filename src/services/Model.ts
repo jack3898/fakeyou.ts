@@ -1,5 +1,5 @@
 import { apiUrl } from '../util/constants.js';
-import { poll } from '../util/functions.js';
+import { poll } from '../util/poll.js';
 import {
 	ttsInferenceSchena,
 	ttsModelListSchema,
@@ -9,16 +9,16 @@ import {
 } from '../util/validation.js';
 import TtsAudioFile from './TtsAudioFile.js';
 import crypto from 'node:crypto';
-import Rest from './Rest.js';
-import Cache from './Cache.js';
 import Category from './Category.js';
+import { cache } from '../util/cache.js';
+import { request } from '../util/request.js';
 
 export default class Model {
 	constructor(public data: TtsModelSchema) {}
 
 	static fetchModels() {
-		return Cache.wrap('fetch-models', async () => {
-			const response = await Rest.fetch(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
+		return cache('fetch-models', async () => {
+			const response = await request(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
 			const json = ttsModelListSchema.parse(await response.json());
 
 			const map = new Map<string, Model>();
@@ -40,7 +40,7 @@ export default class Model {
 	}
 
 	private async fetchInference(text: string) {
-		const response = await Rest.fetch(new URL(`${apiUrl}/tts/inference`), {
+		const response = await request(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.data.model_token,
@@ -54,7 +54,7 @@ export default class Model {
 
 	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
 		return poll(async () => {
-			const response = await Rest.fetch(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());
 
 			switch (result.state.status) {
@@ -71,7 +71,7 @@ export default class Model {
 				case 'dead':
 					return poll.Status.Abort;
 				default:
-					return poll.Status.Retry;
+					return poll.Status.Abort;
 			}
 		});
 	}

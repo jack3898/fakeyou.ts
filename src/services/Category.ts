@@ -1,15 +1,15 @@
+import { cache } from '../util/cache.js';
 import { apiUrl } from '../util/constants.js';
+import { request } from '../util/request.js';
 import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from '../util/validation.js';
-import Cache from './Cache.js';
 import Model from './Model.js';
-import Rest from './Rest.js';
 
 export default class Category {
 	constructor(public data: CategorySchema) {}
 
 	static async fetchCategories(): Promise<Category[]> {
-		return Cache.wrap('fetch-categories', async () => {
-			const response = await Rest.fetch(new URL(`${apiUrl}/category/list/tts`), { method: 'GET' });
+		return cache('fetch-categories', async () => {
+			const response = await request(new URL(`${apiUrl}/category/list/tts`), { method: 'GET' });
 			const json = categoryListResponseSchema.parse(await response.json());
 
 			return json.categories.map((category) => new this(category));
@@ -23,8 +23,8 @@ export default class Category {
 	}
 
 	static async fetchCategoryToModelRelationships() {
-		return Cache.wrap('fetch-category-model-relationships', async () => {
-			const response = await Rest.fetch(new URL(`${apiUrl}/v1/category/computed_assignments/tts`), { method: 'GET' });
+		return cache('fetch-category-model-relationships', async () => {
+			const response = await request(new URL(`${apiUrl}/v1/category/computed_assignments/tts`), { method: 'GET' });
 			const json = categoryToModelSchema.parse(await response.json());
 
 			return json.category_token_to_tts_model_tokens.recursive;

@@ -1,0 +1,31 @@
+let cookie: string | undefined;
+
+/**
+ * Light wrapper over fetch, pre-applies headers useful to this package.
+ */
+export async function request(url: URL, request: Omit<RequestInit, 'headers'>) {
+	const headers = new Headers();
+
+	headers.append('accept', 'application/json');
+	headers.append('content-type', 'application/json');
+	headers.append('credentials', 'include');
+
+	const cookie = getCookie();
+
+	if (cookie) {
+		headers.append('cookie', `session=${cookie}`);
+	}
+
+	return fetch(url, {
+		headers,
+		...request
+	});
+}
+
+export function setCookie(newCookie?: string) {
+	cookie = newCookie;
+}
+
+function getCookie() {
+	return cookie;
+}
