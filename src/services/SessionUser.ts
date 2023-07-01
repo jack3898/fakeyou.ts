@@ -2,6 +2,7 @@ import { type SessionUserSchema, loggedInUserProfileResponseSchema } from '../ut
 import { apiUrl } from '../util/constants.js';
 import ProfileUser from './ProfileUser.js';
 import { request } from '../util/request.js';
+import Subscription from './Subscription.js';
 
 export default class SessionUser {
 	constructor(data: SessionUserSchema) {
@@ -93,7 +94,9 @@ export default class SessionUser {
 		return null;
 	}
 
-	fetchProfile(): Promise<ProfileUser> {
+	readonly fetchSubscriptions = Subscription.fetchSubscriptions;
+
+	fetchProfile(): Promise<ProfileUser | null> {
 		return ProfileUser.fetchUserProfile(this.username);
 	}
 }

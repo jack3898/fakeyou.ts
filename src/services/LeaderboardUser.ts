@@ -1,3 +1,4 @@
+import FakeYouError from '../error/FakeYouError.js';
 import { type LeaderboardUserSchema } from '../util/validation.js';
 import ProfileUser from './ProfileUser.js';
 
@@ -26,7 +27,13 @@ export default class LeaderboardUser {
 
 	readonly uploadedCount: number;
 
-	fetchProfile(): Promise<ProfileUser> {
-		return ProfileUser.fetchUserProfile(this.username);
+	async fetchProfile(): Promise<ProfileUser> {
+		const profileUser = await ProfileUser.fetchUserProfile(this.username);
+
+		if (profileUser) {
+			return profileUser;
+		}
+
+		throw new FakeYouError('Fetch of user profile failed.');
 	}
 }

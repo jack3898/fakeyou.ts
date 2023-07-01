@@ -9,11 +9,11 @@ export default class Queue {
 		this.refreshIntervalMillis = data.refresh_interval_millis;
 	}
 
-	pendingJobCount: number;
+	readonly pendingJobCount: number;
 
-	cacheTime: Date;
+	readonly cacheTime: Date;
 
-	refreshIntervalMillis: number;
+	readonly refreshIntervalMillis: number;
 
 	static async fetchQueue() {
 		const response = await request(new URL(`${apiUrl}/tts/queue_length`), { method: 'GET' });
