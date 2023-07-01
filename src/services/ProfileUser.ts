@@ -1,5 +1,6 @@
 import { cache } from '../util/cache.js';
 import { apiUrl } from '../util/constants.js';
+import { log } from '../util/log.js';
 import { request } from '../util/request.js';
 import { userProfileResponseSchema, type UserProfileSchema } from '../util/validation.js';
 import Badge from './Badge.js';
@@ -74,12 +75,20 @@ export default class ProfileUser {
 
 	badges: Badge[];
 
-	static async fetchUserProfile(username: string) {
-		const json = await cache('fetch-user-profile', async () => {
-			const response = await request(new URL(`${apiUrl}/user/${username}/profile`), { method: 'GET' });
-			return userProfileResponseSchema.parse(await response.json());
-		});
+	static async fetchUserProfile(username: string): Promise<ProfileUser | null> {
+		try {
+			const json = await cache('fetch-user-profile', async () => {
+				const response = await request(new URL(`${apiUrl}/user/${username}/profile`), { method: 'GET' });
+				return userProfileResponseSchema.parse(await response.json());
+			});
 
-		return new this(json.user);
+			return new this(json.user);
+		} catch (error) {
+			log.error(
+				`Response from API failed validation. Check the username you provided, it can be different to their display name.\n${error}`
+			);
+
+			return null;
+		}
 	}
 }
