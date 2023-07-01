@@ -8,6 +8,7 @@
         "outDir": "dist",
         "rootDir": "src",
         "types": ["node"],
+        "declaration": true
     },
     "exclude": ["dist"]
 }

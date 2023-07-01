@@ -4,7 +4,6 @@
     "description": "FakeYou API made easy, with ESM and TypeScript support!",
     "type": "module",
     "main": "dist/index.js",
-    "types": "src/index.ts",
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
