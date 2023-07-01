@@ -15,6 +15,7 @@ import Category from './Category.js';
 import { cache } from '../util/cache.js';
 import { request } from '../util/request.js';
 import { log } from '../util/log.js';
+import ProfileUser from './ProfileUser.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {
@@ -99,6 +100,10 @@ export default class Model {
 
 			return null;
 		}
+	}
+
+	async fetchModelCreator(): Promise<ProfileUser | null> {
+		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}
 
 	private async fetchInference(text: string) {
