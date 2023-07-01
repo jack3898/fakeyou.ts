@@ -3,6 +3,7 @@ import { googleStorageUrl } from '../util/constants.js';
 import type { TtsInferenceStatusDoneSchema } from '../util/validation.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import { request } from '../util/request.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -60,7 +61,7 @@ export default class TtsAudioFile {
 
 		headers.append('content-type', 'audio/x-wav');
 
-		const result = await fetch(this.url, {
+		const result = await request(this.url, {
 			method: 'GET',
 			headers
 		});

@@ -9,6 +9,7 @@ import ProfileUser from './ProfileUser.js';
 import Category from './Category.js';
 import { cache, dispose } from '../util/cache.js';
 import { request, setCookie } from '../util/request.js';
+import { log, setLogging } from '../util/log.js';
 
 export default class Client {
 	readonly model = Model;
@@ -21,10 +22,16 @@ export default class Client {
 
 	readonly category = Category;
 
+	constructor(options?: { logging?: boolean }) {
+		setLogging(!!options?.logging);
+	}
+
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.
 	 */
 	async login(credentials: CredentialsSchema): Promise<void> {
+		log.info('Logging in...');
+
 		const cookie = await cache('login', async () => {
 			const validatedCredentials = credentialsSchema.parse(credentials);
 
@@ -53,6 +60,8 @@ export default class Client {
 		}
 
 		setCookie(cookie);
+
+		log.success('Logged in!');
 	}
 
 	logout() {
