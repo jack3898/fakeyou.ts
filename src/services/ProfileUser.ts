@@ -5,7 +5,74 @@ import { userProfileResponseSchema, type UserProfileSchema } from '../util/valid
 import Badge from './Badge.js';
 
 export default class ProfileUser {
-	constructor(public data: UserProfileSchema) {}
+	constructor(data: UserProfileSchema) {
+		this.token = data.user_token;
+		this.username = data.username;
+		this.displayName = data.display_name;
+		this.emailGravatarHash = data.email_gravatar_hash;
+		this.defaultAvatarIndex = data.default_avatar_index;
+		this.defaultAvatarColorIndex = data.default_avatar_color_index;
+		this.bio = data.profile_markdown;
+		this.bioHtml = data.profile_rendered_html;
+		this.userRoleSlug = data.user_role_slug;
+		this.disableGravatar = data.disable_gravatar;
+		this.preferredTtsResultVisibility = data.preferred_tts_result_visibility;
+		this.preferredW2lResultVisibility = data.preferred_w2l_result_visibility;
+		this.discordUsername = data.discord_username;
+		this.twitchUsername = data.twitch_username;
+		this.twitterUsername = data.twitter_username;
+		this.patreonUsername = data.patreon_username;
+		this.githubUsername = data.github_username;
+		this.cashappUsername = data.cashapp_username;
+		this.websiteUrl = data.website_url;
+		this.createdAt = data.created_at;
+		this.moderatorFields = data.maybe_moderator_fields;
+		this.badges = data.badges.map((badge) => new Badge(badge));
+	}
+
+	token: string;
+
+	username: string;
+
+	displayName: string;
+
+	emailGravatarHash: string;
+
+	defaultAvatarIndex: number;
+
+	defaultAvatarColorIndex: number;
+
+	bio: string;
+
+	bioHtml: string;
+
+	userRoleSlug: string;
+
+	disableGravatar: boolean;
+
+	preferredTtsResultVisibility: string;
+
+	preferredW2lResultVisibility: string;
+
+	discordUsername: string | null;
+
+	twitchUsername: string | null;
+
+	twitterUsername: string | null;
+
+	patreonUsername: string | null;
+
+	githubUsername: string | null;
+
+	cashappUsername: string | null;
+
+	websiteUrl: string | null;
+
+	createdAt: Date;
+
+	moderatorFields: string | null;
+
+	badges: Badge[];
 
 	static async fetchUserProfile(username: string) {
 		const json = await cache('fetch-user-profile', async () => {
@@ -14,53 +81,5 @@ export default class ProfileUser {
 		});
 
 		return new this(json.user);
-	}
-
-	get userToken(): string {
-		return this.data.user_token;
-	}
-
-	get username(): string {
-		return this.data.username;
-	}
-
-	get displayName(): string {
-		return this.data.display_name;
-	}
-
-	get emailGravatarHash(): string {
-		return this.data.email_gravatar_hash;
-	}
-
-	get discordUsername(): string | null {
-		return this.data.discord_username;
-	}
-
-	get twitchUsername(): string | null {
-		return this.data.twitch_username;
-	}
-
-	get twitterUsername(): string | null {
-		return this.data.twitter_username;
-	}
-
-	get patreonUsername(): string | null {
-		return this.data.patreon_username;
-	}
-
-	get githubUsername(): string | null {
-		return this.githubUsername;
-	}
-
-	get websiteUrl(): string | null {
-		return this.websiteUrl;
-	}
-
-	get bio(): string {
-		return this.data.profile_markdown;
-	}
-
-	get badges(): Badge[] {
-		return this.data.badges.map((badge) => new Badge(badge));
 	}
 }

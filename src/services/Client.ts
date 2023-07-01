@@ -11,15 +11,15 @@ import { cache, dispose } from '../util/cache.js';
 import { request, setCookie } from '../util/request.js';
 
 export default class Client {
-	model = Model;
+	readonly model = Model;
 
-	sessionUser = SessionUser;
+	readonly sessionUser = SessionUser;
 
-	leaderboard = Leaderboard;
+	readonly leaderboard = Leaderboard;
 
-	userProfile = ProfileUser;
+	readonly userProfile = ProfileUser;
 
-	category = Category;
+	readonly category = Category;
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.

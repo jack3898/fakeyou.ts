@@ -14,7 +14,53 @@ import { cache } from '../util/cache.js';
 import { request } from '../util/request.js';
 
 export default class Model {
-	constructor(public data: TtsModelSchema) {}
+	constructor(data: TtsModelSchema) {
+		this.token = data.model_token;
+		this.ttsModelType = data.tts_model_type;
+		this.creatorToken = data.creator_user_token;
+		this.creatorUsername = data.creator_username;
+		this.creatorDisplayName = data.creator_display_name;
+		this.creatorGravatarHash = data.creator_gravatar_hash;
+		this.title = data.title;
+		this.ietfLanguageTag = data.ietf_language_tag;
+		this.ietfPrimaryLanguageSubtag = data.ietf_primary_language_subtag;
+		this.isFrontPageFeatured = data.is_front_page_featured;
+		this.isTwitchFeatures = data.is_twitch_featured;
+		this.suggestedUniqueBotCommand = data.maybe_suggested_unique_bot_command;
+		this.categoryTokens = data.category_tokens;
+		this.createdAt = data.created_at;
+		this.updatedAt = data.updated_at;
+	}
+
+	token: string;
+
+	ttsModelType: string;
+
+	creatorToken: string;
+
+	creatorUsername: string;
+
+	creatorDisplayName: string;
+
+	creatorGravatarHash: string;
+
+	title: string;
+
+	ietfLanguageTag: string;
+
+	ietfPrimaryLanguageSubtag: string;
+
+	isFrontPageFeatured: boolean;
+
+	isTwitchFeatures: boolean;
+
+	suggestedUniqueBotCommand: string | null;
+
+	categoryTokens: string[];
+
+	createdAt: Date;
+
+	updatedAt: Date;
 
 	static fetchModels() {
 		return cache('fetch-models', async () => {
@@ -43,7 +89,7 @@ export default class Model {
 		const response = await request(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
-				tts_model_token: this.data.model_token,
+				tts_model_token: this.token,
 				uuid_idempotency_token: crypto.randomUUID(),
 				inference_text: text
 			})
@@ -91,49 +137,5 @@ export default class Model {
 		const categories = await Category.fetchCategories();
 
 		return categories.filter((category) => this.categoryTokens.includes(category.token));
-	}
-
-	get title(): string {
-		return this.data.title;
-	}
-
-	get token(): string {
-		return this.data.model_token;
-	}
-
-	get categoryTokens(): string[] {
-		return this.data.category_tokens;
-	}
-
-	get createdAt(): Date {
-		return this.data.created_at;
-	}
-
-	get updatedAt(): Date {
-		return this.updatedAt;
-	}
-
-	get ttsModelType(): string {
-		return this.data.tts_model_type;
-	}
-
-	get creatorUsername(): string {
-		return this.data.creator_username;
-	}
-
-	get creatorToken(): string {
-		return this.data.creator_user_token;
-	}
-
-	get creatorGravatarHash(): string {
-		return this.data.creator_gravatar_hash;
-	}
-
-	get ietfLanguageTag(): string {
-		return this.data.ietf_language_tag;
-	}
-
-	get ietfPrimaryLanguageSubtag(): string {
-		return this.data.ietf_primary_language_subtag;
 	}
 }
