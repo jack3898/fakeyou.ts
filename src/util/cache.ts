@@ -1,3 +1,5 @@
+import { log } from './log.js';
+
 const cacheMap = new Map<string, { expiry: number; data: unknown }>();
 
 /**
@@ -10,8 +12,12 @@ export async function cache<T>(key: string, operation: () => Promise<T>, expires
 	const cacheItem = cacheMap.get(key);
 
 	if (cacheItem && cacheItem.expiry > Date.now()) {
+		log.info(`Cache hit for key ${key}`);
+
 		return cacheItem.data as T;
 	}
+
+	log.warn(`Cache miss for key ${key}`);
 
 	const freshData = await operation();
 

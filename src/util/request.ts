@@ -1,9 +1,13 @@
+import { log } from './log.js';
+
 let cookie: string | undefined;
 
 /**
  * Light wrapper over fetch, pre-applies headers useful to this package.
  */
-export async function request(url: URL, request: Omit<RequestInit, 'headers'>) {
+export async function request(url: URL, request?: RequestInit) {
+	log.http(url);
+
 	const headers = new Headers();
 
 	headers.append('accept', 'application/json');

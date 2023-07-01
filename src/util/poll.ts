@@ -6,7 +6,7 @@ import { sleep } from './sleep.js';
  * NOTE: You need to explicitly control the polling behaviour with a variant of the poll enum. `poll.Status.X`.
  * For safety reasons, this function will return the result of the callback by default if it has not been told explicitly to retry.
  */
-export async function poll<T>(callback: () => Promise<T | PollStatus>, interval = 1000, maxTries = 60): Promise<T | null> {
+export async function poll<T>(callback: () => Promise<T | PollStatus>, interval = 1000, maxTries = 120): Promise<T | null> {
 	let attempts = 0;
 
 	// eslint-disable-next-line no-constant-condition
