@@ -5,13 +5,16 @@ import {
 	ttsModelListSchema,
 	ttsRequestStatusResponseSchema,
 	type TtsModelSchema,
-	type TtsInferenceStatusDoneSchema
+	type TtsInferenceStatusDoneSchema,
+	userRatingResponseSchema,
+	type RatingSchema
 } from '../util/validation.js';
 import TtsAudioFile from './TtsAudioFile.js';
 import crypto from 'node:crypto';
 import Category from './Category.js';
 import { cache } from '../util/cache.js';
 import { request } from '../util/request.js';
+import { log } from '../util/log.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {
@@ -131,6 +134,38 @@ export default class Model {
 		}
 
 		return null;
+	}
+
+	async fetchMyRating(): Promise<RatingSchema | null> {
+		try {
+			const response = await request(new URL(`${apiUrl}/v1/user_rating/view/tts_model/${this.token}`));
+			const json = userRatingResponseSchema.parse(await response.json());
+
+			return json.maybe_rating_value;
+		} catch (error) {
+			log.error(`Response from API failed validation. Are you logged in?\n${error}`);
+
+			return null;
+		}
+	}
+
+	async rate(decision: RatingSchema): Promise<RatingSchema | null> {
+		try {
+			await request(new URL(`${apiUrl}/v1/user_rating/rate`), {
+				method: 'POST',
+				body: JSON.stringify({
+					entity_type: 'tts_model',
+					entity_token: this.token,
+					rating_value: decision
+				})
+			});
+
+			return this.fetchMyRating();
+		} catch (error) {
+			log.error(`Unable to apply rating. Are you logged in?\n${error}`);
+
+			return null;
+		}
 	}
 
 	async fetchParentCategories(): Promise<Category[]> {
