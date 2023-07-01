@@ -12,6 +12,7 @@ import { request, setCookie } from '../util/request.js';
 import { log, setLogging } from '../util/log.js';
 import Queue from './Queue.js';
 import Subscription from './Subscription.js';
+import UserAudioFile from './UserAudioFile.js';
 
 export default class Client {
 	readonly model = Model;
@@ -27,6 +28,8 @@ export default class Client {
 	readonly queue = Queue;
 
 	readonly userSubscription = Subscription;
+
+	readonly userTtsAudioHistory = UserAudioFile;
 
 	constructor(options?: { logging?: boolean }) {
 		setLogging(!!options?.logging);
