@@ -2,7 +2,13 @@ import { cache } from '../util/cache.js';
 import { apiUrl } from '../util/constants.js';
 import { log } from '../util/log.js';
 import { request } from '../util/request.js';
-import { userProfileResponseSchema, type UserProfileSchema } from '../util/validation.js';
+import {
+	editUserProfileInputSchema,
+	userProfileResponseSchema,
+	type UserProfileSchema,
+	type EditUserProfileInputSchema,
+	editUserProfileResponseSchema
+} from '../util/validation.js';
 import Badge from './Badge.js';
 
 export default class ProfileUser {
@@ -89,6 +95,41 @@ export default class ProfileUser {
 			);
 
 			return null;
+		}
+	}
+
+	/**
+	 * Edit the user profile.
+	 *
+	 * If you do not have privileges to edit other users' accounts, this will return false
+	 */
+	async editProfile(newValues: Partial<EditUserProfileInputSchema>): Promise<boolean> {
+		try {
+			const body = editUserProfileInputSchema.parse({
+				cashapp_username: this.cashappUsername ?? '',
+				discord_username: this.discordUsername ?? '',
+				github_username: this.githubUsername ?? '',
+				twitch_username: this.twitchUsername ?? '',
+				twitter_username: this.twitterUsername ?? '',
+				preferred_tts_result_visibility: this.preferredTtsResultVisibility,
+				preferred_w2l_result_visibility: this.preferredW2lResultVisibility,
+				profile_markdown: this.bio,
+				website_url: this.websiteUrl ?? '',
+				...newValues
+			});
+
+			const result = await request(new URL(`${apiUrl}/user/${this.username}/edit_profile`), {
+				method: 'POST',
+				body: JSON.stringify(body)
+			});
+
+			const json = editUserProfileResponseSchema.parse(await result.json());
+
+			return json.success;
+		} catch (error) {
+			log.error(`Response from API failed validation. Do you have the right privileges to edit this user?\n${error}`);
+
+			return false;
 		}
 	}
 }
