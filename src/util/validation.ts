@@ -308,3 +308,24 @@ export const userRatingResponseSchema = z.object({
 });
 
 export type UserRatingResponseSchema = z.infer<typeof userRatingResponseSchema>;
+
+//////////
+
+export const editUserProfileInputSchema = z.object({
+	cashapp_username: z.string(),
+	discord_username: z.string(),
+	github_username: z.string(),
+	preferred_tts_result_visibility: z.union([z.literal('public'), z.literal('hidden')]),
+	preferred_w2l_result_visibility: z.union([z.literal('public'), z.literal('hidden')]),
+	profile_markdown: z.string(),
+	twitch_username: z.string(),
+	twitter_username: z.string(),
+	website_url: z.string()
+});
+
+export type EditUserProfileInputSchema = z.infer<typeof editUserProfileInputSchema>;
+
+// TODO: was adding response validation
+export const editUserProfileResponseSchema = z.object({
+	success: z.boolean()
+});
