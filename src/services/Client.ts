@@ -10,6 +10,7 @@ import Category from './Category.js';
 import { cache, dispose } from '../util/cache.js';
 import { request, setCookie } from '../util/request.js';
 import { log, setLogging } from '../util/log.js';
+import Queue from './Queue.js';
 
 export default class Client {
 	readonly model = Model;
@@ -21,6 +22,8 @@ export default class Client {
 	readonly userProfile = ProfileUser;
 
 	readonly category = Category;
+
+	readonly queue = Queue;
 
 	constructor(options?: { logging?: boolean }) {
 		setLogging(!!options?.logging);
