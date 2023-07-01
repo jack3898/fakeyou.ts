@@ -3,11 +3,12 @@ import { googleStorageUrl } from '../util/constants.js';
 import type { TtsInferenceStatusDoneSchema } from '../util/validation.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import { request } from '../util/request.js';
+import type { AudioFile } from '../interface/AudioFile.js';
+import { downloadWav } from '../util/downloadWav.js';
 
 const writeFile = promisify(fs.writeFile);
 
-export default class TtsAudioFile {
+export default class TtsAudioFile implements AudioFile {
 	constructor(data: TtsInferenceStatusDoneSchema) {
 		this.token = data.job_token;
 		this.status = data.status;
@@ -57,24 +58,15 @@ export default class TtsAudioFile {
 			return this.#buffer;
 		}
 
-		const headers = new Headers();
+		const download = await downloadWav(this.url);
 
-		headers.append('content-type', 'audio/x-wav');
+		if (download) {
+			this.#buffer = download;
 
-		const result = await request(this.url, {
-			method: 'GET',
-			headers
-		});
-
-		if (result.type === 'opaque') {
-			return null;
+			return this.#buffer;
 		}
 
-		const arrayBuffer = await result.blob().then((b) => b?.arrayBuffer());
-
-		this.#buffer = Buffer.from(arrayBuffer);
-
-		return this.#buffer;
+		return null;
 	}
 
 	async toBase64(): Promise<string | null> {

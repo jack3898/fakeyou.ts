@@ -10,6 +10,7 @@ import {
 	editUserProfileResponseSchema
 } from '../util/validation.js';
 import Badge from './Badge.js';
+import UserAudioFile from './UserAudioFile.js';
 
 export default class ProfileUser {
 	constructor(data: UserProfileSchema) {
@@ -131,5 +132,13 @@ export default class ProfileUser {
 
 			return false;
 		}
+	}
+
+	fetchTtsAudioHistory(cursor?: string): Promise<{
+		cursorNext: string | null;
+		cursorPrev: string | null;
+		results: UserAudioFile[];
+	} | null> {
+		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
 	}
 }
