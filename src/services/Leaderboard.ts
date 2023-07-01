@@ -27,13 +27,6 @@ export default class Leaderboard {
 		return new this(json);
 	}
 
-	get data() {
-		return {
-			tts: this.#ttsLeaderboardData,
-			w2l: this.#w2lLeaderboardData
-		};
-	}
-
 	get ttsLeaderboard(): LeaderboardUser[] {
 		return this.#ttsLeaderboardData.map((leaderboardUser) => new LeaderboardUser(leaderboardUser));
 	}
