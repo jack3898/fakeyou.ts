@@ -146,36 +146,66 @@ export default class Model {
 		});
 	}
 
-	#modelDataloader = new DataLoader(this.#batchInfer.bind(this));
+	// The dataloader must be static, so that multiple different model instances can use it.
+	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
+	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
+	// Thanks to caching, this is not a massive performance problem!
+	static #modelDataloader = new DataLoader(Model.#modelInferenceDataloader);
 
-	async #batchInfer(texts: readonly string[]): Promise<(TtsAudioFile | null)[]> {
-		if (texts.length > 10) {
+	static async #modelInferenceDataloader(base64Query: readonly string[]): Promise<(TtsAudioFile | null)[]> {
+		if (base64Query.length > 10) {
 			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
 		}
 
+		const models = await Model.fetchModels();
 		const results: TtsAudioFile[] = [];
 
-		for (const text of texts) {
-			const end = Date.now() + 3800;
-			const inference = await this.fetchInference(text);
-			const audioUrl = await this.getAudioUrl(inference.inference_job_token);
+		const decodedQueries: [string, string][] = base64Query.map((base64Query) => {
+			const [text, modelToken] = base64Query.split(':');
 
-			if (audioUrl) {
-				log.success(`Inference success for "${text}"`);
-				results.push(new TtsAudioFile(audioUrl));
-				await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until three seconds have passed since the start of the request
+			return [Buffer.from(text, 'base64').toString(), Buffer.from(modelToken, 'base64').toString()];
+		});
+
+		for (const [text, modelToken] of decodedQueries) {
+			const model = models.get(modelToken);
+
+			if (!model) {
+				continue;
 			}
+
+			const end = Date.now() + 3800;
+			const inference = await model.fetchInference(text);
+			const audioUrl = await model.getAudioUrl(inference.inference_job_token);
+
+			if (!audioUrl) {
+				continue;
+			}
+
+			log.success(`Inference success for "${text}"`);
+			results.push(new TtsAudioFile(audioUrl));
+
+			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until three seconds have passed since the start of the request
 		}
 
-		// The return value must match items' order must correspond to the texts array
-		// And be of exactly the same length
-		return texts.map((dataloaderText) => {
-			return results.find((result) => result.rawInferenceText === dataloaderText) || null;
+		// The return value array must return corresponding data for each item.
+		// And be of exactly the same length so the dataloader can tie things back together.
+		return decodedQueries.map(([text]) => {
+			return results.find((result) => result.rawInferenceText === text) || null;
 		});
 	}
 
+	/**
+	 * Infer text for this model!
+	 *
+	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
+	 */
 	infer(text: string): Promise<TtsAudioFile | null> {
-		return this.#modelDataloader.load(text);
+		// First encode text to base64, so that users cannot confuse this application when we pass the
+		// colon-delimited query string to the dataloader
+		const textBase64 = Buffer.from(`${text}`).toString('base64');
+		const modelTokenBase64 = Buffer.from(this.token).toString('base64');
+
+		return Model.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
 	}
 
 	async fetchMyRating(): Promise<RatingSchema | null> {
