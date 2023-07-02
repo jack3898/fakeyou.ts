@@ -4,8 +4,6 @@
 
 A modern, light and easy-to-use API wrapper for FakeYou. Get your app up and running with FakeYou in minutes!
 
-NOTE: This library is a work in progress and is in pre-release, that being said, it should have enough features to suit a TTS application! Things are of course subject to change.
-
 ## Installation
 
 ```bash
