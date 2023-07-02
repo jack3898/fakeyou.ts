@@ -156,7 +156,7 @@ export default class Model {
 		const results: TtsAudioFile[] = [];
 
 		for (const text of texts) {
-			const end = Date.now() + 3000;
+			const end = Date.now() + 3800;
 			const inference = await this.fetchInference(text);
 			const audioUrl = await this.getAudioUrl(inference.inference_job_token);
 
