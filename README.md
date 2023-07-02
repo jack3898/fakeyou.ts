@@ -46,7 +46,9 @@ const audio = await model?.infer("hello!");
 await audio.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw url!
 ```
 
-Or you can let the client handle the rate limiting of FakeYou! Behind the scenes it safely schedules each inference so you aren't accidentally rate limited (simply awaiting each inference in series without this can risk a rate limit).
+## Rate limiting
+
+You can let the client handle the rate limiting of FakeYou! Using the below approach with `Promise.all()` it will automatically safely schedule each inference so you aren't accidentally rate limited. It is important to note that the more you add, the slower it will take to complete your request.
 
 ```ts
 const [audio1, audio2, audio3] = await Promise.all([
