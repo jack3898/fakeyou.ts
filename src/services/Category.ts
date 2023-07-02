@@ -52,7 +52,7 @@ export default class Category {
 
 	static async fetchCategories(): Promise<Category[]> {
 		return cache('fetch-categories', async () => {
-			const response = await request(new URL(`${apiUrl}/category/list/tts`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/category/list/tts`));
 			const json = categoryListResponseSchema.parse(await response.json());
 
 			return json.categories.map((category) => new this(category));
@@ -67,7 +67,7 @@ export default class Category {
 
 	static async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
 		return cache('fetch-category-model-relationships', async () => {
-			const response = await request(new URL(`${apiUrl}/v1/category/computed_assignments/tts`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/v1/category/computed_assignments/tts`));
 			const json = categoryToModelSchema.parse(await response.json());
 
 			return json.category_token_to_tts_model_tokens.recursive;

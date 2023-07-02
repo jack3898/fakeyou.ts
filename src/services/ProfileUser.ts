@@ -87,7 +87,7 @@ export default class ProfileUser {
 	static async fetchUserProfile(username: string): Promise<ProfileUser | null> {
 		try {
 			const json = await cache('fetch-user-profile', async () => {
-				const response = await request(new URL(`${apiUrl}/user/${username}/profile`), { method: 'GET' });
+				const response = await request(new URL(`${apiUrl}/user/${username}/profile`));
 				return userProfileResponseSchema.parse(await response.json());
 			});
 

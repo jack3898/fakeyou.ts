@@ -84,7 +84,7 @@ export default class SessionUser {
 	canDeleteUsers: boolean;
 
 	static async fetchLoggedInUser(): Promise<SessionUser | null> {
-		const response = await request(new URL(`${apiUrl}/session`), { method: 'GET' });
+		const response = await request(new URL(`${apiUrl}/session`));
 		const loggedInUser = loggedInUserProfileResponseSchema.parse(await response.json());
 
 		if (loggedInUser.logged_in) {

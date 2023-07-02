@@ -1,6 +1,6 @@
 {
     "name": "fakeyou.ts",
-    "version": "0.0.31",
+    "version": "0.0.32",
     "description": "FakeYou API made easy, with ESM and TypeScript support!",
     "type": "module",
     "main": "dist/index.js",

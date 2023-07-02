@@ -16,7 +16,7 @@ export default class Subscription {
 
 	static async fetchSubscriptions(): Promise<Subscription | null> {
 		try {
-			const response = await request(new URL(`${apiUrl}/v1/billing/active_subscriptions`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/v1/billing/active_subscriptions`));
 			const json = activeSubscriptionsResponseSchema.parse(await response.json());
 
 			return new this(json);

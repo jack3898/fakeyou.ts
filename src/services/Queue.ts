@@ -16,7 +16,7 @@ export default class Queue {
 	readonly refreshIntervalMillis: number;
 
 	static async fetchQueue(): Promise<Queue> {
-		const response = await request(new URL(`${apiUrl}/tts/queue_length`), { method: 'GET' });
+		const response = await request(new URL(`${apiUrl}/tts/queue_length`));
 		const json = queueLengthResponseSchema.parse(await response.json());
 
 		return new this(json);

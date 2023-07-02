@@ -20,7 +20,7 @@ export default class Leaderboard {
 
 	static async fetchLeaderboard(): Promise<Leaderboard> {
 		const json = await cache('fetch-leaderboard', async () => {
-			const response = await request(new URL(`${apiUrl}/leaderboard`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/leaderboard`));
 			return leaderboardResponseSchema.parse(await response.json());
 		});
 

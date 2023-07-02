@@ -69,7 +69,7 @@ export default class Model {
 
 	static fetchModels(): Promise<Map<string, Model>> {
 		return cache('fetch-models', async () => {
-			const response = await request(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/tts/list`));
 			const json = ttsModelListSchema.parse(await response.json());
 
 			const map = new Map<string, Model>();
@@ -122,7 +122,7 @@ export default class Model {
 
 	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
 		return poll(async () => {
-			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`), { method: 'GET' });
+			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`));
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());
 
 			switch (result.state.status) {
