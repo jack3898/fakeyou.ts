@@ -28,7 +28,6 @@ jobs:
                 rm .eslintrc.cjs
                 rm .gitignore
                 rm tsconfig.json
-                rm README.md
                 npm publish --access public
               env:
                 NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
