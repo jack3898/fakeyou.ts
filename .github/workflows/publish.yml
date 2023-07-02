@@ -27,6 +27,7 @@ jobs:
                 rm -R .vscode/
                 rm .eslintrc.cjs
                 rm .gitignore
+                rm tsconfig.json
                 rm README.md
                 npm publish --access public
               env:
