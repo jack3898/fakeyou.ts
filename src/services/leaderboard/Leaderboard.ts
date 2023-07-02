@@ -1,12 +1,9 @@
-import { cache } from '../util/cache.js';
-import { apiUrl } from '../util/constants.js';
-import { request } from '../util/request.js';
-import {
-	leaderboardResponseSchema,
-	type LeaderboardResponseSchema,
-	type LeaderboardUserSchema
-} from '../util/validation.js';
-import LeaderboardUser from './LeaderboardUser.js';
+import { cache } from '../../util/cache.js';
+import { apiUrl } from '../../util/constants.js';
+import { request } from '../../util/request.js';
+import LeaderboardUser from '../leaderboardUser/LeaderboardUser.js';
+import { type LeaderboardUserSchema } from '../leaderboardUser/leaderboardUser.schema.js';
+import { type LeaderboardResponseSchema, leaderboardResponseSchema } from './leaderboard.schema.js';
 
 export default class Leaderboard {
 	constructor(data: LeaderboardResponseSchema) {

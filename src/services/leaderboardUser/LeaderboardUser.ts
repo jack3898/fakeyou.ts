@@ -1,6 +1,6 @@
-import FakeYouError from '../error/FakeYouError.js';
-import { type LeaderboardUserSchema } from '../util/validation.js';
-import ProfileUser from './ProfileUser.js';
+import FakeYouError from '../../error/FakeYouError.js';
+import ProfileUser from '../profileUser/ProfileUser.js';
+import { type LeaderboardUserSchema } from './leaderboardUser.schema.js';
 
 export default class LeaderboardUser {
 	constructor(public data: LeaderboardUserSchema) {

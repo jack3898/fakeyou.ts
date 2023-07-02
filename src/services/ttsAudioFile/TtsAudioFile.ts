@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import type { AudioFile } from '../interface/AudioFile.js';
-import { googleStorageUrl } from '../util/constants.js';
-import { downloadWav } from '../util/downloadWav.js';
-import type { TtsInferenceStatusDoneSchema } from '../util/validation.js';
-import Model from './Model.js';
+import type { AudioFile } from '../../interface/AudioFile.js';
+import { googleStorageUrl } from '../../util/constants.js';
+import { downloadWav } from '../../util/downloadWav.js';
+import Model from '../model/Model.js';
+import { type TtsInferenceStatusDoneSchema } from '../model/model.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 

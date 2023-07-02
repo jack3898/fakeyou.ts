@@ -1,22 +1,22 @@
 import crypto from 'node:crypto';
-import { cache } from '../util/cache.js';
-import { apiUrl } from '../util/constants.js';
-import { log } from '../util/log.js';
-import { poll } from '../util/poll.js';
-import { request } from '../util/request.js';
+import { cache } from '../../util/cache.js';
+import { apiUrl } from '../../util/constants.js';
+import { log } from '../../util/log.js';
+import { poll } from '../../util/poll.js';
+import { request } from '../../util/request.js';
+import Category from '../category/Category.js';
+import ProfileUser from '../profileUser/ProfileUser.js';
+import TtsAudioFile from '../ttsAudioFile/TtsAudioFile.js';
 import {
-	ttsInferenceSchena,
+	type TtsModelSchema,
 	ttsModelListSchema,
-	ttsRequestStatusResponseSchema,
-	userRatingResponseSchema,
-	type RatingSchema,
 	type TtsInferenceSchema,
+	ttsInferenceSchena,
 	type TtsInferenceStatusDoneSchema,
-	type TtsModelSchema
-} from '../util/validation.js';
-import Category from './Category.js';
-import ProfileUser from './ProfileUser.js';
-import TtsAudioFile from './TtsAudioFile.js';
+	ttsRequestStatusResponseSchema,
+	type RatingSchema,
+	userRatingResponseSchema
+} from './model.schema.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {

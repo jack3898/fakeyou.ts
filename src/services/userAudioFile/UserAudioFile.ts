@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import type { AudioFile } from '../interface/AudioFile.js';
-import { apiUrl, googleStorageUrl } from '../util/constants.js';
-import { downloadWav } from '../util/downloadWav.js';
-import { log } from '../util/log.js';
-import { request } from '../util/request.js';
-import { userTtsListResponseSchema, type UserTtsSchema } from '../util/validation.js';
-import Model from './Model.js';
+import type { AudioFile } from '../../interface/AudioFile.js';
+import { apiUrl, googleStorageUrl } from '../../util/constants.js';
+import { downloadWav } from '../../util/downloadWav.js';
+import { log } from '../../util/log.js';
+import { request } from '../../util/request.js';
+import Model from '../model/Model.js';
+import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 

@@ -1,18 +1,18 @@
-import AuthorisationError from '../error/AuthorisationError.js';
-import FakeYouError from '../error/FakeYouError.js';
-import { cache, dispose } from '../util/cache.js';
-import { apiUrl } from '../util/constants.js';
-import { log, setLogging } from '../util/log.js';
-import { request, setCookie } from '../util/request.js';
-import { credentialsSchema, loginSchema, type CredentialsSchema } from '../util/validation.js';
-import Category from './Category.js';
-import Leaderboard from './Leaderboard.js';
-import Model from './Model.js';
-import ProfileUser from './ProfileUser.js';
-import Queue from './Queue.js';
-import SessionUser from './SessionUser.js';
-import Subscription from './Subscription.js';
-import UserAudioFile from './UserAudioFile.js';
+import AuthorisationError from '../../error/AuthorisationError.js';
+import FakeYouError from '../../error/FakeYouError.js';
+import { cache, dispose } from '../../util/cache.js';
+import { apiUrl } from '../../util/constants.js';
+import { log, setLogging } from '../../util/log.js';
+import { request, setCookie } from '../../util/request.js';
+import Category from '../category/Category.js';
+import Leaderboard from '../leaderboard/Leaderboard.js';
+import Model from '../model/Model.js';
+import ProfileUser from '../profileUser/ProfileUser.js';
+import Queue from '../queue/Queue.js';
+import SessionUser from '../sessionUser/SessionUser.js';
+import Subscription from '../subscription/Subscription.js';
+import UserAudioFile from '../userAudioFile/UserAudioFile.js';
+import { credentialsSchema, type CredentialsSchema, loginSchema } from './client.schema.js';
 
 export default class Client {
 	readonly model = Model;

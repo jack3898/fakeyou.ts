@@ -1,4 +1,4 @@
-import type { ProductSchema } from '../util/validation.js';
+import { type ProductSchema } from './product.schema.js';
 
 export default class Product {
 	constructor(data: ProductSchema) {

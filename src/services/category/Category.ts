@@ -1,8 +1,8 @@
-import { cache } from '../util/cache.js';
-import { apiUrl } from '../util/constants.js';
-import { request } from '../util/request.js';
-import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from '../util/validation.js';
-import Model from './Model.js';
+import { cache } from '../../util/cache.js';
+import { apiUrl } from '../../util/constants.js';
+import { request } from '../../util/request.js';
+import Model from '../model/Model.js';
+import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from './category.schema.js';
 
 export default class Category {
 	constructor(data: CategorySchema) {

@@ -1,8 +1,8 @@
-import { apiUrl } from '../util/constants.js';
-import { log } from '../util/log.js';
-import { request } from '../util/request.js';
-import { activeSubscriptionsResponseSchema, type ActiveSubscriptionsResponseSchema } from '../util/validation.js';
-import Product from './Product.js';
+import { apiUrl } from '../../util/constants.js';
+import { log } from '../../util/log.js';
+import { request } from '../../util/request.js';
+import Product from '../product/Product.js';
+import { type ActiveSubscriptionsResponseSchema, activeSubscriptionsResponseSchema } from './subscription.schema.js';
 
 export default class Subscription {
 	constructor(data: ActiveSubscriptionsResponseSchema) {

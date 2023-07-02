@@ -1,4 +1,4 @@
-import type { UserBadgeSchema } from '../util/validation.js';
+import { type UserBadgeSchema } from './badge.schema.js';
 
 export default class Badge {
 	constructor(data: UserBadgeSchema) {

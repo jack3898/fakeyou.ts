@@ -1,18 +1,18 @@
-import FakeYouError from '../error/FakeYouError.js';
-import { cache } from '../util/cache.js';
-import { apiUrl } from '../util/constants.js';
-import { log } from '../util/log.js';
-import { request } from '../util/request.js';
+import FakeYouError from '../../error/FakeYouError.js';
+import { cache } from '../../util/cache.js';
+import { apiUrl } from '../../util/constants.js';
+import { log } from '../../util/log.js';
+import { request } from '../../util/request.js';
+import Badge from '../badge/Badge.js';
+import Model from '../model/Model.js';
+import UserAudioFile from '../userAudioFile/UserAudioFile.js';
 import {
 	editUserProfileInputSchema,
 	editUserProfileResponseSchema,
 	userProfileResponseSchema,
 	type EditUserProfileInputSchema,
 	type UserProfileSchema
-} from '../util/validation.js';
-import Badge from './Badge.js';
-import Model from './Model.js';
-import UserAudioFile from './UserAudioFile.js';
+} from './profileUser.schema.js';
 
 export default class ProfileUser {
 	constructor(data: UserProfileSchema) {

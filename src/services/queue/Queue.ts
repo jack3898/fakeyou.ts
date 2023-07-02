@@ -1,6 +1,6 @@
-import { apiUrl } from '../util/constants.js';
-import { request } from '../util/request.js';
-import { queueLengthResponseSchema, type QueueLengthResponseSchema } from '../util/validation.js';
+import { apiUrl } from '../../util/constants.js';
+import { request } from '../../util/request.js';
+import { queueLengthResponseSchema, type QueueLengthResponseSchema } from './queue.schema.js';
 
 export default class Queue {
 	constructor(data: QueueLengthResponseSchema) {
