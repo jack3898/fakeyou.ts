@@ -24,6 +24,7 @@ jobs:
                 npm run build
                 rm -R src/
                 rm -R .github/
+                rm -R .vscode/
                 rm .eslintrc.cjs
                 rm .gitignore
                 rm README.md
