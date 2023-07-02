@@ -23,7 +23,7 @@ If you use TypeScript `tsconfig.json` must include:
 ```json
 {
     "compilerOptions": {
-        "module": "ESNext"
+        "module": "NodeNext"
     }
 }
 ```
@@ -32,9 +32,7 @@ If you use TypeScript `tsconfig.json` must include:
 
 ```ts
 import Client from "fakeyou.ts";
-```
 
-```ts
 const client = new Client();
 
 await client.login({
@@ -45,7 +43,19 @@ await client.login({
 const model = await client.model.fetchModelByToken("TM:4e2xqpwqaggr");
 const audio = await model?.infer("hello!");
 
-const download = await audio.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw url!
+await audio.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw url!
+```
+
+Or you can let the client handle the rate limiting of FakeYou! Behind the scenes it safely schedules each inference so you aren't accidentally rate limited (simply awaiting each inference in series without this can risk a rate limit).
+
+```ts
+const [audio1, audio2, audio3] = await Promise.all([
+    model.infer("Test!"),
+    model.infer("test 2"),
+    model.infer("Test! 3"),
+]);
+
+// Do what you like with the audio files from here on!
 ```
 
 ## Features
@@ -55,6 +65,7 @@ const download = await audio.toDisk("./local/name.wav"); // or toBuffer, toBase6
 | FakeYou login support              | Ability to take advantage of any potential premium benefits                                  | ✅     |
 | Fetch models                       | Fetch models, and view their info, and do your own TTS                                       | ✅     |
 | Model TTS download                 | Download as buffer, base64, or directly to disk                                              | ✅     |
+| Model TTS rate limit handling      | Tooling to help avoid the rate limiting of FakeYou's API                                     | ✅     |
 | Fetch model categories             | Fetch categories, child categories and parent categories and their models                    | ✅     |
 | View and edit user profiles        | View user profiles, and edit profiles you are privileged to edit (like your own)             | ✅     |
 | Leaderboards                       | Fetch users from the leaderboard                                                             | ✅     |

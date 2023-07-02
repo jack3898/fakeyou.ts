@@ -17,6 +17,8 @@ import {
 	type RatingSchema,
 	userRatingResponseSchema
 } from './model.schema.js';
+import DataLoader from 'dataloader';
+import { sleep } from '../../util/sleep.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {
@@ -144,15 +146,36 @@ export default class Model {
 		});
 	}
 
-	async infer(text: string): Promise<TtsAudioFile | null> {
-		const inference = await this.fetchInference(text);
-		const data = await this.getAudioUrl(inference.inference_job_token);
+	#modelDataloader = new DataLoader(this.#batchInfer.bind(this));
 
-		if (data) {
-			return new TtsAudioFile(data);
+	async #batchInfer(texts: readonly string[]): Promise<(TtsAudioFile | null)[]> {
+		if (texts.length > 10) {
+			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
 		}
 
-		return null;
+		const results: TtsAudioFile[] = [];
+
+		for (const text of texts) {
+			const end = Date.now() + 3000;
+			const inference = await this.fetchInference(text);
+			const audioUrl = await this.getAudioUrl(inference.inference_job_token);
+
+			if (audioUrl) {
+				log.success(`Inference success for "${text}"`);
+				results.push(new TtsAudioFile(audioUrl));
+				await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until three seconds have passed since the start of the request
+			}
+		}
+
+		// The return value must match items' order must correspond to the texts array
+		// And be of exactly the same length
+		return texts.map((dataloaderText) => {
+			return results.find((result) => result.rawInferenceText === dataloaderText) || null;
+		});
+	}
+
+	infer(text: string): Promise<TtsAudioFile | null> {
+		return this.#modelDataloader.load(text);
 	}
 
 	async fetchMyRating(): Promise<RatingSchema | null> {
