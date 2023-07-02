@@ -1,7 +1,7 @@
-import { type SessionUserSchema, loggedInUserProfileResponseSchema } from '../util/validation.js';
 import { apiUrl } from '../util/constants.js';
-import ProfileUser from './ProfileUser.js';
 import { request } from '../util/request.js';
+import { loggedInUserProfileResponseSchema, type SessionUserSchema } from '../util/validation.js';
+import ProfileUser from './ProfileUser.js';
 import Subscription from './Subscription.js';
 
 export default class SessionUser {

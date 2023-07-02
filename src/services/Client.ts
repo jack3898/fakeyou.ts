@@ -1,16 +1,16 @@
-import { credentialsSchema, type CredentialsSchema, loginSchema } from '../util/validation.js';
-import { apiUrl } from '../util/constants.js';
 import AuthorisationError from '../error/AuthorisationError.js';
-import Model from './Model.js';
 import FakeYouError from '../error/FakeYouError.js';
-import SessionUser from './SessionUser.js';
-import Leaderboard from './Leaderboard.js';
-import ProfileUser from './ProfileUser.js';
-import Category from './Category.js';
 import { cache, dispose } from '../util/cache.js';
-import { request, setCookie } from '../util/request.js';
+import { apiUrl } from '../util/constants.js';
 import { log, setLogging } from '../util/log.js';
+import { request, setCookie } from '../util/request.js';
+import { credentialsSchema, loginSchema, type CredentialsSchema } from '../util/validation.js';
+import Category from './Category.js';
+import Leaderboard from './Leaderboard.js';
+import Model from './Model.js';
+import ProfileUser from './ProfileUser.js';
 import Queue from './Queue.js';
+import SessionUser from './SessionUser.js';
 import Subscription from './Subscription.js';
 import UserAudioFile from './UserAudioFile.js';
 
@@ -73,7 +73,7 @@ export default class Client {
 		log.success('Logged in!');
 	}
 
-	logout() {
+	logout(): void {
 		dispose('login');
 		setCookie(undefined);
 	}

@@ -65,7 +65,7 @@ export default class Category {
 		return allCategories.filter((category) => !category.parentToken);
 	}
 
-	static async fetchCategoryToModelRelationships() {
+	static async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
 		return cache('fetch-category-model-relationships', async () => {
 			const response = await request(new URL(`${apiUrl}/v1/category/computed_assignments/tts`), { method: 'GET' });
 			const json = categoryToModelSchema.parse(await response.json());

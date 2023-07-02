@@ -5,10 +5,10 @@ import { log } from '../util/log.js';
 import { request } from '../util/request.js';
 import {
 	editUserProfileInputSchema,
+	editUserProfileResponseSchema,
 	userProfileResponseSchema,
-	type UserProfileSchema,
 	type EditUserProfileInputSchema,
-	editUserProfileResponseSchema
+	type UserProfileSchema
 } from '../util/validation.js';
 import Badge from './Badge.js';
 import Model from './Model.js';

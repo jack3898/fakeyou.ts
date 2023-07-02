@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-undef
 module.exports = {
-	env: { es2021: true },
+	env: { node: true },
 	extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
@@ -24,18 +24,16 @@ module.exports = {
 				endOfLine: 'lf'
 			}
 		],
-		'@typescript-eslint/consistent-type-imports': [
-			'error',
-			{
-				fixStyle: 'separate-type-imports'
-			}
-		],
-		'@typescript-eslint/no-explicit-any': 'error',
-		'@typescript-eslint/no-unused-vars': 'error',
 		indent: 'off',
 		'linebreak-style': ['error', 'unix'],
 		semi: ['error', 'always'],
-		'no-duplicate-imports': 'error'
+		'no-duplicate-imports': 'error',
+		'no-constant-condition': 'off',
+		'@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+		'@typescript-eslint/no-explicit-any': 'error',
+		'@typescript-eslint/no-unused-vars': 'error',
+		'@typescript-eslint/explicit-function-return-type': 'error',
+		'@typescript-eslint/consistent-type-assertions': 'error'
 	},
 	ignorePatterns: ['dist']
 };

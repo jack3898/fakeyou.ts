@@ -5,7 +5,7 @@ let cookie: string | undefined;
 /**
  * Light wrapper over fetch, pre-applies headers useful to this package.
  */
-export async function request(url: URL, request?: RequestInit) {
+export async function request(url: URL, request?: RequestInit): Promise<Response> {
 	log.http(url);
 
 	const headers = new Headers();
@@ -26,10 +26,10 @@ export async function request(url: URL, request?: RequestInit) {
 	});
 }
 
-export function setCookie(newCookie?: string) {
+export function setCookie(newCookie?: string): void {
 	cookie = newCookie;
 }
 
-function getCookie() {
+function getCookie(): string | undefined {
 	return cookie;
 }

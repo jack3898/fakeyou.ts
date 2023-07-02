@@ -18,7 +18,7 @@ export default class Leaderboard {
 
 	#w2lLeaderboardData: LeaderboardUserSchema[];
 
-	static async fetchLeaderboard() {
+	static async fetchLeaderboard(): Promise<Leaderboard> {
 		const json = await cache('fetch-leaderboard', async () => {
 			const response = await request(new URL(`${apiUrl}/leaderboard`), { method: 'GET' });
 			return leaderboardResponseSchema.parse(await response.json());

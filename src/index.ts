@@ -1,1 +1,13 @@
+export { default as Badge } from './services/Badge.js';
+export { default as Category } from './services/Category.js';
 export { default } from './services/Client.js';
+export { default as Leaderboard } from './services/Leaderboard.js';
+export { default as LeaderboardUser } from './services/LeaderboardUser.js';
+export { default as Model } from './services/Model.js';
+export { default as Product } from './services/Product.js';
+export { default as ProfileUser } from './services/ProfileUser.js';
+export { default as Queue } from './services/Queue.js';
+export { default as SessionUser } from './services/SessionUser.js';
+export { default as Subscription } from './services/Subscription.js';
+export { default as TtsAudioFile } from './services/TtsAudioFile.js';
+export { default as UserAudioFile } from './services/UserAudioFile.js';

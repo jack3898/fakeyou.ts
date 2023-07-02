@@ -5,8 +5,8 @@ const cacheMap = new Map<string, { expiry: number; data: unknown }>();
 /**
  * Using a key, cache the result of an async function!
  *
- * NOTE: Global cache use only. I.e. data that is useful for tne entire lifetime of the application.
- * E.g. models, categories etc.
+ * Global cache use only. I.e. data that is useful for the entire lifetime of the application that just needs an occasional refresh.
+ * If you find yourself making the key dynamic, this cache is not the tool to use.
  */
 export async function cache<T>(key: string, operation: () => Promise<T>, expiresInSeconds = 600): Promise<T> {
 	const cacheItem = cacheMap.get(key);

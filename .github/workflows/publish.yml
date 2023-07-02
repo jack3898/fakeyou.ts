@@ -20,9 +20,13 @@ jobs:
             - name: publish
               run: |
                 npm install
+                npm run lint
                 npm run build
                 rm -R src/
                 rm -R .github/
+                rm .eslintrc.cjs
+                rm .gitignore
+                rm README.md
                 npm publish --access public
               env:
                 NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}

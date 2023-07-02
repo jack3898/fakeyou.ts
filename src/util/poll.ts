@@ -9,7 +9,6 @@ import { sleep } from './sleep.js';
 export async function poll<T>(callback: () => Promise<T | PollStatus>, interval = 1000, maxTries = 120): Promise<T | null> {
 	let attempts = 0;
 
-	// eslint-disable-next-line no-constant-condition
 	while (true) {
 		try {
 			if (attempts >= maxTries) {

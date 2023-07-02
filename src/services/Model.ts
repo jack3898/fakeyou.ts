@@ -1,21 +1,22 @@
+import crypto from 'node:crypto';
+import { cache } from '../util/cache.js';
 import { apiUrl } from '../util/constants.js';
+import { log } from '../util/log.js';
 import { poll } from '../util/poll.js';
+import { request } from '../util/request.js';
 import {
 	ttsInferenceSchena,
 	ttsModelListSchema,
 	ttsRequestStatusResponseSchema,
-	type TtsModelSchema,
-	type TtsInferenceStatusDoneSchema,
 	userRatingResponseSchema,
-	type RatingSchema
+	type RatingSchema,
+	type TtsInferenceSchema,
+	type TtsInferenceStatusDoneSchema,
+	type TtsModelSchema
 } from '../util/validation.js';
-import TtsAudioFile from './TtsAudioFile.js';
-import crypto from 'node:crypto';
 import Category from './Category.js';
-import { cache } from '../util/cache.js';
-import { request } from '../util/request.js';
-import { log } from '../util/log.js';
 import ProfileUser from './ProfileUser.js';
+import TtsAudioFile from './TtsAudioFile.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {
@@ -66,7 +67,7 @@ export default class Model {
 
 	updatedAt: Date;
 
-	static fetchModels() {
+	static fetchModels(): Promise<Map<string, Model>> {
 		return cache('fetch-models', async () => {
 			const response = await request(new URL(`${apiUrl}/tts/list`), { method: 'GET' });
 			const json = ttsModelListSchema.parse(await response.json());
@@ -106,7 +107,7 @@ export default class Model {
 		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}
 
-	private async fetchInference(text: string) {
+	private async fetchInference(text: string): Promise<TtsInferenceSchema> {
 		const response = await request(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
