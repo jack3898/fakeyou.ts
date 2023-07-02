@@ -132,7 +132,7 @@ export default class Model {
 				continue;
 			}
 
-			const end = Date.now() + 3800;
+			const end = Date.now() + 5000;
 			const inference = await model.fetchInference(text);
 			const audioUrl = await model.getAudioUrl(inference.inference_job_token);
 
