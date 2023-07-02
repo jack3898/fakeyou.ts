@@ -105,47 +105,6 @@ export default class Model {
 		}
 	}
 
-	async fetchModelCreator(): Promise<ProfileUser | null> {
-		return ProfileUser.fetchUserProfile(this.creatorUsername);
-	}
-
-	private async fetchInference(text: string): Promise<TtsInferenceSchema> {
-		const response = await request(new URL(`${apiUrl}/tts/inference`), {
-			method: 'POST',
-			body: JSON.stringify({
-				tts_model_token: this.token,
-				uuid_idempotency_token: crypto.randomUUID(),
-				inference_text: text
-			})
-		});
-
-		return ttsInferenceSchena.parse(await response.json());
-	}
-
-	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
-		return poll(async () => {
-			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`));
-			const result = ttsRequestStatusResponseSchema.parse(await response.json());
-
-			switch (result.state.status) {
-				case 'pending':
-					return poll.Status.Retry;
-				case 'started':
-					return poll.Status.Retry;
-				case 'complete_success':
-					return result.state;
-				case 'attempt_failed':
-					return poll.Status.Retry;
-				case 'complete_failure':
-					return poll.Status.Abort;
-				case 'dead':
-					return poll.Status.Abort;
-				default:
-					return poll.Status.Abort;
-			}
-		});
-	}
-
 	// The dataloader must be static, so that multiple different model instances can use it.
 	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
 	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
@@ -191,6 +150,47 @@ export default class Model {
 		// And be of exactly the same length so the dataloader can tie things back together.
 		return decodedQueries.map(([text]) => {
 			return results.find((result) => result.rawInferenceText === text) || null;
+		});
+	}
+
+	async fetchModelCreator(): Promise<ProfileUser | null> {
+		return ProfileUser.fetchUserProfile(this.creatorUsername);
+	}
+
+	private async fetchInference(text: string): Promise<TtsInferenceSchema> {
+		const response = await request(new URL(`${apiUrl}/tts/inference`), {
+			method: 'POST',
+			body: JSON.stringify({
+				tts_model_token: this.token,
+				uuid_idempotency_token: crypto.randomUUID(),
+				inference_text: text
+			})
+		});
+
+		return ttsInferenceSchena.parse(await response.json());
+	}
+
+	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
+		return poll(async () => {
+			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`));
+			const result = ttsRequestStatusResponseSchema.parse(await response.json());
+
+			switch (result.state.status) {
+				case 'pending':
+					return poll.Status.Retry;
+				case 'started':
+					return poll.Status.Retry;
+				case 'complete_success':
+					return result.state;
+				case 'attempt_failed':
+					return poll.Status.Retry;
+				case 'complete_failure':
+					return poll.Status.Abort;
+				case 'dead':
+					return poll.Status.Abort;
+				default:
+					return poll.Status.Abort;
+			}
 		});
 	}
 
