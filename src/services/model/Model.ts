@@ -3,19 +3,19 @@ import { cache } from '../../util/cache.js';
 import { apiUrl } from '../../util/constants.js';
 import { log } from '../../util/log.js';
 import { poll } from '../../util/poll.js';
-import { request } from '../../util/request.js';
+import { isAuthenticated, request } from '../../util/request.js';
 import Category from '../category/Category.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import TtsAudioFile from '../ttsAudioFile/TtsAudioFile.js';
 import {
 	type TtsModelSchema,
 	ttsModelListSchema,
-	type TtsInferenceSchema,
-	ttsInferenceSchena,
 	type TtsInferenceStatusDoneSchema,
 	ttsRequestStatusResponseSchema,
 	type RatingSchema,
-	userRatingResponseSchema
+	userRatingResponseSchema,
+	ttsInferenceResultSchema,
+	type TtsInferenceResultSchema
 } from './model.schema.js';
 import DataLoader from 'dataloader';
 import { sleep } from '../../util/sleep.js';
@@ -111,20 +111,29 @@ export default class Model {
 	// Thanks to caching, this is not a massive performance problem!
 	static #modelDataloader = new DataLoader(Model.#modelInferenceDataloader);
 
-	static async #modelInferenceDataloader(base64Query: readonly string[]): Promise<(TtsAudioFile | null)[]> {
-		if (base64Query.length > 10) {
+	static async #modelInferenceDataloader(
+		base64Queries: readonly `${string}:${string}`[]
+	): Promise<(TtsAudioFile | null)[]> {
+		if (base64Queries.length > 10) {
 			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
+		}
+
+		const authenticated = isAuthenticated();
+
+		if (!authenticated) {
+			log.info('You are not logged in to your FakeYou account! Your requests will take longer to process.');
 		}
 
 		const models = await Model.fetchModels();
 		const results: TtsAudioFile[] = [];
 
-		const decodedQueries: [string, string][] = base64Query.map((base64Query) => {
+		const decodedQueries: [string, string][] = base64Queries.map((base64Query) => {
 			const [text, modelToken] = base64Query.split(':');
 
 			return [Buffer.from(text, 'base64').toString(), Buffer.from(modelToken, 'base64').toString()];
 		});
 
+		const startTime = Date.now();
 		for (const [text, modelToken] of decodedQueries) {
 			const model = models.get(modelToken);
 
@@ -132,8 +141,20 @@ export default class Model {
 				continue;
 			}
 
-			const end = Date.now() + 5000;
+			const end = Date.now() + (authenticated ? 5000 : 12000);
 			const inference = await model.fetchInference(text);
+
+			if (!inference.success) {
+				const sleepInterval = 8000;
+
+				log.error(`There was a problem fetching this inference. Will retry in ${sleepInterval / 1000} seconds.`);
+				log.error(inference.error_reason);
+
+				await sleep(sleepInterval); // Probably a rate limit. So we'll wait extra long.
+
+				continue;
+			}
+
 			const audioUrl = await model.getAudioUrl(inference.inference_job_token);
 
 			if (!audioUrl) {
@@ -146,6 +167,11 @@ export default class Model {
 			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until three seconds have passed since the start of the request
 		}
 
+		const endTime = Date.now();
+		const durationSecs = Math.round((endTime - startTime) / 1000);
+
+		log.success(`Finished in ${durationSecs} seconds.`);
+
 		// The return value array must return corresponding data for each item.
 		// And be of exactly the same length so the dataloader can tie things back together.
 		return decodedQueries.map(([text]) => {
@@ -157,7 +183,7 @@ export default class Model {
 		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}
 
-	private async fetchInference(text: string): Promise<TtsInferenceSchema> {
+	private async fetchInference(text: string): Promise<TtsInferenceResultSchema> {
 		const response = await request(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
@@ -167,7 +193,9 @@ export default class Model {
 			})
 		});
 
-		return ttsInferenceSchena.parse(await response.json());
+		const json = await response.json();
+
+		return ttsInferenceResultSchema.parse(json);
 	}
 
 	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {

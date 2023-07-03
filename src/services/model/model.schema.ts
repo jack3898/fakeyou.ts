@@ -2,7 +2,9 @@ import { z } from 'zod';
 
 export type TtsModelSchema = z.infer<typeof ttsModelSchema>;
 export type TtsModelListSchema = z.infer<typeof ttsModelListSchema>;
-export type TtsInferenceSchema = z.infer<typeof ttsInferenceSchena>;
+export type TtsInferenceSchema = z.infer<typeof ttsInferenceSchema>;
+export type TtsInferenceRateLimitSchema = z.infer<typeof ttsInferenceErrorSchema>;
+export type TtsInferenceResultSchema = z.infer<typeof ttsInferenceResultSchema>;
 export type TtsInferenceStatusDoneSchema = z.infer<typeof ttsInferenceStatusDoneSchema>;
 export type TtsInferenceStatusSchema = z.infer<typeof ttsInferenceStatusSchema>;
 export type TtsRequestStatusResponseSchema = z.infer<typeof ttsRequestStatusResponseSchema>;
@@ -35,10 +37,17 @@ export const ttsModelListSchema = z.object({
 	models: z.array(ttsModelSchema)
 });
 
-export const ttsInferenceSchena = z.object({
-	success: z.boolean(),
+export const ttsInferenceSchema = z.object({
+	success: z.literal(true),
 	inference_job_token: z.string()
 });
+
+export const ttsInferenceErrorSchema = z.object({
+	success: z.literal(false),
+	error_reason: z.string()
+});
+
+export const ttsInferenceResultSchema = z.union([ttsInferenceSchema, ttsInferenceErrorSchema]);
 
 export const ttsInferenceStatusDoneSchema = z.object({
 	job_token: z.string(),

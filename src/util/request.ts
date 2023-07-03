@@ -14,8 +14,6 @@ export async function request(url: URL, request?: RequestInit): Promise<Response
 	headers.append('content-type', 'application/json');
 	headers.append('credentials', 'include');
 
-	const cookie = getCookie();
-
 	if (cookie) {
 		headers.append('cookie', `session=${cookie}`);
 	}
@@ -30,6 +28,6 @@ export function setCookie(newCookie?: string): void {
 	cookie = newCookie;
 }
 
-function getCookie(): string | undefined {
-	return cookie;
+export function isAuthenticated(): boolean {
+	return !!cookie;
 }
