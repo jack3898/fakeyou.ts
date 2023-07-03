@@ -242,11 +242,12 @@ export default class Model {
 
 	async fetchParentCategories(): Promise<Category[]> {
 		const categories = await Category.fetchCategories();
+		const categoryTokens = this.categoryTokens;
 
-		if (this.categoryTokens) {
+		if (!categoryTokens) {
 			return [];
 		}
 
-		return categories.filter((category) => this.categoryTokens?.includes(category.token));
+		return categories.filter((category) => categoryTokens.includes(category.token));
 	}
 }
