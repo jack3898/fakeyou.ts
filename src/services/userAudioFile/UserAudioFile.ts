@@ -31,33 +31,19 @@ export default class UserAudioFile implements AudioFile {
 	}
 
 	readonly ttsResultToken: string;
-
 	readonly ttsModelToken: string;
-
 	readonly ttsModelTitle: string;
-
 	readonly rawInferenceText: string;
-
 	readonly publicBucketWavAudioPath: string;
-
 	readonly creatorUserToken: string;
-
 	readonly creatorUsername: string;
-
 	readonly creatorDisplayName: string;
-
 	readonly creatorResultId: number;
-
 	readonly fileSizeBytes: number;
-
 	readonly durationMillis: number;
-
 	readonly visibility: string;
-
 	readonly createdAt: Date;
-
 	readonly updatedAt: Date;
-
 	readonly url: URL;
 
 	#buffer?: Buffer;

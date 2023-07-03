@@ -10,9 +10,7 @@ export default class Queue {
 	}
 
 	readonly pendingJobCount: number;
-
 	readonly cacheTime: Date;
-
 	readonly refreshIntervalMillis: number;
 
 	static async fetchQueue(): Promise<Queue> {

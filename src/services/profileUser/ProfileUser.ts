@@ -40,49 +40,28 @@ export default class ProfileUser {
 		this.badges = data.badges.map((badge) => new Badge(badge));
 	}
 
-	token: string;
-
-	username: string;
-
-	displayName: string;
-
-	emailGravatarHash: string;
-
-	defaultAvatarIndex: number;
-
-	defaultAvatarColorIndex: number;
-
-	bio: string;
-
-	bioHtml: string;
-
-	userRoleSlug: string;
-
-	disableGravatar: boolean;
-
-	preferredTtsResultVisibility: string;
-
-	preferredW2lResultVisibility: string;
-
-	discordUsername: string | null;
-
-	twitchUsername: string | null;
-
-	twitterUsername: string | null;
-
-	patreonUsername: string | null;
-
-	githubUsername: string | null;
-
-	cashappUsername: string | null;
-
-	websiteUrl: string | null;
-
-	createdAt: Date;
-
-	moderatorFields: string | null;
-
-	badges: Badge[];
+	readonly token: string;
+	readonly username: string;
+	readonly displayName: string;
+	readonly emailGravatarHash: string;
+	readonly defaultAvatarIndex: number;
+	readonly defaultAvatarColorIndex: number;
+	readonly bio: string;
+	readonly bioHtml: string;
+	readonly userRoleSlug: string;
+	readonly disableGravatar: boolean;
+	readonly preferredTtsResultVisibility: string;
+	readonly preferredW2lResultVisibility: string;
+	readonly discordUsername: string | null;
+	readonly twitchUsername: string | null;
+	readonly twitterUsername: string | null;
+	readonly patreonUsername: string | null;
+	readonly githubUsername: string | null;
+	readonly cashappUsername: string | null;
+	readonly websiteUrl: string | null;
+	readonly createdAt: Date;
+	readonly moderatorFields: string | null;
+	readonly badges: Badge[];
 
 	static async fetchUserProfile(username: string): Promise<ProfileUser | null> {
 		try {

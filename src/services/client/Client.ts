@@ -15,25 +15,18 @@ import UserAudioFile from '../userAudioFile/UserAudioFile.js';
 import { credentialsSchema, type CredentialsSchema, loginSchema } from './client.schema.js';
 
 export default class Client {
-	readonly model = Model;
-
-	readonly sessionUser = SessionUser;
-
-	readonly leaderboard = Leaderboard;
-
-	readonly userProfile = ProfileUser;
-
-	readonly category = Category;
-
-	readonly queue = Queue;
-
-	readonly userSubscription = Subscription;
-
-	readonly userTtsAudioHistory = UserAudioFile;
-
 	constructor(options?: { logging?: boolean }) {
 		setLogging(!!options?.logging);
 	}
+
+	readonly model = Model;
+	readonly sessionUser = SessionUser;
+	readonly leaderboard = Leaderboard;
+	readonly userProfile = ProfileUser;
+	readonly category = Category;
+	readonly queue = Queue;
+	readonly userSubscription = Subscription;
+	readonly userTtsAudioHistory = UserAudioFile;
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.

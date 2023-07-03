@@ -26,33 +26,21 @@ export default class TtsAudioFile implements AudioFile {
 		this.url = new URL(`${googleStorageUrl}${data.maybe_public_bucket_wav_audio_path}`);
 	}
 
-	#buffer?: Buffer;
-
 	readonly token: string;
-
 	readonly status: string;
-
 	readonly extraStatusDescription: string | null;
-
 	readonly attemptCount: number;
-
 	readonly resultToken: string;
-
 	readonly publicBucketWavAudioPath: string;
-
 	readonly modelToken: string;
-
 	readonly ttsModelType: string;
-
 	readonly title: string;
-
 	readonly rawInferenceText: string;
-
 	readonly createdAt: Date;
-
 	readonly updatedAt: Date;
-
 	readonly url: URL;
+
+	#buffer?: Buffer;
 
 	async toBuffer(): Promise<Buffer | null> {
 		if (this.#buffer) {

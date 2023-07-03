@@ -40,35 +40,21 @@ export default class Model {
 		this.updatedAt = data.updated_at;
 	}
 
-	token: string;
-
-	ttsModelType: string;
-
-	creatorToken: string;
-
-	creatorUsername: string;
-
-	creatorDisplayName: string;
-
-	creatorGravatarHash: string;
-
-	title: string;
-
-	ietfLanguageTag: string;
-
-	ietfPrimaryLanguageSubtag: string;
-
-	isFrontPageFeatured: boolean;
-
-	isTwitchFeatured: boolean;
-
-	suggestedUniqueBotCommand: string | null;
-
-	categoryTokens: string[] | null;
-
-	createdAt: Date;
-
-	updatedAt: Date;
+	readonly token: string;
+	readonly ttsModelType: string;
+	readonly creatorToken: string;
+	readonly creatorUsername: string;
+	readonly creatorDisplayName: string;
+	readonly creatorGravatarHash: string;
+	readonly title: string;
+	readonly ietfLanguageTag: string;
+	readonly ietfPrimaryLanguageSubtag: string;
+	readonly isFrontPageFeatured: boolean;
+	readonly isTwitchFeatured: boolean;
+	readonly suggestedUniqueBotCommand: string | null;
+	readonly categoryTokens: string[] | null;
+	readonly createdAt: Date;
+	readonly updatedAt: Date;
 
 	static fetchModels(): Promise<Map<string, Model>> {
 		return cache('fetch-models', async () => {
@@ -143,7 +129,7 @@ export default class Model {
 			}
 
 			const end = Date.now() + (authenticated ? 5000 : 12000);
-			const inference = await model.fetchInference(text);
+			const inference = await model.#fetchInference(text);
 
 			if (!inference.success) {
 				const sleepInterval = 8000;
@@ -156,7 +142,7 @@ export default class Model {
 				continue;
 			}
 
-			const audioUrl = await model.getAudioUrl(inference.inference_job_token);
+			const audioUrl = await model.#getAudioUrl(inference.inference_job_token);
 
 			if (!audioUrl) {
 				continue;
@@ -184,7 +170,7 @@ export default class Model {
 		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}
 
-	private async fetchInference(text: string): Promise<TtsInferenceResultSchema> {
+	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
 		const response = await request(new URL(`${apiUrl}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
@@ -199,7 +185,7 @@ export default class Model {
 		return ttsInferenceResultSchema.parse(json);
 	}
 
-	private getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
+	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
 		return poll(async () => {
 			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`));
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());

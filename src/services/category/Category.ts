@@ -23,31 +23,18 @@ export default class Category {
 	}
 
 	readonly token: string;
-
 	readonly parentToken: string | null;
-
 	readonly modelType: string;
-
 	readonly name: string;
-
 	readonly nameForDropdown: string;
-
 	readonly canDirectlyHaveModels: boolean;
-
 	readonly canHaveSubcategories: boolean;
-
 	readonly canOnlyModsApply: boolean;
-
 	readonly isModApproved: boolean | null;
-
 	readonly isSynthetic: boolean;
-
 	readonly shouldBeSorted: boolean;
-
 	readonly createdAt: Date;
-
 	readonly updatedAt: Date;
-
 	readonly deletedAt: Date | null;
 
 	static async fetchCategories(): Promise<Category[]> {

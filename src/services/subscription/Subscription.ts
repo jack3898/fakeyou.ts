@@ -11,7 +11,6 @@ export default class Subscription {
 	}
 
 	readonly loyaltyProgram: boolean;
-
 	readonly activeSubscriptions: Product[];
 
 	static async fetchSubscriptions(): Promise<Subscription | null> {

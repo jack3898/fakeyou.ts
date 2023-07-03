@@ -33,55 +33,31 @@ export default class SessionUser {
 		this.canDeleteUsers = data.can_delete_users;
 	}
 
-	token: string;
-
-	username: string;
-
-	displayName: string;
-
-	emailGravatarHash: string;
-
-	fakeyouPlan: string;
-
-	storytellerStreamPlan: string;
-
-	canUseTts: boolean;
-
-	canUseW2l: boolean;
-
-	canDeleteOwnTtsResults: boolean;
-
-	canDeleteOwnW2lResults: boolean;
-
-	canDeleteOwnAccount: boolean;
-
-	canUploadTtsModels: boolean;
-
-	canUploadW2lTemplates: boolean;
-
-	canDeleteOwnTtsModels: boolean;
-
-	canDeleteOwnW2lTemplates: boolean;
-
-	canApproveW2lTemplates: boolean;
-
-	canEditOtherUsersProfiles: boolean;
-
-	canEditOtherUsersTtsModels: boolean;
-
-	canEditOtherUsersW2lTemplates: boolean;
-
-	canDeleteOtherUsersTtsModels: boolean;
-
-	canDeleteOtherUsersTtsResults: boolean;
-
-	canDeleteOtherUsersW2lTemplates: boolean;
-
-	canDeleteOtherUsersW2lResults: boolean;
-
-	canBanUsers: boolean;
-
-	canDeleteUsers: boolean;
+	readonly token: string;
+	readonly username: string;
+	readonly displayName: string;
+	readonly emailGravatarHash: string;
+	readonly fakeyouPlan: string;
+	readonly storytellerStreamPlan: string;
+	readonly canUseTts: boolean;
+	readonly canUseW2l: boolean;
+	readonly canDeleteOwnTtsResults: boolean;
+	readonly canDeleteOwnW2lResults: boolean;
+	readonly canDeleteOwnAccount: boolean;
+	readonly canUploadTtsModels: boolean;
+	readonly canUploadW2lTemplates: boolean;
+	readonly canDeleteOwnTtsModels: boolean;
+	readonly canDeleteOwnW2lTemplates: boolean;
+	readonly canApproveW2lTemplates: boolean;
+	readonly canEditOtherUsersProfiles: boolean;
+	readonly canEditOtherUsersTtsModels: boolean;
+	readonly canEditOtherUsersW2lTemplates: boolean;
+	readonly canDeleteOtherUsersTtsModels: boolean;
+	readonly canDeleteOtherUsersTtsResults: boolean;
+	readonly canDeleteOtherUsersW2lTemplates: boolean;
+	readonly canDeleteOtherUsersW2lResults: boolean;
+	readonly canBanUsers: boolean;
+	readonly canDeleteUsers: boolean;
 
 	static async fetchLoggedInUser(): Promise<SessionUser | null> {
 		const response = await request(new URL(`${apiUrl}/session`));

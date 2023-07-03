@@ -10,12 +10,8 @@ export default class Badge {
 	}
 
 	readonly slug: string;
-
 	readonly title: string;
-
 	readonly description: string;
-
 	readonly imageUrl: string;
-
 	readonly grantedAt: Date;
 }

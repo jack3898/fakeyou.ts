@@ -7,6 +7,5 @@ export default class Product {
 	}
 
 	readonly namespace: string;
-
 	readonly productSlug: string;
 }
