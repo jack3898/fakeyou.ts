@@ -19,6 +19,7 @@ import {
 } from './model.schema.js';
 import DataLoader from 'dataloader';
 import { sleep } from '../../util/sleep.js';
+import { base64decode, base64encode } from '../../util/base64.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {
@@ -130,7 +131,7 @@ export default class Model {
 		const decodedQueries: [string, string][] = base64Queries.map((base64Query) => {
 			const [text, modelToken] = base64Query.split(':');
 
-			return [Buffer.from(text, 'base64').toString(), Buffer.from(modelToken, 'base64').toString()];
+			return [base64decode(text), base64decode(modelToken)];
 		});
 
 		const startTime = Date.now();
@@ -164,7 +165,7 @@ export default class Model {
 			log.success(`Inference success for "${text}"`);
 			results.push(new TtsAudioFile(audioUrl));
 
-			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until three seconds have passed since the start of the request
+			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until x seconds have passed since the start of the request
 		}
 
 		const endTime = Date.now();
@@ -230,8 +231,8 @@ export default class Model {
 	infer(text: string): Promise<TtsAudioFile | null> {
 		// First encode text to base64, so that users cannot confuse this application when we pass the
 		// colon-delimited query string to the dataloader
-		const textBase64 = Buffer.from(`${text}`).toString('base64');
-		const modelTokenBase64 = Buffer.from(this.token).toString('base64');
+		const textBase64 = base64encode(text);
+		const modelTokenBase64 = base64encode(this.token);
 
 		return Model.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
 	}

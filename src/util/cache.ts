@@ -5,9 +5,9 @@ import sizeof from './sizeof.js';
 const cacheMap = new LRUCache<string, NonNullable<unknown>>({
 	max: 5000, // Max amount of objects
 	ttl: 1000 * 60 * 10, // 10 mins
-	maxSize: 5e8, // 500MB
+	maxSize: 5e8, // 500MB in bytes
 	sizeCalculation(value): number {
-		const size = sizeof(value);
+		const size = sizeof(value); // Get best approx size of any object in bytes
 
 		return size > 0 ? size : Number.MAX_SAFE_INTEGER; // Max safe int is just another way of saying "don't store it"
 	}
