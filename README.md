@@ -64,19 +64,20 @@ const [audio1, audio2, audio3] = await Promise.all([
 
 ## Features
 
-| Name                               | Description                                                                                  | Status |
-| ---------------------------------- | -------------------------------------------------------------------------------------------- | ------ |
-| FakeYou login support (session)    | Ability to take advantage of any potential premium benefits                                  | ✅     |
-| Fetch models                       | Fetch models, and view their info, and do your own TTS                                       | ✅     |
-| Model TTS download                 | Download as buffer, base64, or directly to disk                                              | ✅     |
-| Model TTS rate limit handling      | Tooling to help avoid the rate limiting of FakeYou's API                                     | ✅     |
-| Fetch model categories             | Fetch categories, child categories and parent categories and their models                    | ✅     |
-| View and edit user profiles        | View user profiles, and edit profiles you are privileged to edit (like your own)             | ✅     |
-| Leaderboards                       | Fetch users from the leaderboard                                                             | ✅     |
-| Global FakeYou queue stats         | Simple fetch of queue statistics                                                             | ✅     |
-| Subscription details               | View your subscription details and loyalty status                                            | ✅     |
-| View TTS audio history on profiles | View profile TTS audio history, and get associated model details, re-download audio and more | ✅     |
-| View user models on profiles       | Get a lits of the user's models from their profile                                           | ✅     |
+| Name                               | Description                                                                                      | Status     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------ | ---------- |
+| FakeYou login support (session)    | Ability to take advantage of any potential premium benefits                                      | ✅         |
+| Fetch models                       | Fetch models, and view their info, and do your own TTS                                           | ✅         |
+| Model TTS download                 | Download text-to-speech as buffer, base64, or directly to disk                                   | ✅         |
+| Model V2V download                 | Upload a voice then download the voice-to-voice inference as buffer, base64, or directly to disk | 🟨 (soon!) |
+| Model TTS rate limit handling      | Tooling to help avoid the rate limiting of FakeYou's API                                         | ✅         |
+| Fetch model categories             | Fetch categories, child categories and parent categories and their models                        | ✅         |
+| View and edit user profiles        | View user profiles, and edit profiles you are privileged to edit (like your own)                 | ✅         |
+| Leaderboards                       | Fetch users from the leaderboard                                                                 | ✅         |
+| Global FakeYou queue stats         | Simple fetch of queue statistics                                                                 | ✅         |
+| Subscription details               | View your subscription details and loyalty status                                                | ✅         |
+| View TTS audio history on profiles | View profile TTS audio history, and get associated model details, re-download audio and more     | ✅         |
+| View user models on profiles       | Get a lits of the user's models from their profile                                               | ✅         |
 
 ... and I will keep this list up to date with more features to come.
 
