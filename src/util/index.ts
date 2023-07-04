@@ -7,3 +7,4 @@ export * as log from './log.js';
 export * as request from './request.js';
 export * from './sizeof.js';
 export * from './sleep.js';
+export * as upload from './upload.js';

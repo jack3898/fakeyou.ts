@@ -1,5 +1,10 @@
-import { cache, constants, request } from '../../util/index.js';
-import { type V2vModelSchema, v2vModelListSchema } from './v2vModel.schema.js';
+import { cache, constants, request, upload } from '../../util/index.js';
+import {
+	type V2vModelSchema,
+	v2vModelListSchema,
+	type V2vVoiceUploadResponseSchema,
+	v2vVoiceUploadResponseSchema
+} from './v2vModel.schema.js';
 
 export default class V2vModel {
 	constructor(data: V2vModelSchema) {
@@ -55,8 +60,15 @@ export default class V2vModel {
 		return (await this.fetchModels()).get(token) || null;
 	}
 
+	// TODO: make private member! Public at the moment for testing.
+	static async uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema> {
+		const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
+
+		return v2vVoiceUploadResponseSchema.parse(await response.json());
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	async #fetchInference(text: string): Promise<unknown> {
+	async #fetchInference(uploadToken: string): Promise<unknown> {
 		throw TypeError('This method is not implemented.');
 	}
 
@@ -71,7 +83,7 @@ export default class V2vModel {
 	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	infer(text: string): Promise<unknown | null> {
+	infer(audio: Buffer): Promise<unknown | null> {
 		throw TypeError('This method is not implemented.');
 	}
 }

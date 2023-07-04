@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export type V2vModelSchema = z.infer<typeof v2vModelSchema>;
+export type V2vModelListSchema = z.infer<typeof v2vModelListSchema>;
+export type V2vVoiceUploadResponseSchema = z.infer<typeof v2vVoiceUploadResponseSchema>;
+
 export const v2vModelSchema = z.object({
 	token: z.string(),
 	model_type: z.string(),
@@ -18,11 +22,12 @@ export const v2vModelSchema = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export type V2vModelSchema = z.infer<typeof v2vModelSchema>;
-
 export const v2vModelListSchema = z.object({
 	success: z.boolean(),
 	models: z.array(v2vModelSchema)
 });
 
-export type V2vModelListSchema = z.infer<typeof v2vModelListSchema>;
+export const v2vVoiceUploadResponseSchema = z.object({
+	success: z.boolean(),
+	upload_token: z.string()
+});
