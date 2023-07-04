@@ -1,7 +1,7 @@
 import FakeYouError from '../../error/FakeYouError.js';
 import { cache, constants, log, request } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
-import Model from '../model/Model.js';
+import TtsModel from '../ttsModel/TtsModel.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
 import {
 	editUserProfileInputSchema,
@@ -120,8 +120,8 @@ export default class ProfileUser {
 		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
 	}
 
-	async fetchUserModels(): Promise<Model[]> {
-		const userModels = await Model.fetchModelsByUser(this.username);
+	async fetchUserModels(): Promise<TtsModel[]> {
+		const userModels = await TtsModel.fetchModelsByUser(this.username);
 
 		if (userModels) {
 			return userModels;

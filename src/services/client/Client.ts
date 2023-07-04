@@ -3,7 +3,7 @@ import FakeYouError from '../../error/FakeYouError.js';
 import { constants, cache, log, request } from '../../util/index.js';
 import Category from '../category/Category.js';
 import Leaderboard from '../leaderboard/Leaderboard.js';
-import Model from '../model/Model.js';
+import TtsModel from '../ttsModel/TtsModel.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import Queue from '../queue/Queue.js';
 import SessionUser from '../sessionUser/SessionUser.js';
@@ -16,7 +16,7 @@ export default class Client {
 		log.setLogging(!!options?.logging);
 	}
 
-	readonly model = Model;
+	readonly ttsModel = TtsModel;
 	readonly sessionUser = SessionUser;
 	readonly leaderboard = Leaderboard;
 	readonly userProfile = ProfileUser;

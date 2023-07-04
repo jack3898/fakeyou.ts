@@ -3,7 +3,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
 import { constants, download, log, request } from '../../util/index.js';
-import Model from '../model/Model.js';
+import TtsModel from '../ttsModel/TtsModel.js';
 import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
 
 const writeFile = promisify(fs.writeFile);
@@ -109,7 +109,7 @@ export default class UserAudioFile implements AudioFile {
 		}
 	}
 
-	fetchTtsModel(): Promise<Model | null> {
-		return Model.fetchModelByToken(this.ttsModelToken);
+	fetchTtsModel(): Promise<TtsModel | null> {
+		return TtsModel.fetchModelByToken(this.ttsModelToken);
 	}
 }

@@ -1,5 +1,5 @@
 import { cache, constants, request } from '../../util/index.js';
-import Model from '../model/Model.js';
+import TtsModel from '../ttsModel/TtsModel.js';
 import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from './category.schema.js';
 
 export default class Category {
@@ -59,12 +59,12 @@ export default class Category {
 		});
 	}
 
-	async fetchModels(): Promise<Model[]> {
+	async fetchModels(): Promise<TtsModel[]> {
 		const relationships = await Category.fetchCategoryToModelRelationships();
-		const allModels = await Model.fetchModels();
+		const allModels = await TtsModel.fetchModels();
 		const models = relationships[this.token]
 			.map((modelToken) => allModels.get(modelToken))
-			.filter((model): model is Model => !!model);
+			.filter((model): model is TtsModel => !!model);
 
 		return models;
 	}

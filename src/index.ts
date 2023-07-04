@@ -3,7 +3,7 @@ export { default as Category } from './services/category/Category.js';
 export { default } from './services/client/Client.js';
 export { default as Leaderboard } from './services/leaderboard/Leaderboard.js';
 export { default as LeaderboardUser } from './services/leaderboardUser/LeaderboardUser.js';
-export { default as Model } from './services/model/Model.js';
+export { default as Model } from './services/ttsModel/TtsModel.js';
 export { default as Product } from './services/product/Product.js';
 export { default as ProfileUser } from './services/profileUser/ProfileUser.js';
 export { default as Queue } from './services/queue/Queue.js';
