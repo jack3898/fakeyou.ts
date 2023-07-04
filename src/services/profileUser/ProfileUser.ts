@@ -1,8 +1,5 @@
 import FakeYouError from '../../error/FakeYouError.js';
-import { cache } from '../../util/cache.js';
-import { apiUrl } from '../../util/constants.js';
-import { log } from '../../util/log.js';
-import { request } from '../../util/request.js';
+import { cache, constants, log, request } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import Model from '../model/Model.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
@@ -65,8 +62,8 @@ export default class ProfileUser {
 
 	static async fetchUserProfile(username: string): Promise<ProfileUser | null> {
 		try {
-			const json = await cache('fetch-user-profile', async () => {
-				const response = await request(new URL(`${apiUrl}/user/${username}/profile`));
+			const json = await cache.wrap('fetch-user-profile', async () => {
+				const response = await request.send(new URL(`${constants.API_URL}/user/${username}/profile`));
 				return userProfileResponseSchema.parse(await response.json());
 			});
 
@@ -100,7 +97,7 @@ export default class ProfileUser {
 				...newValues
 			});
 
-			const result = await request(new URL(`${apiUrl}/user/${this.username}/edit_profile`), {
+			const result = await request.send(new URL(`${constants.API_URL}/user/${this.username}/edit_profile`), {
 				method: 'POST',
 				body: JSON.stringify(body)
 			});

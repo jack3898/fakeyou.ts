@@ -1,5 +1,4 @@
-import { apiUrl } from '../../util/constants.js';
-import { request } from '../../util/request.js';
+import { constants, request } from '../../util/index.js';
 import { queueLengthResponseSchema, type QueueLengthResponseSchema } from './queue.schema.js';
 
 export default class Queue {
@@ -14,7 +13,7 @@ export default class Queue {
 	readonly refreshIntervalMillis: number;
 
 	static async fetchQueue(): Promise<Queue> {
-		const response = await request(new URL(`${apiUrl}/tts/queue_length`));
+		const response = await request.send(new URL(`${constants.API_URL}/tts/queue_length`));
 		const json = queueLengthResponseSchema.parse(await response.json());
 
 		return new this(json);

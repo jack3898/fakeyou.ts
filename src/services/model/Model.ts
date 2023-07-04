@@ -1,9 +1,4 @@
 import crypto from 'node:crypto';
-import { cache } from '../../util/cache.js';
-import { apiUrl } from '../../util/constants.js';
-import { log } from '../../util/log.js';
-import { poll } from '../../util/poll.js';
-import { isAuthenticated, request } from '../../util/request.js';
 import Category from '../category/Category.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import TtsAudioFile from '../ttsAudioFile/TtsAudioFile.js';
@@ -18,8 +13,7 @@ import {
 	type TtsInferenceResultSchema
 } from './model.schema.js';
 import DataLoader from 'dataloader';
-import { sleep } from '../../util/sleep.js';
-import { base64decode, base64encode } from '../../util/base64.js';
+import { base64, log, poll, request, constants, cache, PollStatus, sleep } from '../../util/index.js';
 
 export default class Model {
 	constructor(data: TtsModelSchema) {
@@ -57,8 +51,8 @@ export default class Model {
 	readonly updatedAt: Date;
 
 	static fetchModels(): Promise<Map<string, Model>> {
-		return cache('fetch-models', async () => {
-			const response = await request(new URL(`${apiUrl}/tts/list`));
+		return cache.wrap('fetch-models', async () => {
+			const response = await request.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = ttsModelListSchema.parse(await response.json());
 
 			const map = new Map<string, Model>();
@@ -81,7 +75,7 @@ export default class Model {
 
 	static async fetchModelsByUser(username: string): Promise<Model[] | null> {
 		try {
-			const response = await request(new URL(`${apiUrl}/user/${username}/tts_models`));
+			const response = await request.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
 			const json = ttsModelListSchema.parse(await response.json());
 
 			return json.models.map((model) => new this(model));
@@ -105,7 +99,7 @@ export default class Model {
 			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
 		}
 
-		const authenticated = isAuthenticated();
+		const authenticated = request.isAuthenticated();
 
 		if (!authenticated) {
 			log.info('You are not logged in to your FakeYou account! Your requests will take longer to process.');
@@ -113,14 +107,14 @@ export default class Model {
 
 		const models = await Model.fetchModels();
 		const results: TtsAudioFile[] = [];
+		const startTime = Date.now();
 
 		const decodedQueries: [string, string][] = base64Queries.map((base64Query) => {
 			const [text, modelToken] = base64Query.split(':');
 
-			return [base64decode(text), base64decode(modelToken)];
+			return [base64.decode(text), base64.decode(modelToken)];
 		});
 
-		const startTime = Date.now();
 		for (const [text, modelToken] of decodedQueries) {
 			const model = models.get(modelToken);
 
@@ -171,7 +165,7 @@ export default class Model {
 	}
 
 	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
-		const response = await request(new URL(`${apiUrl}/tts/inference`), {
+		const response = await request.send(new URL(`${constants.API_URL}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.token,
@@ -187,24 +181,24 @@ export default class Model {
 
 	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
 		return poll(async () => {
-			const response = await request(new URL(`${apiUrl}/tts/job/${inferenceJobToken}`));
+			const response = await request.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());
 
 			switch (result.state.status) {
 				case 'pending':
-					return poll.Status.Retry;
+					return PollStatus.Retry;
 				case 'started':
-					return poll.Status.Retry;
+					return PollStatus.Retry;
 				case 'complete_success':
 					return result.state;
 				case 'attempt_failed':
-					return poll.Status.Retry;
+					return PollStatus.Retry;
 				case 'complete_failure':
-					return poll.Status.Abort;
+					return PollStatus.Abort;
 				case 'dead':
-					return poll.Status.Abort;
+					return PollStatus.Abort;
 				default:
-					return poll.Status.Abort;
+					return PollStatus.Abort;
 			}
 		});
 	}
@@ -217,15 +211,15 @@ export default class Model {
 	infer(text: string): Promise<TtsAudioFile | null> {
 		// First encode text to base64, so that users cannot confuse this application when we pass the
 		// colon-delimited query string to the dataloader
-		const textBase64 = base64encode(text);
-		const modelTokenBase64 = base64encode(this.token);
+		const textBase64 = base64.encode(text);
+		const modelTokenBase64 = base64.encode(this.token);
 
 		return Model.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
 	}
 
 	async fetchMyRating(): Promise<RatingSchema | null> {
 		try {
-			const response = await request(new URL(`${apiUrl}/v1/user_rating/view/tts_model/${this.token}`));
+			const response = await request.send(new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`));
 			const json = userRatingResponseSchema.parse(await response.json());
 
 			return json.maybe_rating_value;
@@ -238,7 +232,7 @@ export default class Model {
 
 	async rate(decision: RatingSchema): Promise<RatingSchema | null> {
 		try {
-			await request(new URL(`${apiUrl}/v1/user_rating/rate`), {
+			await request.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
 				method: 'POST',
 				body: JSON.stringify({
 					entity_type: 'tts_model',
@@ -259,10 +253,6 @@ export default class Model {
 		const categories = await Category.fetchCategories();
 		const categoryTokens = this.categoryTokens;
 
-		if (!categoryTokens) {
-			return [];
-		}
-
-		return categories.filter((category) => categoryTokens.includes(category.token));
+		return categories.filter((category) => categoryTokens?.includes(category.token));
 	}
 }

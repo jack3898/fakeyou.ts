@@ -1,6 +1,4 @@
-import { apiUrl } from '../../util/constants.js';
-import { log } from '../../util/log.js';
-import { request } from '../../util/request.js';
+import { constants, log, request } from '../../util/index.js';
 import Product from '../product/Product.js';
 import { type ActiveSubscriptionsResponseSchema, activeSubscriptionsResponseSchema } from './subscription.schema.js';
 
@@ -15,7 +13,7 @@ export default class Subscription {
 
 	static async fetchSubscriptions(): Promise<Subscription | null> {
 		try {
-			const response = await request(new URL(`${apiUrl}/v1/billing/active_subscriptions`));
+			const response = await request.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
 			const json = activeSubscriptionsResponseSchema.parse(await response.json());
 
 			return new this(json);

@@ -2,8 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
-import { googleStorageUrl } from '../../util/constants.js';
-import { downloadWav } from '../../util/downloadWav.js';
+import { download, constants } from '../../util/index.js';
 import Model from '../model/Model.js';
 import { type TtsInferenceStatusDoneSchema } from '../model/model.schema.js';
 
@@ -23,7 +22,7 @@ export default class TtsAudioFile implements AudioFile {
 		this.rawInferenceText = data.raw_inference_text;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-		this.url = new URL(`${googleStorageUrl}${data.maybe_public_bucket_wav_audio_path}`);
+		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`);
 	}
 
 	readonly token: string;
@@ -47,10 +46,10 @@ export default class TtsAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const download = await downloadWav(this.url);
+		const wav = await download.wav(this.url);
 
-		if (download) {
-			this.#buffer = download;
+		if (wav) {
+			this.#buffer = wav;
 
 			return this.#buffer;
 		}

@@ -1,5 +1,5 @@
 import { LRUCache } from 'lru-cache';
-import { log } from './log.js';
+import * as log from './log.js';
 import sizeof from './sizeof.js';
 
 const cacheMap = new LRUCache<string, NonNullable<unknown>>({
@@ -19,7 +19,7 @@ const cacheMap = new LRUCache<string, NonNullable<unknown>>({
  * Global cache use only. I.e. data that is useful for the entire lifetime of the application that just needs an occasional refresh.
  * If you find yourself making the key dynamic, this cache is not the tool to use.
  */
-export async function cache<T>(key: string, operation: () => Promise<T>): Promise<T> {
+export async function wrap<T>(key: string, operation: () => Promise<T>): Promise<T> {
 	const cacheItem = cacheMap.get(key);
 
 	if (cacheItem) {

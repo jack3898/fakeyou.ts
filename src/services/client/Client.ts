@@ -1,9 +1,6 @@
 import AuthorisationError from '../../error/AuthorisationError.js';
 import FakeYouError from '../../error/FakeYouError.js';
-import { cache, dispose } from '../../util/cache.js';
-import { apiUrl } from '../../util/constants.js';
-import { log, setLogging } from '../../util/log.js';
-import { request, setCookie } from '../../util/request.js';
+import { constants, cache, log, request } from '../../util/index.js';
 import Category from '../category/Category.js';
 import Leaderboard from '../leaderboard/Leaderboard.js';
 import Model from '../model/Model.js';
@@ -16,7 +13,7 @@ import { credentialsSchema, type CredentialsSchema, loginSchema } from './client
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
-		setLogging(!!options?.logging);
+		log.setLogging(!!options?.logging);
 	}
 
 	readonly model = Model;
@@ -34,10 +31,10 @@ export default class Client {
 	async login(credentials: CredentialsSchema): Promise<void> {
 		log.info('Logging in...');
 
-		const cookie = await cache('login', async () => {
+		const cookie = await cache.wrap('login', async () => {
 			const validatedCredentials = credentialsSchema.parse(credentials);
 
-			const response = await request(new URL(`${apiUrl}/login`), {
+			const response = await request.send(new URL(`${constants.API_URL}/login`), {
 				method: 'POST',
 				body: JSON.stringify({
 					username_or_email: validatedCredentials.username,
@@ -61,13 +58,13 @@ export default class Client {
 			throw new FakeYouError('Login succeeded but there was a problem processing your session token.');
 		}
 
-		setCookie(cookie);
+		request.setCookie(cookie);
 
 		log.success('Logged in!');
 	}
 
 	logout(): void {
-		dispose('login');
-		setCookie(undefined);
+		cache.dispose('login');
+		request.setCookie(undefined);
 	}
 }

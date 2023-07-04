@@ -2,10 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
-import { apiUrl, googleStorageUrl } from '../../util/constants.js';
-import { downloadWav } from '../../util/downloadWav.js';
-import { log } from '../../util/log.js';
-import { request } from '../../util/request.js';
+import { constants, download, log, request } from '../../util/index.js';
 import Model from '../model/Model.js';
 import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
 
@@ -27,7 +24,7 @@ export default class UserAudioFile implements AudioFile {
 		this.visibility = data.visibility;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-		this.url = new URL(`${googleStorageUrl}${data.public_bucket_wav_audio_path}`);
+		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`);
 	}
 
 	readonly ttsResultToken: string;
@@ -56,14 +53,14 @@ export default class UserAudioFile implements AudioFile {
 		cursorPrev: string | null;
 		results: UserAudioFile[];
 	} | null> {
-		const url = new URL(`${apiUrl}/user/${username}/tts_results?limit=10`);
+		const url = new URL(`${constants.API_URL}/user/${username}/tts_results?limit=10`);
 
 		if (cursor) {
 			url.searchParams.append('cursor', cursor);
 		}
 
 		try {
-			const response = await request(url, {
+			const response = await request.send(url, {
 				method: 'GET'
 			});
 
@@ -87,10 +84,10 @@ export default class UserAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const download = await downloadWav(this.url);
+		const wav = await download.wav(this.url);
 
-		if (download) {
-			this.#buffer = download;
+		if (wav) {
+			this.#buffer = wav;
 
 			return this.#buffer;
 		}

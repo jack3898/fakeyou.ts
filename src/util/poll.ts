@@ -36,9 +36,7 @@ export async function poll<T>(callback: () => Promise<T | PollStatus>, interval 
 	}
 }
 
-enum PollStatus {
+export enum PollStatus {
 	Retry,
 	Abort
 }
-
-poll.Status = PollStatus;

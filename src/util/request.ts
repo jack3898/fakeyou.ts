@@ -1,11 +1,11 @@
-import { log } from './log.js';
+import * as log from './log.js';
 
 let cookie: string | undefined;
 
 /**
  * Light wrapper over fetch, pre-applies headers useful to this package.
  */
-export async function request(url: URL, request?: RequestInit): Promise<Response> {
+export async function send(url: URL, request?: RequestInit): Promise<Response> {
 	log.http(url);
 
 	const headers = new Headers();

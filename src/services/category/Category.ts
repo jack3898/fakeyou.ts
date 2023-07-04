@@ -1,6 +1,4 @@
-import { cache } from '../../util/cache.js';
-import { apiUrl } from '../../util/constants.js';
-import { request } from '../../util/request.js';
+import { cache, constants, request } from '../../util/index.js';
 import Model from '../model/Model.js';
 import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from './category.schema.js';
 
@@ -38,8 +36,8 @@ export default class Category {
 	readonly deletedAt: Date | null;
 
 	static async fetchCategories(): Promise<Category[]> {
-		return cache('fetch-categories', async () => {
-			const response = await request(new URL(`${apiUrl}/category/list/tts`));
+		return cache.wrap('fetch-categories', async () => {
+			const response = await request.send(new URL(`${constants.API_URL}/category/list/tts`));
 			const json = categoryListResponseSchema.parse(await response.json());
 
 			return json.categories.map((category) => new this(category));
@@ -53,8 +51,8 @@ export default class Category {
 	}
 
 	static async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
-		return cache('fetch-category-model-relationships', async () => {
-			const response = await request(new URL(`${apiUrl}/v1/category/computed_assignments/tts`));
+		return cache.wrap('fetch-category-model-relationships', async () => {
+			const response = await request.send(new URL(`${constants.API_URL}/v1/category/computed_assignments/tts`));
 			const json = categoryToModelSchema.parse(await response.json());
 
 			return json.category_token_to_tts_model_tokens.recursive;
