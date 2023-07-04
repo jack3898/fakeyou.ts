@@ -10,6 +10,7 @@ import SessionUser from '../sessionUser/SessionUser.js';
 import Subscription from '../subscription/Subscription.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
 import { credentialsSchema, type CredentialsSchema, loginSchema } from './client.schema.js';
+import V2vModel from '../v2vmodel/V2vModel.js';
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
@@ -17,6 +18,7 @@ export default class Client {
 	}
 
 	readonly ttsModel = TtsModel;
+	readonly v2vModel = V2vModel;
 	readonly sessionUser = SessionUser;
 	readonly leaderboard = Leaderboard;
 	readonly userProfile = ProfileUser;

@@ -4,7 +4,7 @@ import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
 import { download, constants } from '../../util/index.js';
 import TtsModel from '../ttsModel/TtsModel.js';
-import { type TtsInferenceStatusDoneSchema } from '../ttsModel/model.schema.js';
+import { type TtsInferenceStatusDoneSchema } from '../ttsModel/ttsModel.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 

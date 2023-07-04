@@ -11,7 +11,7 @@ import {
 	userRatingResponseSchema,
 	ttsInferenceResultSchema,
 	type TtsInferenceResultSchema
-} from './model.schema.js';
+} from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
 import { base64, log, poll, request, constants, cache, PollStatus, sleep } from '../../util/index.js';
 
@@ -51,7 +51,7 @@ export default class TtsModel {
 	readonly updatedAt: Date;
 
 	static fetchModels(): Promise<Map<string, TtsModel>> {
-		return cache.wrap('fetch-models', async () => {
+		return cache.wrap('fetch-tts-models', async () => {
 			const response = await request.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = ttsModelListSchema.parse(await response.json());
 
