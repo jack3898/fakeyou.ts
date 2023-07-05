@@ -1,9 +1,14 @@
-import { cache, constants, request, upload } from '../../util/index.js';
+import { PollStatus, cache, constants, request, upload, poll } from '../../util/index.js';
+import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
 	v2vModelListSchema,
 	type V2vVoiceUploadResponseSchema,
-	v2vVoiceUploadResponseSchema
+	v2vVoiceUploadResponseSchema,
+	type V2vInferenceResultSchema,
+	v2vInferenceResultSchema,
+	v2vRequestStatusResponseSchema,
+	type V2vInferenceStatusDoneSchema
 } from './v2vModel.schema.js';
 
 export default class V2vModel {
@@ -60,21 +65,51 @@ export default class V2vModel {
 		return (await this.fetchModels()).get(token) || null;
 	}
 
-	// TODO: make private member! Public at the moment for testing.
-	static async uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema> {
+	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema> {
 		const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
 
 		return v2vVoiceUploadResponseSchema.parse(await response.json());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	async #fetchInference(uploadToken: string): Promise<unknown> {
-		throw TypeError('This method is not implemented.');
+	async #fetchInference(uploadToken: string): Promise<V2vInferenceResultSchema> {
+		const response = await request.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
+			method: 'POST',
+			body: JSON.stringify({
+				uuid_idempotency_token: crypto.randomUUID(),
+				voice_conversion_model_token: this.token,
+				source_media_upload_token: uploadToken
+			})
+		});
+
+		const json = await response.json();
+
+		return v2vInferenceResultSchema.parse(json);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	#getAudioUrl(inferenceJobToken: string): Promise<unknown | null> {
-		throw TypeError('This method is not implemented.');
+	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | null> {
+		return poll(async () => {
+			const response = await request.send(
+				new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
+			);
+			const result = v2vRequestStatusResponseSchema.parse(await response.json());
+
+			switch (result.state.status.status) {
+				case 'pending':
+					return PollStatus.Retry;
+				case 'started':
+					return PollStatus.Retry;
+				case 'complete_success':
+					return result.state as V2vInferenceStatusDoneSchema;
+				case 'attempt_failed':
+					return PollStatus.Retry;
+				case 'complete_failure':
+					return PollStatus.Abort;
+				case 'dead':
+					return PollStatus.Abort;
+				default:
+					return PollStatus.Abort;
+			}
+		});
 	}
 
 	/**
@@ -83,7 +118,15 @@ export default class V2vModel {
 	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	infer(audio: Buffer): Promise<unknown | null> {
-		throw TypeError('This method is not implemented.');
+	async infer(audio: Buffer): Promise<V2vAudioFile | null> {
+		const uploadedAudio = await V2vModel.#uploadAudio(audio);
+		const inference = await this.#fetchInference(uploadedAudio.upload_token);
+		const audioUrl = await this.#getAudioUrl(inference.inference_job_token);
+
+		if (audioUrl) {
+			return new V2vAudioFile(audioUrl);
+		}
+
+		return null;
 	}
 }
