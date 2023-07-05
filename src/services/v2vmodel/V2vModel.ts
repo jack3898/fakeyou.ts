@@ -3,12 +3,12 @@ import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
 	v2vModelListSchema,
-	type V2vVoiceUploadResponseSchema,
 	v2vVoiceUploadResponseSchema,
 	v2vInferenceResultSchema,
 	v2vRequestStatusResponseSchema,
 	type V2vInferenceStatusDoneSchema,
-	type V2vInferenceSchema
+	type V2vInferenceSchema,
+	type V2vVoiceUploadResponseSchema
 } from './v2vModel.schema.js';
 
 export default class V2vModel {
@@ -65,10 +65,18 @@ export default class V2vModel {
 		return (await this.fetchModels()).get(token) || null;
 	}
 
-	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema> {
-		const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
+	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | null> {
+		try {
+			const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
 
-		return v2vVoiceUploadResponseSchema.parse(await response.json());
+			return v2vVoiceUploadResponseSchema.parse(await response.json());
+		} catch (error) {
+			log.error(
+				`Unexpected response from the server. Maybe you uploaded the wrong file type (not a wav) or there was an unknown error.\n${error}`
+			);
+
+			return null;
+		}
 	}
 
 	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | null> {
@@ -126,6 +134,11 @@ export default class V2vModel {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async infer(audio: Buffer): Promise<V2vAudioFile | null> {
 		const uploadedAudio = await V2vModel.#uploadAudio(audio);
+
+		if (!uploadedAudio) {
+			return null;
+		}
+
 		const inference = await this.#fetchInference(uploadedAudio.upload_token);
 
 		if (!inference) {
