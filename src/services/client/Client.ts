@@ -3,20 +3,22 @@ import FakeYouError from '../../error/FakeYouError.js';
 import { constants, cache, log, request } from '../../util/index.js';
 import Category from '../category/Category.js';
 import Leaderboard from '../leaderboard/Leaderboard.js';
-import Model from '../model/Model.js';
+import TtsModel from '../ttsModel/TtsModel.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import Queue from '../queue/Queue.js';
 import SessionUser from '../sessionUser/SessionUser.js';
 import Subscription from '../subscription/Subscription.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
 import { credentialsSchema, type CredentialsSchema, loginSchema } from './client.schema.js';
+import V2vModel from '../v2vmodel/V2vModel.js';
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
 		log.setLogging(!!options?.logging);
 	}
 
-	readonly model = Model;
+	readonly ttsModel = TtsModel;
+	readonly v2vModel = V2vModel;
 	readonly sessionUser = SessionUser;
 	readonly leaderboard = Leaderboard;
 	readonly userProfile = ProfileUser;

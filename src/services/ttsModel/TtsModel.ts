@@ -11,11 +11,11 @@ import {
 	userRatingResponseSchema,
 	ttsInferenceResultSchema,
 	type TtsInferenceResultSchema
-} from './model.schema.js';
+} from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
 import { base64, log, poll, request, constants, cache, PollStatus, sleep } from '../../util/index.js';
 
-export default class Model {
+export default class TtsModel {
 	constructor(data: TtsModelSchema) {
 		this.token = data.model_token;
 		this.ttsModelType = data.tts_model_type;
@@ -50,12 +50,12 @@ export default class Model {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 
-	static fetchModels(): Promise<Map<string, Model>> {
-		return cache.wrap('fetch-models', async () => {
+	static fetchModels(): Promise<Map<string, TtsModel>> {
+		return cache.wrap('fetch-tts-models', async () => {
 			const response = await request.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = ttsModelListSchema.parse(await response.json());
 
-			const map = new Map<string, Model>();
+			const map = new Map<string, TtsModel>();
 
 			for (const modelData of json.models) {
 				map.set(modelData.model_token, new this(modelData));
@@ -69,11 +69,11 @@ export default class Model {
 	 * This is the fastest method to find the model you need, the token is unique to each model and
 	 * can be found in the URL of the model's more details page on fakeyou.com.
 	 */
-	static async fetchModelByToken(token: string): Promise<Model | null> {
+	static async fetchModelByToken(token: string): Promise<TtsModel | null> {
 		return (await this.fetchModels()).get(token) || null;
 	}
 
-	static async fetchModelsByUser(username: string): Promise<Model[] | null> {
+	static async fetchModelsByUser(username: string): Promise<TtsModel[] | null> {
 		try {
 			const response = await request.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
 			const json = ttsModelListSchema.parse(await response.json());
@@ -90,7 +90,7 @@ export default class Model {
 	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
 	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
 	// Thanks to caching, this is not a massive performance problem!
-	static #modelDataloader = new DataLoader(Model.#modelInferenceDataloader);
+	static #modelDataloader = new DataLoader(TtsModel.#modelInferenceDataloader);
 
 	static async #modelInferenceDataloader(
 		base64Queries: readonly `${string}:${string}`[]
@@ -105,7 +105,7 @@ export default class Model {
 			log.info('You are not logged in to your FakeYou account! Your requests will take longer to process.');
 		}
 
-		const models = await Model.fetchModels();
+		const models = await TtsModel.fetchModels();
 		const results: TtsAudioFile[] = [];
 		const startTime = Date.now();
 
@@ -214,7 +214,7 @@ export default class Model {
 		const textBase64 = base64.encode(text);
 		const modelTokenBase64 = base64.encode(this.token);
 
-		return Model.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
+		return TtsModel.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
 	}
 
 	async fetchMyRating(): Promise<RatingSchema | null> {
