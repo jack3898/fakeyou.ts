@@ -45,7 +45,7 @@ await client.login({
 const model = await client.ttsModel.fetchModelByToken("TM:4e2xqpwqaggr");
 const audio = await model?.infer("hello!");
 
-await audio.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw URL!
+await audio?.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw URL!
 ```
 
 ## Or voice-to-voice!
@@ -84,7 +84,7 @@ const [audio1, audio2, audio3] = await Promise.all([
 // Do what you like with the audio files from here on!
 ```
 
-_Voice-to-voice rate limiting is not yet supported_
+_The voice-to-voice rate limit guard is not yet implemented._
 
 ## Features
 
