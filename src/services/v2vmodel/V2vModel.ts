@@ -1,14 +1,14 @@
-import { PollStatus, cache, constants, request, upload, poll } from '../../util/index.js';
+import { PollStatus, cache, constants, request, upload, poll, log } from '../../util/index.js';
 import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
 	v2vModelListSchema,
 	type V2vVoiceUploadResponseSchema,
 	v2vVoiceUploadResponseSchema,
-	type V2vInferenceResultSchema,
 	v2vInferenceResultSchema,
 	v2vRequestStatusResponseSchema,
-	type V2vInferenceStatusDoneSchema
+	type V2vInferenceStatusDoneSchema,
+	type V2vInferenceSchema
 } from './v2vModel.schema.js';
 
 export default class V2vModel {
@@ -71,7 +71,7 @@ export default class V2vModel {
 		return v2vVoiceUploadResponseSchema.parse(await response.json());
 	}
 
-	async #fetchInference(uploadToken: string): Promise<V2vInferenceResultSchema> {
+	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | null> {
 		const response = await request.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
@@ -81,9 +81,15 @@ export default class V2vModel {
 			})
 		});
 
-		const json = await response.json();
+		const inference = v2vInferenceResultSchema.parse(await response.json());
 
-		return v2vInferenceResultSchema.parse(json);
+		if (!inference.success) {
+			log.error(`There was a problem fetching this inference. Reason: ${inference.error_reason}.`);
+
+			return null;
+		}
+
+		return inference;
 	}
 
 	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | null> {
@@ -115,12 +121,17 @@ export default class V2vModel {
 	/**
 	 * Infer text for this model!
 	 *
-	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
+	 * Unlike TTS, this does NOT support rate limit safety features, so be cautious!
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async infer(audio: Buffer): Promise<V2vAudioFile | null> {
 		const uploadedAudio = await V2vModel.#uploadAudio(audio);
 		const inference = await this.#fetchInference(uploadedAudio.upload_token);
+
+		if (!inference) {
+			return null;
+		}
+
 		const audioUrl = await this.#getAudioUrl(inference.inference_job_token);
 
 		if (audioUrl) {

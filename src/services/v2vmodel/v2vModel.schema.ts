@@ -4,6 +4,7 @@ export type V2vModelSchema = z.infer<typeof v2vModelSchema>;
 export type V2vModelListSchema = z.infer<typeof v2vModelListSchema>;
 export type V2vVoiceUploadResponseSchema = z.infer<typeof v2vVoiceUploadResponseSchema>;
 export type V2vInferenceResultSchema = z.infer<typeof v2vInferenceResultSchema>;
+export type V2vInferenceSchema = z.infer<typeof v2vInferenceSchema>;
 export type V2vInferenceStatusSchema = z.infer<typeof v2vInferenceStatusSchema>;
 export type V2vInferenceStatusDoneSchema = z.infer<typeof v2vInferenceStatusDoneSchema>;
 export type V2vRequestStatusResponseSchema = z.infer<typeof v2vRequestStatusResponseSchema>;
@@ -36,10 +37,17 @@ export const v2vVoiceUploadResponseSchema = z.object({
 	upload_token: z.string()
 });
 
-export const v2vInferenceResultSchema = z.object({
-	success: z.boolean(),
+export const v2vInferenceSchema = z.object({
+	success: z.literal(true),
 	inference_job_token: z.string()
 });
+
+export const v2vInferenceErrorSchema = z.object({
+	success: z.literal(false),
+	error_reason: z.string()
+});
+
+export const v2vInferenceResultSchema = z.union([v2vInferenceSchema, v2vInferenceErrorSchema]);
 
 export const v2vInferenceStatusSchema = z.object({
 	job_token: z.string(),
