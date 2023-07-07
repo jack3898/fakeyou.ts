@@ -41,7 +41,7 @@ export default class TtsAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
-	async toBuffer(): Promise<Buffer | null> {
+	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
 		}
@@ -53,14 +53,12 @@ export default class TtsAudioFile implements AudioFile {
 
 			return this.#buffer;
 		}
-
-		return null;
 	}
 
-	async toBase64(): Promise<string | null> {
+	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
 
-		return buffer ? Buffer.from(buffer).toString('base64') : null;
+		return buffer && Buffer.from(buffer).toString('base64');
 	}
 
 	async toDisk(location: `${string}.wav`): Promise<void> {
@@ -71,7 +69,7 @@ export default class TtsAudioFile implements AudioFile {
 		}
 	}
 
-	async fetchModel(): Promise<TtsModel | null> {
+	async fetchModel(): Promise<TtsModel | undefined> {
 		return TtsModel.fetchModelByToken(this.modelToken);
 	}
 }

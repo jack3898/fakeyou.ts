@@ -60,7 +60,7 @@ export default class ProfileUser {
 	readonly moderatorFields: string | null;
 	readonly badges: Badge[];
 
-	static async fetchUserProfile(username: string): Promise<ProfileUser | null> {
+	static async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
 			const json = await cache.wrap('fetch-user-profile', async () => {
 				const response = await request.send(new URL(`${constants.API_URL}/user/${username}/profile`));
@@ -72,8 +72,6 @@ export default class ProfileUser {
 			log.error(
 				`Response from API failed validation. Check the username you provided, it can be different to their display name.\n${error}`
 			);
-
-			return null;
 		}
 	}
 
@@ -112,11 +110,14 @@ export default class ProfileUser {
 		}
 	}
 
-	fetchTtsAudioHistory(cursor?: string): Promise<{
-		cursorNext: string | null;
-		cursorPrev: string | null;
-		results: UserAudioFile[];
-	} | null> {
+	fetchTtsAudioHistory(cursor?: string): Promise<
+		| {
+				cursorNext: string | null;
+				cursorPrev: string | null;
+				results: UserAudioFile[];
+		  }
+		| undefined
+	> {
 		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
 	}
 

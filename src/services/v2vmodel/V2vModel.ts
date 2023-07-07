@@ -61,11 +61,13 @@ export default class V2vModel {
 	 * This is the fastest method to find the model you need, the token is unique to each model and
 	 * can be found in the URL of the model's more details page on fakeyou.com.
 	 */
-	static async fetchModelByToken(token: string): Promise<V2vModel | null> {
-		return (await this.fetchModels()).get(token) || null;
+	static async fetchModelByToken(token: string): Promise<V2vModel | undefined> {
+		const models = await this.fetchModels();
+
+		return models.get(token);
 	}
 
-	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | null> {
+	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | undefined> {
 		try {
 			const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
 
@@ -74,12 +76,10 @@ export default class V2vModel {
 			log.error(
 				`Unexpected response from the server. Maybe you uploaded the wrong file type (not a wav) or there was an unknown error.\n${error}`
 			);
-
-			return null;
 		}
 	}
 
-	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | null> {
+	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | undefined> {
 		const response = await request.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
@@ -94,13 +94,13 @@ export default class V2vModel {
 		if (!inference.success) {
 			log.error(`There was a problem fetching this inference. Reason: ${inference.error_reason}.`);
 
-			return null;
+			return;
 		}
 
 		return inference;
 	}
 
-	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | null> {
+	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
 			const response = await request.send(
 				new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
@@ -132,17 +132,17 @@ export default class V2vModel {
 	 * Unlike TTS, this does NOT support rate limit safety features, so be cautious!
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	async infer(audio: Buffer): Promise<V2vAudioFile | null> {
+	async infer(audio: Buffer): Promise<V2vAudioFile | undefined> {
 		const uploadedAudio = await V2vModel.#uploadAudio(audio);
 
 		if (!uploadedAudio) {
-			return null;
+			return;
 		}
 
 		const inference = await this.#fetchInference(uploadedAudio.upload_token);
 
 		if (!inference) {
-			return null;
+			return;
 		}
 
 		const audioUrl = await this.#getAudioUrl(inference.inference_job_token);
@@ -150,7 +150,5 @@ export default class V2vModel {
 		if (audioUrl) {
 			return new V2vAudioFile(audioUrl);
 		}
-
-		return null;
 	}
 }

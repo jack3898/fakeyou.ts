@@ -36,8 +36,6 @@ export default class Leaderboard {
 				return this.#ttsLeaderboardData.at(index) && new LeaderboardUser(this.#ttsLeaderboardData[index]);
 			case 'w2l':
 				return this.#w2lLeaderboardData.at(index) && new LeaderboardUser(this.#w2lLeaderboardData[index]);
-			default:
-				return undefined;
 		}
 	}
 }

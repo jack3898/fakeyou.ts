@@ -48,11 +48,14 @@ export default class UserAudioFile implements AudioFile {
 	static async fetchUserAudioFiles(
 		username: string,
 		cursor?: string
-	): Promise<{
-		cursorNext: string | null;
-		cursorPrev: string | null;
-		results: UserAudioFile[];
-	} | null> {
+	): Promise<
+		| {
+				cursorNext: string | null;
+				cursorPrev: string | null;
+				results: UserAudioFile[];
+		  }
+		| undefined
+	> {
 		const url = new URL(`${constants.API_URL}/user/${username}/tts_results?limit=10`);
 
 		if (cursor) {
@@ -74,12 +77,10 @@ export default class UserAudioFile implements AudioFile {
 			};
 		} catch (error) {
 			log.error(`Response from API failed validation. Could not load user TTS results.\n${error}`);
-
-			return null;
 		}
 	}
 
-	async toBuffer(): Promise<Buffer | null> {
+	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
 		}
@@ -91,14 +92,12 @@ export default class UserAudioFile implements AudioFile {
 
 			return this.#buffer;
 		}
-
-		return null;
 	}
 
-	async toBase64(): Promise<string | null> {
+	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
 
-		return buffer ? Buffer.from(buffer).toString('base64') : null;
+		return buffer && Buffer.from(buffer).toString('base64');
 	}
 
 	async toDisk(location: `${string}.wav`): Promise<void> {
@@ -109,7 +108,7 @@ export default class UserAudioFile implements AudioFile {
 		}
 	}
 
-	fetchTtsModel(): Promise<TtsModel | null> {
+	fetchTtsModel(): Promise<TtsModel | undefined> {
 		return TtsModel.fetchModelByToken(this.ttsModelToken);
 	}
 }

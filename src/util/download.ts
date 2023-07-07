@@ -1,6 +1,6 @@
 import * as request from './request.js';
 
-export async function wav(url: URL): Promise<Buffer | null> {
+export async function wav(url: URL): Promise<Buffer | undefined> {
 	const headers = new Headers();
 
 	headers.append('content-type', 'audio/x-wav');
@@ -11,7 +11,7 @@ export async function wav(url: URL): Promise<Buffer | null> {
 	});
 
 	if (result.type === 'opaque') {
-		return null;
+		return;
 	}
 
 	const arrayBuffer = await result.blob().then((b) => b?.arrayBuffer());

@@ -53,7 +53,7 @@ export default class V2vAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
-	async toBuffer(): Promise<Buffer | null> {
+	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
 		}
@@ -65,14 +65,12 @@ export default class V2vAudioFile implements AudioFile {
 
 			return this.#buffer;
 		}
-
-		return null;
 	}
 
-	async toBase64(): Promise<string | null> {
+	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
 
-		return buffer ? Buffer.from(buffer).toString('base64') : null;
+		return buffer && Buffer.from(buffer).toString('base64');
 	}
 
 	async toDisk(location: `${string}.wav`): Promise<void> {
@@ -83,7 +81,7 @@ export default class V2vAudioFile implements AudioFile {
 		}
 	}
 
-	async fetchModel(): Promise<V2vModel | null> {
+	async fetchModel(): Promise<V2vModel | undefined> {
 		return V2vModel.fetchModelByToken(this.entityToken);
 	}
 }

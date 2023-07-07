@@ -58,20 +58,18 @@ export default class SessionUser {
 	readonly canBanUsers: boolean;
 	readonly canDeleteUsers: boolean;
 
-	static async fetchLoggedInUser(): Promise<SessionUser | null> {
+	static async fetchLoggedInUser(): Promise<SessionUser | undefined> {
 		const response = await request.send(new URL(`${constants.API_URL}/session`));
 		const loggedInUser = loggedInUserProfileResponseSchema.parse(await response.json());
 
 		if (loggedInUser.logged_in) {
 			return new this(loggedInUser.user);
 		}
-
-		return null;
 	}
 
 	readonly fetchSubscriptions = Subscription.fetchSubscriptions;
 
-	fetchProfile(): Promise<ProfileUser | null> {
+	fetchProfile(): Promise<ProfileUser | undefined> {
 		return ProfileUser.fetchUserProfile(this.username);
 	}
 }

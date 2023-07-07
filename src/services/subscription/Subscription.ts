@@ -11,7 +11,7 @@ export default class Subscription {
 	readonly loyaltyProgram: boolean;
 	readonly activeSubscriptions: Product[];
 
-	static async fetchSubscriptions(): Promise<Subscription | null> {
+	static async fetchSubscriptions(): Promise<Subscription | undefined> {
 		try {
 			const response = await request.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
 			const json = activeSubscriptionsResponseSchema.parse(await response.json());
@@ -19,8 +19,6 @@ export default class Subscription {
 			return new this(json);
 		} catch (error) {
 			log.error(`Response from API failed validation. Are you logged in?\n${error}`);
-
-			return null;
 		}
 	}
 }

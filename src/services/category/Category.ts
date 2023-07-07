@@ -69,10 +69,10 @@ export default class Category {
 		return models;
 	}
 
-	async getParent(): Promise<Category | null> {
+	async getParent(): Promise<Category | undefined> {
 		const categories = await Category.fetchCategories();
 
-		return categories.find((categoryFromCache) => categoryFromCache.token === this.parentToken) || null;
+		return categories.find((categoryFromCache) => categoryFromCache.token === this.parentToken);
 	}
 
 	async getChildren(): Promise<Category[]> {

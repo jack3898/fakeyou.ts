@@ -69,11 +69,13 @@ export default class TtsModel {
 	 * This is the fastest method to find the model you need, the token is unique to each model and
 	 * can be found in the URL of the model's more details page on fakeyou.com.
 	 */
-	static async fetchModelByToken(token: string): Promise<TtsModel | null> {
-		return (await this.fetchModels()).get(token) || null;
+	static async fetchModelByToken(token: string): Promise<TtsModel | undefined> {
+		const models = await this.fetchModels();
+
+		return models.get(token);
 	}
 
-	static async fetchModelsByUser(username: string): Promise<TtsModel[] | null> {
+	static async fetchModelsByUser(username: string): Promise<TtsModel[] | undefined> {
 		try {
 			const response = await request.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
 			const json = ttsModelListSchema.parse(await response.json());
@@ -81,15 +83,13 @@ export default class TtsModel {
 			return json.models.map((model) => new this(model));
 		} catch (error) {
 			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
-
-			return null;
 		}
 	}
 
 	/**
 	 * @param search Case-insensitive search query
 	 */
-	static async fetchModelByName(search: string): Promise<TtsModel | null> {
+	static async fetchModelByName(search: string): Promise<TtsModel | undefined> {
 		const models = await this.fetchModels();
 
 		for (const [, model] of models) {
@@ -97,8 +97,6 @@ export default class TtsModel {
 				return model;
 			}
 		}
-
-		return null;
 	}
 
 	// The dataloader must be static, so that multiple different model instances can use it.
@@ -109,7 +107,7 @@ export default class TtsModel {
 
 	static async #modelInferenceDataloader(
 		base64Queries: readonly `${string}:${string}`[]
-	): Promise<(TtsAudioFile | null)[]> {
+	): Promise<(TtsAudioFile | undefined)[]> {
 		if (base64Queries.length > 10) {
 			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
 		}
@@ -171,11 +169,11 @@ export default class TtsModel {
 		// The return value array must return corresponding data for each item.
 		// And be of exactly the same length so the dataloader can tie things back together.
 		return decodedQueries.map(([text]) => {
-			return results.find((result) => result.rawInferenceText === text) || null;
+			return results.find((result) => result.rawInferenceText === text);
 		});
 	}
 
-	async fetchModelCreator(): Promise<ProfileUser | null> {
+	async fetchModelCreator(): Promise<ProfileUser | undefined> {
 		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}
 
@@ -194,7 +192,7 @@ export default class TtsModel {
 		return ttsInferenceResultSchema.parse(json);
 	}
 
-	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | null> {
+	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
 			const response = await request.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
 			const result = ttsRequestStatusResponseSchema.parse(await response.json());
@@ -223,7 +221,7 @@ export default class TtsModel {
 	 *
 	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
 	 */
-	infer(text: string): Promise<TtsAudioFile | null> {
+	infer(text: string): Promise<TtsAudioFile | undefined> {
 		// First encode text to base64, so that users cannot confuse this application when we pass the
 		// colon-delimited query string to the dataloader
 		const textBase64 = base64.encode(text);
@@ -232,7 +230,7 @@ export default class TtsModel {
 		return TtsModel.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
 	}
 
-	async fetchMyRating(): Promise<RatingSchema | null> {
+	async fetchMyRating(): Promise<RatingSchema | undefined> {
 		try {
 			const response = await request.send(new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`));
 			const json = userRatingResponseSchema.parse(await response.json());
@@ -240,12 +238,10 @@ export default class TtsModel {
 			return json.maybe_rating_value;
 		} catch (error) {
 			log.error(`Response from API failed validation. Are you logged in?\n${error}`);
-
-			return null;
 		}
 	}
 
-	async rate(decision: RatingSchema): Promise<RatingSchema | null> {
+	async rate(decision: RatingSchema): Promise<RatingSchema | undefined> {
 		try {
 			await request.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
 				method: 'POST',
@@ -259,8 +255,6 @@ export default class TtsModel {
 			return this.fetchMyRating();
 		} catch (error) {
 			log.error(`Unable to apply rating. Are you logged in?\n${error}`);
-
-			return null;
 		}
 	}
 
