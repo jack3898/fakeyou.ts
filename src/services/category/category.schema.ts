@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { fakeyouResponse } from '../../global.schema.js';
 
 export type CategorySchema = z.infer<typeof categorySchema>;
 export type CategoryListResponseSchema = z.infer<typeof categoryListResponseSchema>;
@@ -21,13 +22,11 @@ export const categorySchema = z.object({
 	deleted_at: z.date({ coerce: true }).nullable()
 });
 
-export const categoryListResponseSchema = z.object({
-	success: z.boolean(),
+export const categoryListResponseSchema = fakeyouResponse.extend({
 	categories: z.array(categorySchema)
 });
 
-export const categoryToModelSchema = z.object({
-	success: z.boolean(),
+export const categoryToModelSchema = fakeyouResponse.extend({
 	category_token_to_tts_model_tokens: z.object({
 		recursive: z.record(z.string(), z.array(z.string()))
 	})

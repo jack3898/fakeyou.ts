@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { fakeyouResponse } from '../../global.schema.js';
 
 export type SessionUserSchema = z.infer<typeof sessionUserSchema>;
 export type SessionUserResponseSchema = z.infer<typeof sessionUserResponseSchema>;
@@ -32,19 +33,16 @@ export const sessionUserSchema = z.object({
 	can_delete_users: z.boolean()
 });
 
-export const sessionUserResponseSchema = z.object({
-	success: z.boolean(),
+export const sessionUserResponseSchema = fakeyouResponse.extend({
 	user: sessionUserSchema
 });
 
 export const loggedInUserProfileResponseSchema = z.union([
-	z.object({
-		success: z.boolean(),
+	fakeyouResponse.extend({
 		logged_in: z.literal(true),
 		user: sessionUserSchema
 	}),
-	z.object({
-		success: z.boolean(),
+	fakeyouResponse.extend({
 		logged_in: z.literal(false),
 		user: z.null()
 	})

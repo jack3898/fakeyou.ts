@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { fakeyouResponse, visibilitySchema } from '../../global.schema.js';
 
 export type UserTtsSchema = z.infer<typeof userTtsSchema>;
 export type UserTtsListResponseSchema = z.infer<typeof userTtsListResponseSchema>;
@@ -15,13 +16,12 @@ export const userTtsSchema = z.object({
 	maybe_creator_result_id: z.number(),
 	file_size_bytes: z.number(),
 	duration_millis: z.number(),
-	visibility: z.union([z.literal('public'), z.literal('hidden')]),
+	visibility: visibilitySchema,
 	created_at: z.date({ coerce: true }),
 	updated_at: z.date({ coerce: true })
 });
 
-export const userTtsListResponseSchema = z.object({
-	success: z.boolean(),
+export const userTtsListResponseSchema = fakeyouResponse.extend({
 	results: z.array(userTtsSchema),
 	cursor_next: z.string().nullable(),
 	cursor_previous: z.string().nullable()

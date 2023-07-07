@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { fakeyouResponse, fakeyouResponseFalse, fakeyouResponseTrue } from '../../global.schema.js';
 
 export type TtsModelSchema = z.infer<typeof ttsModelSchema>;
 export type TtsModelListSchema = z.infer<typeof ttsModelListSchema>;
@@ -32,18 +33,17 @@ export const ttsModelSchema = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export const ttsModelListSchema = z.object({
+export const ttsModelListSchema = fakeyouResponse.extend({
 	success: z.boolean(),
 	models: z.array(ttsModelSchema)
 });
 
-export const ttsInferenceSchema = z.object({
+export const ttsInferenceSchema = fakeyouResponseTrue.extend({
 	success: z.literal(true),
 	inference_job_token: z.string()
 });
 
-export const ttsInferenceErrorSchema = z.object({
-	success: z.literal(false),
+export const ttsInferenceErrorSchema = fakeyouResponseFalse.extend({
 	error_reason: z.string()
 });
 
@@ -84,14 +84,12 @@ export const ttsInferenceStatusSchema = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export const ttsRequestStatusResponseSchema = z.object({
-	success: z.boolean(),
+export const ttsRequestStatusResponseSchema = fakeyouResponse.extend({
 	state: z.union([ttsInferenceStatusSchema, ttsInferenceStatusDoneSchema])
 });
 
 export const ratingSchema = z.union([z.literal('positive'), z.literal('negative'), z.literal('neutral')]);
 
-export const userRatingResponseSchema = z.object({
-	success: z.boolean(),
+export const userRatingResponseSchema = fakeyouResponse.extend({
 	maybe_rating_value: ratingSchema
 });

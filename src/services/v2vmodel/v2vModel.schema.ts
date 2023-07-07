@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { fakeyouResponse, fakeyouResponseFalse, fakeyouResponseTrue, visibilitySchema } from '../../global.schema.js';
 
 export type V2vModelSchema = z.infer<typeof v2vModelSchema>;
 export type V2vModelListSchema = z.infer<typeof v2vModelListSchema>;
@@ -19,7 +20,7 @@ export const v2vModelSchema = z.object({
 		display_name: z.string(),
 		gravatar_hash: z.string()
 	}),
-	creator_set_visibility: z.union([z.literal('public'), z.literal('hidden')]),
+	creator_set_visibility: visibilitySchema,
 	ietf_language_tag: z.string(),
 	ietf_primary_language_subtag: z.string(),
 	is_front_page_featured: z.boolean(),
@@ -27,23 +28,19 @@ export const v2vModelSchema = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export const v2vModelListSchema = z.object({
-	success: z.boolean(),
+export const v2vModelListSchema = fakeyouResponse.extend({
 	models: z.array(v2vModelSchema)
 });
 
-export const v2vVoiceUploadResponseSchema = z.object({
-	success: z.boolean(),
+export const v2vVoiceUploadResponseSchema = fakeyouResponse.extend({
 	upload_token: z.string()
 });
 
-export const v2vInferenceSchema = z.object({
-	success: z.literal(true),
+export const v2vInferenceSchema = fakeyouResponseTrue.extend({
 	inference_job_token: z.string()
 });
 
-export const v2vInferenceErrorSchema = z.object({
-	success: z.literal(false),
+export const v2vInferenceErrorSchema = fakeyouResponseFalse.extend({
 	error_reason: z.string()
 });
 
@@ -108,7 +105,6 @@ export const v2vInferenceStatusDoneSchema = z.object({
 	updated_at: z.date({ coerce: true })
 });
 
-export const v2vRequestStatusResponseSchema = z.object({
-	success: z.boolean(),
+export const v2vRequestStatusResponseSchema = fakeyouResponse.extend({
 	state: z.union([v2vInferenceStatusSchema, v2vInferenceStatusDoneSchema])
 });
