@@ -28,6 +28,13 @@ export default class Client {
 	readonly userTtsAudioHistory = UserAudioFile;
 
 	/**
+	 * Make a custom authenticated request, if there is an endpoint this package does not use!
+	 *
+	 * Light wrapper over fetch.
+	 */
+	readonly request = request;
+
+	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.
 	 */
 	async login(credentials: CredentialsSchema): Promise<void> {

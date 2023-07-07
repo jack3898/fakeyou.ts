@@ -86,6 +86,21 @@ export default class TtsModel {
 		}
 	}
 
+	/**
+	 * @param search Case-insensitive search query
+	 */
+	static async fetchModelByName(search: string): Promise<TtsModel | null> {
+		const models = await this.fetchModels();
+
+		for (const [, model] of models) {
+			if (model.title.toLowerCase().includes(search.toLowerCase())) {
+				return model;
+			}
+		}
+
+		return null;
+	}
+
 	// The dataloader must be static, so that multiple different model instances can use it.
 	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
 	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
