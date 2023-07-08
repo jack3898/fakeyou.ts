@@ -1,4 +1,4 @@
-import { PollStatus, cache, constants, request, upload, poll, log } from '../../util/index.js';
+import { PollStatus, cache, constants, request, upload, poll, log, prettyParse } from '../../util/index.js';
 import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
@@ -45,7 +45,7 @@ export default class V2vModel {
 	static fetchModels(): Promise<Map<string, V2vModel>> {
 		return cache.wrap('fetch-v2v-models', async () => {
 			const response = await request.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
-			const json = v2vModelListSchema.parse(await response.json());
+			const json = prettyParse(v2vModelListSchema, await response.json());
 
 			const map = new Map<string, V2vModel>();
 
@@ -71,7 +71,7 @@ export default class V2vModel {
 		try {
 			const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
 
-			return v2vVoiceUploadResponseSchema.parse(await response.json());
+			return prettyParse(v2vVoiceUploadResponseSchema, await response.json());
 		} catch (error) {
 			log.error(
 				`Unexpected response from the server. Maybe you uploaded the wrong file type (not a wav) or there was an unknown error.\n${error}`
@@ -89,7 +89,7 @@ export default class V2vModel {
 			})
 		});
 
-		const inference = v2vInferenceResultSchema.parse(await response.json());
+		const inference = prettyParse(v2vInferenceResultSchema, await response.json());
 
 		if (!inference.success) {
 			log.error(`There was a problem fetching this inference. Reason: ${inference.error_reason}.`);
@@ -105,7 +105,7 @@ export default class V2vModel {
 			const response = await request.send(
 				new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
 			);
-			const result = v2vRequestStatusResponseSchema.parse(await response.json());
+			const result = prettyParse(v2vRequestStatusResponseSchema, await response.json());
 
 			switch (result.state.status.status) {
 				case 'pending':

@@ -1,4 +1,4 @@
-import { constants, request } from '../../util/index.js';
+import { constants, prettyParse, request } from '../../util/index.js';
 import { queueLengthResponseSchema, type QueueLengthResponseSchema } from './queue.schema.js';
 
 export default class Queue {
@@ -14,7 +14,7 @@ export default class Queue {
 
 	static async fetchQueue(): Promise<Queue> {
 		const response = await request.send(new URL(`${constants.API_URL}/tts/queue_length`));
-		const json = queueLengthResponseSchema.parse(await response.json());
+		const json = prettyParse(queueLengthResponseSchema, await response.json());
 
 		return new this(json);
 	}

@@ -13,7 +13,7 @@ import {
 	type TtsInferenceResultSchema
 } from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
-import { base64, log, poll, request, constants, cache, PollStatus, sleep } from '../../util/index.js';
+import { base64, log, poll, request, constants, cache, PollStatus, sleep, prettyParse } from '../../util/index.js';
 
 export default class TtsModel {
 	constructor(data: TtsModelSchema) {
@@ -53,7 +53,7 @@ export default class TtsModel {
 	static fetchModels(): Promise<Map<string, TtsModel>> {
 		return cache.wrap('fetch-tts-models', async () => {
 			const response = await request.send(new URL(`${constants.API_URL}/tts/list`));
-			const json = ttsModelListSchema.parse(await response.json());
+			const json = prettyParse(ttsModelListSchema, await response.json());
 
 			const map = new Map<string, TtsModel>();
 
@@ -78,7 +78,7 @@ export default class TtsModel {
 	static async fetchModelsByUser(username: string): Promise<TtsModel[] | undefined> {
 		try {
 			const response = await request.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
-			const json = ttsModelListSchema.parse(await response.json());
+			const json = prettyParse(ttsModelListSchema, await response.json());
 
 			return json.models.map((model) => new this(model));
 		} catch (error) {
@@ -187,15 +187,13 @@ export default class TtsModel {
 			})
 		});
 
-		const json = await response.json();
-
-		return ttsInferenceResultSchema.parse(json);
+		return prettyParse(ttsInferenceResultSchema, await response.json());
 	}
 
 	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
 			const response = await request.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
-			const result = ttsRequestStatusResponseSchema.parse(await response.json());
+			const result = prettyParse(ttsRequestStatusResponseSchema, await response.json());
 
 			switch (result.state.status) {
 				case 'pending':
@@ -233,7 +231,7 @@ export default class TtsModel {
 	async fetchMyRating(): Promise<RatingSchema | undefined> {
 		try {
 			const response = await request.send(new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`));
-			const json = userRatingResponseSchema.parse(await response.json());
+			const json = prettyParse(userRatingResponseSchema, await response.json());
 
 			return json.maybe_rating_value;
 		} catch (error) {

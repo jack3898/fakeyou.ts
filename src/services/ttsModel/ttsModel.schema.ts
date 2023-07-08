@@ -34,12 +34,10 @@ export const ttsModelSchema = z.object({
 });
 
 export const ttsModelListSchema = fakeyouResponse.extend({
-	success: z.boolean(),
 	models: z.array(ttsModelSchema)
 });
 
 export const ttsInferenceSchema = fakeyouResponseTrue.extend({
-	success: z.literal(true),
 	inference_job_token: z.string()
 });
 

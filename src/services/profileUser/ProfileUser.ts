@@ -1,5 +1,5 @@
 import FakeYouError from '../../error/FakeYouError.js';
-import { cache, constants, log, request } from '../../util/index.js';
+import { cache, constants, log, prettyParse, request } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
@@ -64,7 +64,7 @@ export default class ProfileUser {
 		try {
 			const json = await cache.wrap('fetch-user-profile', async () => {
 				const response = await request.send(new URL(`${constants.API_URL}/user/${username}/profile`));
-				return userProfileResponseSchema.parse(await response.json());
+				return prettyParse(userProfileResponseSchema, await response.json());
 			});
 
 			return new this(json.user);
@@ -82,7 +82,7 @@ export default class ProfileUser {
 	 */
 	async editProfile(newValues: Partial<EditUserProfileInputSchema>): Promise<boolean> {
 		try {
-			const body = editUserProfileInputSchema.parse({
+			const body = prettyParse(editUserProfileInputSchema, {
 				cashapp_username: this.cashappUsername ?? '',
 				discord_username: this.discordUsername ?? '',
 				github_username: this.githubUsername ?? '',
@@ -100,7 +100,7 @@ export default class ProfileUser {
 				body: JSON.stringify(body)
 			});
 
-			const json = editUserProfileResponseSchema.parse(await result.json());
+			const json = prettyParse(editUserProfileResponseSchema, await result.json());
 
 			return json.success;
 		} catch (error) {

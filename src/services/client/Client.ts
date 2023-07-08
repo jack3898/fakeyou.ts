@@ -1,6 +1,6 @@
 import AuthorisationError from '../../error/AuthorisationError.js';
 import FakeYouError from '../../error/FakeYouError.js';
-import { constants, cache, log, request } from '../../util/index.js';
+import { constants, cache, log, request, prettyParse } from '../../util/index.js';
 import Category from '../category/Category.js';
 import Leaderboard from '../leaderboard/Leaderboard.js';
 import TtsModel from '../ttsModel/TtsModel.js';
@@ -9,8 +9,8 @@ import Queue from '../queue/Queue.js';
 import SessionUser from '../sessionUser/SessionUser.js';
 import Subscription from '../subscription/Subscription.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
-import { credentialsSchema, type CredentialsSchema, loginSchema } from './client.schema.js';
 import V2vModel from '../v2vmodel/V2vModel.js';
+import { loginSchema } from './client.schema.js';
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
@@ -37,21 +37,19 @@ export default class Client {
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.
 	 */
-	async login(credentials: CredentialsSchema): Promise<void> {
+	async login(credentials: { username: string; password: string }): Promise<void> {
 		log.info('Logging in...');
 
 		const cookie = await cache.wrap('login', async () => {
-			const validatedCredentials = credentialsSchema.parse(credentials);
-
 			const response = await request.send(new URL(`${constants.API_URL}/login`), {
 				method: 'POST',
 				body: JSON.stringify({
-					username_or_email: validatedCredentials.username,
-					password: validatedCredentials.password
+					username_or_email: credentials.username,
+					password: credentials.password
 				})
 			});
 
-			const body = loginSchema.parse(await response.json());
+			const body = prettyParse(loginSchema, await response.json());
 
 			if (!body.success) {
 				throw new AuthorisationError(`Authentication failed. Status ${response.status}.`);

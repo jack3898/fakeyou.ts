@@ -1,4 +1,4 @@
-import { constants, request } from '../../util/index.js';
+import { constants, prettyParse, request } from '../../util/index.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
 import { type SessionUserSchema, loggedInUserProfileResponseSchema } from './sessionUser.schema.js';
@@ -60,7 +60,7 @@ export default class SessionUser {
 
 	static async fetchLoggedInUser(): Promise<SessionUser | undefined> {
 		const response = await request.send(new URL(`${constants.API_URL}/session`));
-		const loggedInUser = loggedInUserProfileResponseSchema.parse(await response.json());
+		const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
 
 		if (loggedInUser.logged_in) {
 			return new this(loggedInUser.user);

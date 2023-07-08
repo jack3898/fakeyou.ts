@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
-import { constants, download, log, request } from '../../util/index.js';
+import { constants, download, log, prettyParse, request } from '../../util/index.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
 
@@ -67,7 +67,7 @@ export default class UserAudioFile implements AudioFile {
 				method: 'GET'
 			});
 
-			const json = userTtsListResponseSchema.parse(await response.json());
+			const json = prettyParse(userTtsListResponseSchema, await response.json());
 			const results = json.results.map((userTtsAudioEntry) => new this(userTtsAudioEntry));
 
 			return {
