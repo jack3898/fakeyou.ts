@@ -9,5 +9,5 @@
         "types": ["node"],
         "declaration": true
     },
-    "exclude": ["dist"],
+    "exclude": ["dist"]
 }

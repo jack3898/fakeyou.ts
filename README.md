@@ -2,11 +2,11 @@
 
 ![FakeYou.ts logo](https://github.com/jack3898/fakeyou.ts/assets/28375223/c76748e2-0456-4ed9-af06-6a84139e8f51)
 
-A modern, light, 100% type-safe, and easy-to-use unofficial API wrapper for [FakeYou](https://fakeyou.com/). Get your app up and running with FakeYou in minutes!
+A modern, light, 100% type-safe, and easy-to-use unofficial API wrapper for [FakeYou](https://fakeyou.com/) with [Node.js](https://nodejs.org). Get your app up and running with FakeYou in minutes!
 
 ## Installation
 
-Node v18 and higher is supported.
+NOTE: Node v18 and higher is only supported.
 
 ```bash
 npm install fakeyou.ts
@@ -37,11 +37,6 @@ import Client from "fakeyou.ts";
 
 const client = new Client();
 
-await client.login({
-    username: "your username",
-    password: "your password",
-});
-
 const model = await client.ttsModel.fetchModelByToken("TM:4e2xqpwqaggr");
 const audio = await model?.infer("hello!");
 
@@ -58,11 +53,6 @@ import { readFileSync } from "node:fs";
 
 const client = new Client();
 
-await client.login({
-    username: "your username",
-    password: "your password",
-});
-
 const model = await client.v2vModel.fetchModelByToken("vcm_tes015h65n6h");
 const audioFile = readFileSync("./localAudioFile.wav"); // Wav is only supported for simplicity, as validating the type is not reliable
 const audio = await model?.infer(audioFile);
@@ -70,19 +60,36 @@ const audio = await model?.infer(audioFile);
 await audio?.toDisk("./local/name.wav"); // Same API as TTS!
 ```
 
-## TTS Rate limiting
+## Login to FakeYou
+
+You may optionally log in to take advantage of reduced rate limits, premium benefits, faster processing times and more.
+
+```ts
+import Client from "fakeyou.ts";
+
+const client = new Client();
+
+await client.login({
+    username: "your username",
+    password: "your password",
+});
+```
+
+## TTS rate limiting helper
 
 Let the client take away the stress of rate limiting with text-to-speech. Using the below approach with `Promise.all()` it will automatically and safely queue each inference so you aren't accidentally rate limited. It is important to note that the more you add, the longer it will take to complete your request (especially if you are not logged in)!
 
 ```ts
 const [audio1, audio2, audio3] = await Promise.all([
     model.infer("Test!"),
-    model.infer("test 2"),
-    model.infer("Test! 3"),
+    differentModel.infer("Test 2!"),
+    model.infer("Test 3!"),
 ]);
 
 // Do what you like with the audio files from here on!
 ```
+
+And the best bit is you can mix a variety of different models within the rate limit guard, which makes it very useful for buffering up a conversation.
 
 _The voice-to-voice rate limit guard is not yet implemented._
 
@@ -101,7 +108,7 @@ _The voice-to-voice rate limit guard is not yet implemented._
 | Global FakeYou queue stats         | Simple fetch of queue statistics                                                                 | ✅     |
 | Subscription details               | View your subscription details and loyalty status                                                | ✅     |
 | View TTS audio history on profiles | View profile TTS audio history, and get associated model details, re-download audio and more     | ✅     |
-| View user models on profiles       | Get a lits of the user's models from their profile                                               | ✅     |
+| View user models on profiles       | Get a list of the user's models from their profile                                               | ✅     |
 
 ... and I will keep this list up to date with more features to come.
 
@@ -134,3 +141,16 @@ Node.js v18 and up are the only versions of Node.js that this package supports. 
 ### Does it work in the browser?
 
 No, unfortunately. 😔 It is best you create your own web server that uses this package to build your app.
+
+### Why this over fakeyou.**js**?
+
+Fakeyou.js is a great project (if you haven't seen it, you can check it out [here!](https://github.com/leunamcrack/fakeyou.js/)) but I wrote this package to address its shortcomings. For example, fakeyou.ts is...
+
+-   [x] Safe; All API responses are validated at runtime with type-smart schemas, which provides type-safety guarantees as well as the package just being fully type-safe. When using this package you will get autocomplete for every function, types for every return and compile-time errors for improper usage.
+-   [x] Scalable; All classes and components are almost all independent from one-another, making refactors and feature additions easy. No class inheritance to be found.
+-   [x] Feature-rich; Not only does fakeyou.ts have pretty much the same featureset at fakeyou.js, it also supports voice-to-voice.
+-   [x] Modern; Fakeyou.ts works with ESModules, supporting next-generation JavaScript projects and supports top-level await.
+-   [x] Relies on packages only when it needs to; Fakeyou.ts uses native Node.js modules if they are available (like fetch).
+-   [x] Smart; More implementation details are hidden away. It will contact the API only when it needs to. No need to run any `.init()` or `.start()` functions at the top of your app.
+-   [x] Easy to work with; Not only does fakeyou.ts give you type-safety guarantees, it has a logging flag you can enable to inspect all of its network traffic, and if you're unfortunate enough, see nicely-formatted errors.
+-   [x] Active on Discord; The maintainer (me!) of this project is active on FakeYou's official Discord! If there are any problems you are having, you can either contact me there (#api channel) or submit an issue on this GitHub page. Make sure to tag me so I don't miss you! For safety reasons I will not display my discord tag here.
