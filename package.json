@@ -8,7 +8,7 @@
         "build": "tsc",
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts",
-        "test": "vitest run",
+        "test": "vitest run test",
         "test:ui": "vitest --ui",
         "test:types": "tsc --noEmit"
     },

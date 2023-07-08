@@ -13,29 +13,23 @@ export async function poll<T>(
 ): Promise<T | undefined> {
 	let attempts = 0;
 
-	while (true) {
-		try {
-			if (attempts >= maxTries) {
-				throw Error(`Too many poll attempts. ${attempts} attempts have been made.`);
-			}
+	while (attempts < maxTries) {
+		attempts += 1;
 
-			attempts += 1;
+		const result = await callback();
 
-			const result = await callback();
-
-			switch (result) {
-				case PollStatus.Abort:
-					return;
-				case PollStatus.Retry:
-					await sleep(interval);
-					continue;
-				default:
-					return result;
-			}
-		} catch (error: unknown) {
-			console.error('Poll attempt threw an error.', error);
+		switch (result) {
+			case PollStatus.Abort:
+				return;
+			case PollStatus.Retry:
+				await sleep(interval);
+				continue;
+			default:
+				return result;
 		}
 	}
+
+	console.error(`Max tries exceeded. The limit was ${maxTries}`);
 }
 
 export enum PollStatus {
