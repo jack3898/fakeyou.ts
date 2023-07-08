@@ -9,8 +9,9 @@
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts",
         "test": "vitest run unit",
-        "test:e2e": "vitest run e2e",
+        "test:e2e": "vitest run e2e --threads false",
         "test:ui": "vitest unit --ui",
+        "test:e2e:ui": "vitest e2e --ui",
         "test:types": "tsc --noEmit"
     },
     "keywords": [

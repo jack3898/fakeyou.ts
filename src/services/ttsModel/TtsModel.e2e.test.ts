@@ -50,5 +50,5 @@ it(
 
 		expect(base64).toBeInstanceOf(Buffer);
 	},
-	{ timeout: 60_000 }
+	{ timeout: 120_000 }
 );
