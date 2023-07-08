@@ -42,3 +42,7 @@ export async function wrap<T>(key: string, operation: () => Promise<T>): Promise
 export function dispose(key: string): boolean {
 	return cacheMap.delete(key);
 }
+
+export function disposeAll(): void {
+	return cacheMap.clear();
+}

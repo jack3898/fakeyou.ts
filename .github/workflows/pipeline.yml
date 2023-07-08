@@ -1,13 +1,14 @@
-name: "Build and publish"
+name: "Run pipeline"
 
 on:
     push:
         branches:
-            - release
+            - feature/*
+            - main
 
 jobs:
     release:
-        name: publish
+        name: pipeline
         runs-on: ubuntu-latest
         steps:
             - name: checkout
@@ -20,16 +21,8 @@ jobs:
             - name: publish
               run: |
                 npm install
-                npm run lint
+                npm run test:types
                 npm run test
-                npm run build
-                rm -R src/
-                rm -R .github/
-                rm -R .vscode/
-                rm .eslintrc.cjs
-                rm .gitignore
-                rm tsconfig.json
-                npm publish --access public
+                npm run lint
               env:
-                NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
                 NODE_ENV: development
