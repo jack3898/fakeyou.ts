@@ -8,8 +8,9 @@
         "build": "tsc",
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts",
-        "test": "vitest run test",
-        "test:ui": "vitest --ui",
+        "test": "vitest run unit",
+        "test:e2e": "vitest run e2e",
+        "test:ui": "vitest unit --ui",
         "test:types": "tsc --noEmit"
     },
     "keywords": [
