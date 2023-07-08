@@ -18,7 +18,7 @@ jobs:
               with:
                   node-version: 18
                   registry-url: https://registry.npmjs.org
-            - name: publish
+            - name: checks
               run: |
                 npm install
                 npm run test:types
