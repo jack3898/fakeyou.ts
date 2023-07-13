@@ -21,7 +21,7 @@ jobs:
               run: |
                 npm install
                 npm run lint
-                npm run test
+                npm run test:unit
                 npm run build
                 rm -R src/
                 rm -R .github/
