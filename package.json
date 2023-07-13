@@ -8,10 +8,9 @@
         "build": "tsc",
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts",
-        "test": "vitest run unit",
+        "test": "vitest run",
+        "test:unit": "vitest run unit",
         "test:e2e": "vitest run e2e --threads false",
-        "test:ui": "vitest unit --ui",
-        "test:e2e:ui": "vitest e2e --ui",
         "test:types": "tsc --noEmit"
     },
     "keywords": [
@@ -34,15 +33,15 @@
     },
     "devDependencies": {
         "@types/node": "^18.16.18",
-        "@typescript-eslint/eslint-plugin": "^5.60.1",
-        "@typescript-eslint/parser": "^5.60.1",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
         "@vitest/ui": "^0.33.0",
         "eslint": "^8.44.0",
         "eslint-config-prettier": "^8.8.0",
-        "eslint-plugin-prettier": "^4.2.1",
-        "prettier": "^2.8.8",
+        "eslint-plugin-prettier": "^5.0.0",
+        "prettier": "^3.0.0",
         "typescript": "^5.1.6",
-        "vite": "^4.4.2",
+        "vite": "^4.4.3",
         "vitest": "^0.33.0"
     },
     "engines": {

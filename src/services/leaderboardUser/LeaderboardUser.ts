@@ -14,17 +14,11 @@ export default class LeaderboardUser {
 	}
 
 	readonly creatorUserToken: string;
-
 	readonly username: string;
-
 	readonly displayName: string;
-
 	readonly gravatarHash: string;
-
 	readonly defaultAvatarIndex: number;
-
 	readonly defaultAvatarColorIndex: number;
-
 	readonly uploadedCount: number;
 
 	async fetchProfile(): Promise<ProfileUser> {

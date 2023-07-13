@@ -64,6 +64,7 @@ export default class ProfileUser {
 		try {
 			const json = await cache.wrap('fetch-user-profile', async () => {
 				const response = await request.send(new URL(`${constants.API_URL}/user/${username}/profile`));
+
 				return prettyParse(userProfileResponseSchema, await response.json());
 			});
 
