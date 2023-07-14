@@ -63,8 +63,13 @@ export default class Client {
 		log.success('Logged in!');
 	}
 
-	logout(): void {
-		cache.dispose('login');
+	async logout(): Promise<boolean> {
+		const response = await request.send(new URL(`${constants.API_URL}/logout`), { method: 'POST' });
+		const { success } = prettyParse(loginSchema, await response.json());
+
 		request.setCookie(undefined);
+		cache.dispose('login');
+
+		return success;
 	}
 }
