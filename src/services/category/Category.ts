@@ -69,6 +69,12 @@ export default class Category {
 		return models;
 	}
 
+	static async fetchCategoryByToken(token: string): Promise<Category | undefined> {
+		const categories = await this.fetchCategories();
+
+		return categories.find((category) => category.token === token);
+	}
+
 	async getParent(): Promise<Category | undefined> {
 		const categories = await Category.fetchCategories();
 
