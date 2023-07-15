@@ -7,31 +7,31 @@ let enabled = false;
 
 export function error(message: string): void {
 	if (enabled) {
-		console.error(`${chalk.bgRed` ERROR `} ${message}`);
+		console.error(`${chalk.black(chalk.bgRed(' ERROR '))} ${message}`);
 	}
 }
 
 export function success(message: string): void {
 	if (enabled) {
-		console.log(`${chalk.bgGreen` SUCCESS `} ${message}`);
+		console.log(`${chalk.black(chalk.bgGreen(' SUCCESS '))} ${message}`);
 	}
 }
 
 export function info(message: string): void {
 	if (enabled) {
-		console.info(`${chalk.bgBlue` INFO `} ${message}`);
+		console.info(`${chalk.black(chalk.bgBlue(' INFO '))} ${message}`);
 	}
 }
 
 export function warn(message: string): void {
 	if (enabled) {
-		console.warn(`${chalk.bgYellow` WARN `} ${message}`);
+		console.warn(`${chalk.black(chalk.bgYellow(' WARN '))} ${message}`);
 	}
 }
 
 export function http(url: URL): void {
 	if (enabled) {
-		console.log(`${chalk.bgWhite(` HTTP ${url.host} `)} ${url.pathname}`);
+		console.log(`${chalk.black(chalk.bgWhite(` HTTP ${url.host} `))} ${url.pathname}`);
 	}
 }
 

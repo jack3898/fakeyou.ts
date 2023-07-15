@@ -59,6 +59,12 @@ export default class Category {
 		});
 	}
 
+	static async fetchCategoryByToken(token: string): Promise<Category | undefined> {
+		const categories = await this.fetchCategories();
+
+		return categories.find((category) => category.token === token);
+	}
+
 	async fetchModels(): Promise<TtsModel[]> {
 		const relationships = await Category.fetchCategoryToModelRelationships();
 		const allModels = await TtsModel.fetchModels();
@@ -68,13 +74,6 @@ export default class Category {
 
 		return models;
 	}
-
-	static async fetchCategoryByToken(token: string): Promise<Category | undefined> {
-		const categories = await this.fetchCategories();
-
-		return categories.find((category) => category.token === token);
-	}
-
 	async getParent(): Promise<Category | undefined> {
 		const categories = await Category.fetchCategories();
 
