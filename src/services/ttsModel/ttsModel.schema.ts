@@ -63,13 +63,7 @@ export const ttsInferenceStatusDoneSchema = z.object({
 });
 
 export const ttsInferenceStatusSchema = z.object({
-	status: z.union([
-		z.literal('pending'),
-		z.literal('started'),
-		z.literal('complete_failure'),
-		z.literal('attempt_failed'),
-		z.literal('dead')
-	]),
+	status: z.enum(['pending', 'started', 'complete_failure', 'attempt_failed', 'dead']),
 	maybe_extra_status_description: z.null(),
 	attempt_count: z.number(),
 	maybe_result_token: z.null(),
@@ -86,7 +80,7 @@ export const ttsRequestStatusResponseSchema = fakeyouResponse.extend({
 	state: z.union([ttsInferenceStatusSchema, ttsInferenceStatusDoneSchema])
 });
 
-export const ratingSchema = z.union([z.literal('positive'), z.literal('negative'), z.literal('neutral')]);
+export const ratingSchema = z.enum(['positive', 'negative', 'neutral']);
 
 export const userRatingResponseSchema = fakeyouResponse.extend({
 	maybe_rating_value: ratingSchema

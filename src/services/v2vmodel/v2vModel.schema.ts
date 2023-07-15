@@ -56,15 +56,9 @@ export const v2vInferenceStatusSchema = z.object({
 		maybe_raw_inference_text: z.string().nullable()
 	}),
 	status: z.object({
-		status: z.union([
-			// My confidence with this union is low, as I do not know exactly what it may be.
-			// So far it's just using the same union as the TTS model schema.
-			z.literal('pending'),
-			z.literal('started'),
-			z.literal('complete_failure'),
-			z.literal('attempt_failed'),
-			z.literal('dead')
-		]),
+		// My confidence with this union is low, as I do not know exactly what it may be.
+		// So far it's just using the same enum as the TTS model schema.
+		status: z.enum(['pending', 'started', 'complete_failure', 'attempt_failed', 'dead']),
 		maybe_extra_status_description: z.string().nullable(),
 		maybe_assigned_worker: z.string().nullable(),
 		maybe_assigned_cluster: z.string().nullable(),

@@ -18,12 +18,16 @@ it('should fetch root categories', async () => {
 	}
 });
 
-it('should fetch category to model relationships', async () => {
-	const categoryToModelRelationships = await Category.fetchCategoryToModelRelationships();
-	const recordSchema = z.record(z.string(), z.array(z.string()));
+it(
+	'should fetch category to model relationships',
+	async () => {
+		const categoryToModelRelationships = await Category.fetchCategoryToModelRelationships();
+		const recordSchema = z.record(z.string(), z.array(z.string()));
 
-	expect(recordSchema.safeParse(categoryToModelRelationships).success).toBe(true);
-});
+		expect(recordSchema.safeParse(categoryToModelRelationships).success).toBe(true);
+	},
+	{ timeout: 20_000 }
+);
 
 it('should fetch a single category', async () => {
 	const category = await Category.fetchCategoryByToken('CAT:pfy6spah8ny');
