@@ -112,6 +112,9 @@ _The voice-to-voice rate limit guard is not yet implemented._
 
 ... and I will keep this list up to date with more features to come.
 
+## Contributing
+If you would like to contribute, then please read the [contributing guidelines](https://github.com/jack3898/fakeyou.ts/blob/main/.github/CONTRIBUTING.md). Thank you!
+
 ## Q&A
 
 ### My project uses CommonJS (`require` instead of `import`), will this package work?
