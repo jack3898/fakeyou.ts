@@ -9,7 +9,6 @@ export default class SessionUser {
 		this.username = data.username;
 		this.displayName = data.display_name;
 		this.emailGravatarHash = data.email_gravatar_hash;
-		this.fakeyouPlan = data.fakeyou_plan;
 		this.storytellerStreamPlan = data.storyteller_stream_plan;
 		this.canUseTts = data.can_use_tts;
 		this.canUseW2l = data.can_use_w2l;
@@ -36,7 +35,6 @@ export default class SessionUser {
 	readonly username: string;
 	readonly displayName: string;
 	readonly emailGravatarHash: string;
-	readonly fakeyouPlan: string;
 	readonly storytellerStreamPlan: string;
 	readonly canUseTts: boolean;
 	readonly canUseW2l: boolean;
@@ -71,5 +69,9 @@ export default class SessionUser {
 
 	fetchProfile(): Promise<ProfileUser | undefined> {
 		return ProfileUser.fetchUserProfile(this.username);
+	}
+
+	fetchSubscription(): Promise<Subscription | undefined> {
+		return Subscription.fetchSubscriptions();
 	}
 }

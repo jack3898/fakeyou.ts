@@ -10,7 +10,6 @@ export const sessionUserSchema = z.object({
 	username: z.string(),
 	display_name: z.string(),
 	email_gravatar_hash: z.string(),
-	fakeyou_plan: z.string(),
 	storyteller_stream_plan: z.string(),
 	can_use_tts: z.boolean(),
 	can_use_w2l: z.boolean(),

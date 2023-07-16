@@ -1,15 +1,17 @@
 import { constants, log, prettyParse, request } from '../../util/index.js';
-import Product from '../product/Product.js';
 import { type ActiveSubscriptionsResponseSchema, activeSubscriptionsResponseSchema } from './subscription.schema.js';
 
 export default class Subscription {
 	constructor(data: ActiveSubscriptionsResponseSchema) {
-		this.loyaltyProgram = data.maybe_loyalty_program;
-		this.activeSubscriptions = data.active_subscriptions.map((product) => new Product(product));
+		this.inLoyaltyProgram = data.maybe_loyalty_program;
+		this.activeSubscriptions = new Map(data.active_subscriptions.map((sub) => [sub.namespace, sub.product_slug]));
 	}
 
-	readonly loyaltyProgram: boolean;
-	readonly activeSubscriptions: Product[];
+	readonly inLoyaltyProgram: boolean;
+	/**
+	 * The key is the product namespace, and value is the product slug
+	 */
+	readonly activeSubscriptions: Map<string, string>;
 
 	static async fetchSubscriptions(): Promise<Subscription | undefined> {
 		try {
