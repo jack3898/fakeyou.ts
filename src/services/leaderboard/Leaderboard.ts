@@ -1,17 +1,15 @@
 import { cache, constants, prettyParse, request } from '../../util/index.js';
 import LeaderboardUser from '../leaderboardUser/LeaderboardUser.js';
-import { type LeaderboardUserSchema } from '../leaderboardUser/leaderboardUser.schema.js';
 import { type LeaderboardResponseSchema, leaderboardResponseSchema } from './leaderboard.schema.js';
 
 export default class Leaderboard {
 	constructor(data: LeaderboardResponseSchema) {
-		this.#ttsLeaderboardData = data.tts_leaderboard;
-		this.#w2lLeaderboardData = data.w2l_leaderboard;
+		this.ttsLeaderboard = data.tts_leaderboard.map((leaderboardUser) => new LeaderboardUser(leaderboardUser));
+		this.w2lLeaderboard = data.w2l_leaderboard.map((leaderboardUser) => new LeaderboardUser(leaderboardUser));
 	}
 
-	#ttsLeaderboardData: LeaderboardUserSchema[];
-
-	#w2lLeaderboardData: LeaderboardUserSchema[];
+	readonly ttsLeaderboard: LeaderboardUser[];
+	readonly w2lLeaderboard: LeaderboardUser[];
 
 	static async fetchLeaderboard(): Promise<Leaderboard> {
 		const json = await cache.wrap('fetch-leaderboard', async () => {
@@ -23,20 +21,12 @@ export default class Leaderboard {
 		return new this(json);
 	}
 
-	get ttsLeaderboard(): LeaderboardUser[] {
-		return this.#ttsLeaderboardData.map((leaderboardUser) => new LeaderboardUser(leaderboardUser));
-	}
-
-	get w2lLeaderboard(): LeaderboardUser[] {
-		return this.#w2lLeaderboardData.map((leaderboardUser) => new LeaderboardUser(leaderboardUser));
-	}
-
 	getEntry(index: number, type: 'tts' | 'w2l'): LeaderboardUser | undefined {
 		switch (type) {
 			case 'tts':
-				return this.#ttsLeaderboardData.at(index) && new LeaderboardUser(this.#ttsLeaderboardData[index]);
+				return this.ttsLeaderboard.at(index);
 			case 'w2l':
-				return this.#w2lLeaderboardData.at(index) && new LeaderboardUser(this.#w2lLeaderboardData[index]);
+				return this.w2lLeaderboard.at(index);
 		}
 	}
 }
