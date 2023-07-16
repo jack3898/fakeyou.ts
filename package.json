@@ -1,6 +1,6 @@
 {
     "name": "fakeyou.ts",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "description": "FakeYou API made easy, with ESM and TypeScript support!",
     "type": "module",
     "main": "dist/index.js",
@@ -11,7 +11,8 @@
         "test": "vitest run",
         "test:unit": "vitest run unit",
         "test:e2e": "vitest run e2e --threads false",
-        "test:types": "tsc --noEmit"
+        "test:types": "tsc --noEmit",
+        "prepare": "husky install"
     },
     "keywords": [
         "fakeyou",
@@ -39,6 +40,7 @@
         "eslint": "^8.44.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^5.0.0",
+        "husky": "^8.0.3",
         "prettier": "^3.0.0",
         "typescript": "^5.1.6",
         "vite": "^4.4.4",

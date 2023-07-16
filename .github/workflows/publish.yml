@@ -26,6 +26,7 @@ jobs:
                 rm -R src/
                 rm -R .github/
                 rm -R .vscode/
+                rm -R .husky/
                 rm .eslintrc.cjs
                 rm .gitignore
                 rm tsconfig.json
@@ -33,3 +34,4 @@ jobs:
               env:
                 NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
                 NODE_ENV: development
+                HUSKY: 0 # Disable Husky git hook installation
