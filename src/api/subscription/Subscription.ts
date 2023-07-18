@@ -1,4 +1,5 @@
-import { constants, log, prettyParse, request } from '../../util/index.js';
+import type Client from '../../index.js';
+import { constants, log, prettyParse } from '../../util/index.js';
 import { type ActiveSubscriptionsResponseSchema, activeSubscriptionsResponseSchema } from './subscription.schema.js';
 
 export default class Subscription {
@@ -13,9 +14,11 @@ export default class Subscription {
 	 */
 	readonly activeSubscriptions: Map<string, string>;
 
+	static client: Client;
+
 	static async fetchSubscriptions(): Promise<Subscription | undefined> {
 		try {
-			const response = await request.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
 			const json = prettyParse(activeSubscriptionsResponseSchema, await response.json());
 
 			return new this(json);

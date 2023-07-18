@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
-import { download, constants } from '../../util/index.js';
+import { constants } from '../../util/index.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import { type TtsInferenceStatusDoneSchema } from '../ttsModel/ttsModel.schema.js';
+import type Client from '../../index.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -41,12 +42,14 @@ export default class TtsAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
+	static client: Client;
+
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
 		}
 
-		const wav = await download.wav(this.url);
+		const wav = await TtsAudioFile.client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;

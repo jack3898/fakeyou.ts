@@ -1,5 +1,10 @@
-import { it, expect } from 'vitest';
+import { it, expect, beforeEach } from 'vitest';
 import UserAudioFile from './UserAudioFile.js';
+import Client from '../../index.js';
+
+beforeEach(() => {
+	UserAudioFile.client = new Client();
+});
 
 it('should fetch user models with success and paginate', async () => {
 	const result = await UserAudioFile.fetchUserAudioFiles('jackwright3898');

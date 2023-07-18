@@ -1,4 +1,5 @@
-import { constants, prettyParse, request } from '../../util/index.js';
+import type Client from '../../index.js';
+import { constants, prettyParse } from '../../util/index.js';
 import { queueLengthResponseSchema, type QueueLengthResponseSchema } from './queue.schema.js';
 
 export default class Queue {
@@ -12,8 +13,10 @@ export default class Queue {
 	readonly cacheTime: Date;
 	readonly refreshIntervalMillis: number;
 
+	static client: Client;
+
 	static async fetchQueue(): Promise<Queue> {
-		const response = await request.send(new URL(`${constants.API_URL}/tts/queue_length`));
+		const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/queue_length`));
 		const json = prettyParse(queueLengthResponseSchema, await response.json());
 
 		return new this(json);

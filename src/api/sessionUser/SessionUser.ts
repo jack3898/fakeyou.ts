@@ -1,4 +1,5 @@
-import { constants, prettyParse, request } from '../../util/index.js';
+import type Client from '../../index.js';
+import { constants, prettyParse } from '../../util/index.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
 import { type SessionUserSchema, loggedInUserProfileResponseSchema } from './sessionUser.schema.js';
@@ -56,8 +57,10 @@ export default class SessionUser {
 	readonly canBanUsers: boolean;
 	readonly canDeleteUsers: boolean;
 
+	static client: Client;
+
 	static async fetchLoggedInUser(): Promise<SessionUser | undefined> {
-		const response = await request.send(new URL(`${constants.API_URL}/session`));
+		const response = await this.client.rest.send(new URL(`${constants.API_URL}/session`));
 		const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
 
 		if (loggedInUser.logged_in) {

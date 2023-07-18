@@ -1,5 +1,6 @@
 import FakeYouError from '../../error/FakeYouError.js';
-import { cache, constants, log, prettyParse, request } from '../../util/index.js';
+import type Client from '../../index.js';
+import { cache, constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
@@ -60,10 +61,12 @@ export default class ProfileUser {
 	readonly moderatorFields: string | null;
 	readonly badges: Badge[];
 
+	static client: Client;
+
 	static async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
 			const json = await cache.wrap('fetch-user-profile', async () => {
-				const response = await request.send(new URL(`${constants.API_URL}/user/${username}/profile`));
+				const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/profile`));
 
 				return prettyParse(userProfileResponseSchema, await response.json());
 			});
@@ -96,10 +99,10 @@ export default class ProfileUser {
 				...newValues
 			});
 
-			const result = await request.send(new URL(`${constants.API_URL}/user/${this.username}/edit_profile`), {
-				method: 'POST',
-				body: JSON.stringify(body)
-			});
+			const result = await ProfileUser.client.rest.send(
+				new URL(`${constants.API_URL}/user/${this.username}/edit_profile`),
+				{ method: 'POST', body: JSON.stringify(body) }
+			);
 
 			const json = prettyParse(editUserProfileResponseSchema, await result.json());
 

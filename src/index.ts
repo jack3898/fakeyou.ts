@@ -1,9 +1,9 @@
 export { default as Badge } from './api/badge/Badge.js';
 export { default as Category } from './api/category/Category.js';
-export { default } from './api/client/Client.js';
+export { default } from './services/client/Client.js';
 export { default as Leaderboard } from './api/leaderboard/Leaderboard.js';
 export { default as LeaderboardUser } from './api/leaderboardUser/LeaderboardUser.js';
-export { default as Model } from './api/ttsModel/TtsModel.js';
+export { default as TtsModel } from './api/ttsModel/TtsModel.js';
 export { default as ProfileUser } from './api/profileUser/ProfileUser.js';
 export { default as Queue } from './api/queue/Queue.js';
 export { default as SessionUser } from './api/sessionUser/SessionUser.js';

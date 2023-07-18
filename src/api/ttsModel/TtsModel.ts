@@ -13,7 +13,8 @@ import {
 	type TtsInferenceResultSchema
 } from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
-import { base64, log, poll, request, constants, cache, PollStatus, sleep, prettyParse } from '../../util/index.js';
+import { base64, log, poll, constants, cache, PollStatus, sleep, prettyParse } from '../../util/index.js';
+import type Client from '../../index.js';
 
 export default class TtsModel {
 	constructor(data: TtsModelSchema) {
@@ -50,9 +51,11 @@ export default class TtsModel {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 
+	static client: Client;
+
 	static fetchModels(): Promise<Map<string, TtsModel>> {
 		return cache.wrap('fetch-tts-models', async () => {
-			const response = await request.send(new URL(`${constants.API_URL}/tts/list`));
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
 
 			const map = new Map<string, TtsModel>();
@@ -77,7 +80,7 @@ export default class TtsModel {
 
 	static async fetchModelsByUser(username: string): Promise<TtsModel[] | undefined> {
 		try {
-			const response = await request.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
 
 			return json.models.map((model) => new this(model));
@@ -103,7 +106,7 @@ export default class TtsModel {
 	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
 	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
 	// Thanks to caching, this is not a massive performance problem!
-	static #modelDataloader = new DataLoader(TtsModel.#modelInferenceDataloader);
+	static #modelDataloader = new DataLoader(TtsModel.#modelInferenceDataloader.bind(TtsModel));
 
 	static async #modelInferenceDataloader(
 		base64Queries: readonly `${string}:${string}`[]
@@ -112,7 +115,7 @@ export default class TtsModel {
 			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
 		}
 
-		const authenticated = request.isAuthenticated();
+		const authenticated = this.client.rest.isAuthenticated;
 
 		if (!authenticated) {
 			log.info('You are not logged in to your FakeYou account! Your requests will take longer to process.');
@@ -178,7 +181,7 @@ export default class TtsModel {
 	}
 
 	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
-		const response = await request.send(new URL(`${constants.API_URL}/tts/inference`), {
+		const response = await TtsModel.client.rest.send(new URL(`${constants.API_URL}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.token,
@@ -192,7 +195,7 @@ export default class TtsModel {
 
 	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
-			const response = await request.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
+			const response = await TtsModel.client.rest.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
 			const result = prettyParse(ttsRequestStatusResponseSchema, await response.json());
 
 			switch (result.state.status) {
@@ -230,7 +233,9 @@ export default class TtsModel {
 
 	async fetchMyRating(): Promise<RatingSchema | undefined> {
 		try {
-			const response = await request.send(new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`));
+			const response = await TtsModel.client.rest.send(
+				new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`)
+			);
 			const json = prettyParse(userRatingResponseSchema, await response.json());
 
 			return json.maybe_rating_value;
@@ -241,7 +246,7 @@ export default class TtsModel {
 
 	async rate(decision: RatingSchema): Promise<RatingSchema | undefined> {
 		try {
-			await request.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
+			await TtsModel.client.rest.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
 				method: 'POST',
 				body: JSON.stringify({
 					entity_type: 'tts_model',

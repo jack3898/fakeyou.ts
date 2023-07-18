@@ -1,6 +1,11 @@
-import { it, expect } from 'vitest';
+import { it, expect, beforeEach } from 'vitest';
 import Category from './Category.js';
 import { z } from 'zod';
+import Client from '../../services/index.js';
+
+beforeEach(() => {
+	Category.client = new Client();
+});
 
 it('should fetch all categories', async () => {
 	const categories = await Category.fetchCategories();
