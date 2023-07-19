@@ -1,3 +1,4 @@
+import { log } from './index.js';
 import { sleep } from './sleep.js';
 
 /**
@@ -29,7 +30,7 @@ export async function poll<T>(
 		}
 	}
 
-	console.error(`Max tries exceeded. The limit was ${maxTries}`);
+	log.error(`Max tries exceeded. The limit was ${maxTries}`);
 }
 
 export enum PollStatus {
