@@ -1,5 +1,5 @@
 import type Client from '../../index.js';
-import { cache, constants, prettyParse } from '../../util/index.js';
+import { constants, prettyParse } from '../../util/index.js';
 import LeaderboardUser from '../leaderboardUser/LeaderboardUser.js';
 import { type LeaderboardResponseSchema, leaderboardResponseSchema } from './leaderboard.schema.js';
 
@@ -15,7 +15,7 @@ export default class Leaderboard {
 	static client: Client;
 
 	static async fetchLeaderboard(): Promise<Leaderboard> {
-		const json = await cache.wrap('fetch-leaderboard', async () => {
+		const json = await this.client.cache.wrap('fetch-leaderboard', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/leaderboard`));
 
 			return prettyParse(leaderboardResponseSchema, await response.json());

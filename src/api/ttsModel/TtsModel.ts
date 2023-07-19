@@ -13,7 +13,7 @@ import {
 	type TtsInferenceResultSchema
 } from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
-import { base64, log, poll, constants, cache, PollStatus, sleep, prettyParse } from '../../util/index.js';
+import { base64, log, poll, constants, PollStatus, sleep, prettyParse } from '../../util/index.js';
 import type Client from '../../index.js';
 
 export default class TtsModel {
@@ -54,7 +54,7 @@ export default class TtsModel {
 	static client: Client;
 
 	static fetchModels(): Promise<Map<string, TtsModel>> {
-		return cache.wrap('fetch-tts-models', async () => {
+		return this.client.cache.wrap('fetch-tts-models', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
 

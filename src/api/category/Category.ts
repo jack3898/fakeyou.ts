@@ -1,5 +1,5 @@
 import type Client from '../../index.js';
-import { cache, constants, prettyParse } from '../../util/index.js';
+import { constants, prettyParse } from '../../util/index.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from './category.schema.js';
 
@@ -39,7 +39,7 @@ export default class Category {
 	static client: Client;
 
 	static async fetchCategories(): Promise<Category[]> {
-		return cache.wrap('fetch-categories', async () => {
+		return this.client.cache.wrap('fetch-categories', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/category/list/tts`));
 			const json = prettyParse(categoryListResponseSchema, await response.json());
 
@@ -54,7 +54,7 @@ export default class Category {
 	}
 
 	static async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
-		return cache.wrap('fetch-category-model-relationships', async () => {
+		return this.client.cache.wrap('fetch-category-model-relationships', async () => {
 			const response = await this.client.rest.send(
 				new URL(`${constants.API_URL}/v1/category/computed_assignments/tts`)
 			);

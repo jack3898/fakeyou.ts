@@ -1,5 +1,4 @@
 export * as base64 from './base64.js';
-export * as cache from './cache.js';
 export * as constants from './constants.js';
 export * from './poll.js';
 export * as log from './log.js';

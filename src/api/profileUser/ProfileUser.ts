@@ -1,6 +1,6 @@
 import FakeYouError from '../../error/FakeYouError.js';
 import type Client from '../../index.js';
-import { cache, constants, log, prettyParse } from '../../util/index.js';
+import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import UserAudioFile from '../userAudioFile/UserAudioFile.js';
@@ -65,7 +65,7 @@ export default class ProfileUser {
 
 	static async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
-			const json = await cache.wrap('fetch-user-profile', async () => {
+			const json = await this.client.cache.wrap('fetch-user-profile', async () => {
 				const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/profile`));
 
 				return prettyParse(userProfileResponseSchema, await response.json());

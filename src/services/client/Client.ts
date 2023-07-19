@@ -1,6 +1,6 @@
 import AuthorisationError from '../../error/AuthorisationError.js';
 import FakeYouError from '../../error/FakeYouError.js';
-import { constants, cache, log, prettyParse } from '../../util/index.js';
+import { constants, log, prettyParse } from '../../util/index.js';
 import Category from '../../api/category/Category.js';
 import Leaderboard from '../../api/leaderboard/Leaderboard.js';
 import TtsModel from '../../api/ttsModel/TtsModel.js';
@@ -12,6 +12,7 @@ import UserAudioFile from '../../api/userAudioFile/UserAudioFile.js';
 import V2vModel from '../../api/v2vmodel/V2vModel.js';
 import { loginSchema } from './client.schema.js';
 import { Rest } from '../rest/Rest.js';
+import { Cache } from '../cache/Cache.js';
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
@@ -29,6 +30,7 @@ export default class Client {
 	}
 
 	readonly rest = new Rest();
+	readonly cache = new Cache();
 
 	readonly ttsModel = TtsModel;
 	readonly v2vModel = V2vModel;
@@ -46,7 +48,7 @@ export default class Client {
 	async login(credentials: { username: string; password: string }): Promise<void> {
 		log.info('Logging in...');
 
-		const cookie = await cache.wrap('login', async () => {
+		const cookie = await this.cache.wrap('login', async () => {
 			const response = await this.rest.send(new URL(`${constants.API_URL}/login`), {
 				method: 'POST',
 				body: JSON.stringify({
@@ -81,7 +83,7 @@ export default class Client {
 		const { success } = prettyParse(loginSchema, await response.json());
 
 		this.rest.cookie = undefined;
-		cache.dispose('login');
+		this.cache.dispose('login');
 
 		return success;
 	}

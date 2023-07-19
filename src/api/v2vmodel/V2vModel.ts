@@ -1,5 +1,5 @@
 import type Client from '../../index.js';
-import { PollStatus, cache, constants, poll, log, prettyParse } from '../../util/index.js';
+import { PollStatus, constants, poll, log, prettyParse } from '../../util/index.js';
 import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
@@ -46,7 +46,7 @@ export default class V2vModel {
 	static client: Client;
 
 	static fetchModels(): Promise<Map<string, V2vModel>> {
-		return cache.wrap('fetch-v2v-models', async () => {
+		return this.client.cache.wrap('fetch-v2v-models', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
 			const json = prettyParse(v2vModelListSchema, await response.json());
 
