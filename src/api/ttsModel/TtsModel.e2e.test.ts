@@ -1,10 +1,14 @@
-import { it, expect } from 'vitest';
-import { Model } from '../../index.js';
+import { it, expect, beforeEach } from 'vitest';
+import Client, { TtsModel } from '../../index.js';
+
+beforeEach(() => {
+	TtsModel.client = new Client();
+});
 
 it(
 	'should fetch models',
 	async () => {
-		const modelList = await Model.fetchModels();
+		const modelList = await TtsModel.fetchModels();
 
 		expect(modelList.size).toBeGreaterThan(0);
 	},
@@ -14,7 +18,7 @@ it(
 it(
 	'should find model by name',
 	async () => {
-		const model = await Model.fetchModelByName('Squidward Tentacles');
+		const model = await TtsModel.fetchModelByName('Squidward Tentacles');
 
 		expect(model?.title).toContain('Squidward');
 	},
@@ -24,7 +28,7 @@ it(
 it(
 	'should fetch model by model token',
 	async () => {
-		const model = await Model.fetchModelByToken('TM:4e2xqpwqaggr');
+		const model = await TtsModel.fetchModelByToken('TM:4e2xqpwqaggr');
 
 		expect(model?.title).toContain('Squidward');
 	},
@@ -34,7 +38,7 @@ it(
 it(
 	'should fetch user models',
 	async () => {
-		const models = await Model.fetchModelsByUser('vegito1089');
+		const models = await TtsModel.fetchModelsByUser('vegito1089');
 
 		expect(models?.length).toBeGreaterThan(0);
 	},
@@ -44,11 +48,11 @@ it(
 it(
 	'should process an inference to buffer with success',
 	async () => {
-		const model = await Model.fetchModelByName('Squidward Tentacles');
+		const model = await TtsModel.fetchModelByName('Squidward Tentacles');
 		const audio = await model?.infer('hello');
-		const base64 = await audio?.toBuffer();
+		const buffer = await audio?.toBuffer();
 
-		expect(base64).toBeInstanceOf(Buffer);
+		expect(buffer).toBeInstanceOf(Buffer);
 	},
 	{ timeout: 180_000 }
 );

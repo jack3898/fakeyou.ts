@@ -1,21 +1,36 @@
 import AuthorisationError from '../../error/AuthorisationError.js';
 import FakeYouError from '../../error/FakeYouError.js';
-import { constants, cache, log, request, prettyParse } from '../../util/index.js';
-import Category from '../category/Category.js';
-import Leaderboard from '../leaderboard/Leaderboard.js';
-import TtsModel from '../ttsModel/TtsModel.js';
-import ProfileUser from '../profileUser/ProfileUser.js';
-import Queue from '../queue/Queue.js';
-import SessionUser from '../sessionUser/SessionUser.js';
-import Subscription from '../subscription/Subscription.js';
-import UserAudioFile from '../userAudioFile/UserAudioFile.js';
-import V2vModel from '../v2vmodel/V2vModel.js';
+import { constants, log, prettyParse } from '../../util/index.js';
+import Category from '../../api/category/Category.js';
+import Leaderboard from '../../api/leaderboard/Leaderboard.js';
+import TtsModel from '../../api/ttsModel/TtsModel.js';
+import ProfileUser from '../../api/profileUser/ProfileUser.js';
+import Queue from '../../api/queue/Queue.js';
+import SessionUser from '../../api/sessionUser/SessionUser.js';
+import Subscription from '../../api/subscription/Subscription.js';
+import UserAudioFile from '../../api/userAudioFile/UserAudioFile.js';
+import V2vModel from '../../api/v2vmodel/V2vModel.js';
 import { loginSchema } from './client.schema.js';
+import { Rest } from '../rest/Rest.js';
+import { Cache } from '../cache/Cache.js';
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
 		log.setLogging(!!options?.logging);
+
+		this.ttsModel.client = this;
+		this.v2vModel.client = this;
+		this.sessionUser.client = this;
+		this.leaderboard.client = this;
+		this.userProfile.client = this;
+		this.category.client = this;
+		this.queue.client = this;
+		this.userSubscription.client = this;
+		this.userTtsAudioHistory.client = this;
 	}
+
+	readonly rest = new Rest();
+	readonly cache = new Cache();
 
 	readonly ttsModel = TtsModel;
 	readonly v2vModel = V2vModel;
@@ -33,8 +48,8 @@ export default class Client {
 	async login(credentials: { username: string; password: string }): Promise<void> {
 		log.info('Logging in...');
 
-		const cookie = await cache.wrap('login', async () => {
-			const response = await request.send(new URL(`${constants.API_URL}/login`), {
+		const cookie = await this.cache.wrap('login', async () => {
+			const response = await this.rest.send(new URL(`${constants.API_URL}/login`), {
 				method: 'POST',
 				body: JSON.stringify({
 					username_or_email: credentials.username,
@@ -58,17 +73,17 @@ export default class Client {
 			throw new FakeYouError('Login succeeded but there was a problem processing your session token.');
 		}
 
-		request.setCookie(cookie);
+		this.rest.cookie = cookie;
 
 		log.success('Logged in!');
 	}
 
 	async logout(): Promise<boolean> {
-		const response = await request.send(new URL(`${constants.API_URL}/logout`), { method: 'POST' });
+		const response = await this.rest.send(new URL(`${constants.API_URL}/logout`), { method: 'POST' });
 		const { success } = prettyParse(loginSchema, await response.json());
 
-		request.setCookie(undefined);
-		cache.dispose('login');
+		this.rest.cookie = undefined;
+		this.cache.dispose('login');
 
 		return success;
 	}

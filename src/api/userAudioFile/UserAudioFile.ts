@@ -1,8 +1,9 @@
+import type Client from '../../index.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
-import { constants, download, log, prettyParse, request } from '../../util/index.js';
+import { constants, log, prettyParse } from '../../util/index.js';
 import TtsModel from '../ttsModel/TtsModel.js';
 import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
 
@@ -43,6 +44,8 @@ export default class UserAudioFile implements AudioFile {
 	readonly updatedAt: Date;
 	readonly url: URL;
 
+	static client: Client;
+
 	#buffer?: Buffer;
 
 	static async fetchUserAudioFiles(
@@ -63,7 +66,7 @@ export default class UserAudioFile implements AudioFile {
 		}
 
 		try {
-			const response = await request.send(url, {
+			const response = await this.client.rest.send(url, {
 				method: 'GET'
 			});
 
@@ -85,7 +88,7 @@ export default class UserAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const wav = await download.wav(this.url);
+		const wav = await UserAudioFile.client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;

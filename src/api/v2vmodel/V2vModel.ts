@@ -1,4 +1,5 @@
-import { PollStatus, cache, constants, request, upload, poll, log, prettyParse } from '../../util/index.js';
+import type Client from '../../index.js';
+import { PollStatus, constants, poll, log, prettyParse } from '../../util/index.js';
 import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
@@ -42,9 +43,11 @@ export default class V2vModel {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 
+	static client: Client;
+
 	static fetchModels(): Promise<Map<string, V2vModel>> {
-		return cache.wrap('fetch-v2v-models', async () => {
-			const response = await request.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
+		return this.client.cache.wrap('fetch-v2v-models', async () => {
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
 			const json = prettyParse(v2vModelListSchema, await response.json());
 
 			const map = new Map<string, V2vModel>();
@@ -69,7 +72,11 @@ export default class V2vModel {
 
 	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | undefined> {
 		try {
-			const response = await upload.wav(new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`), file);
+			const response = await this.client.rest.upload(
+				new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`),
+				file,
+				'audio/wav'
+			);
 
 			return prettyParse(v2vVoiceUploadResponseSchema, await response.json());
 		} catch (error) {
@@ -80,7 +87,7 @@ export default class V2vModel {
 	}
 
 	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | undefined> {
-		const response = await request.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
+		const response = await V2vModel.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				uuid_idempotency_token: crypto.randomUUID(),
@@ -102,7 +109,7 @@ export default class V2vModel {
 
 	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
-			const response = await request.send(
+			const response = await V2vModel.client.rest.send(
 				new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
 			);
 			const result = prettyParse(v2vRequestStatusResponseSchema, await response.json());

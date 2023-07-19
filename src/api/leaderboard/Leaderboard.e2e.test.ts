@@ -1,6 +1,11 @@
-import { expect, it } from 'vitest';
+import { expect, it, beforeEach } from 'vitest';
 import Leaderboard from './Leaderboard.js';
 import LeaderboardUser from '../leaderboardUser/LeaderboardUser.js';
+import Client from '../../index.js';
+
+beforeEach(() => {
+	Leaderboard.client = new Client();
+});
 
 it('should fetch a leaderboard tts entry with success', async () => {
 	const result = await Leaderboard.fetchLeaderboard();

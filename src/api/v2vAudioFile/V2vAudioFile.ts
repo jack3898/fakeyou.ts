@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../interface/AudioFile.js';
-import { download, constants } from '../../util/index.js';
+import { constants } from '../../util/index.js';
 import { type V2vInferenceStatusDoneSchema } from '../v2vmodel/v2vModel.schema.js';
 import V2vModel from '../v2vmodel/V2vModel.js';
+import type Client from '../../services/index.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -53,12 +54,14 @@ export default class V2vAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
+	static client: Client;
+
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
 		}
 
-		const wav = await download.wav(this.url);
+		const wav = await V2vAudioFile.client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;

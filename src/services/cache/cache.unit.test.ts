@@ -1,5 +1,7 @@
 import { it, vitest, expect, afterEach } from 'vitest';
-import { cache } from './index.js';
+import { Cache } from './Cache.js';
+
+const cache = new Cache();
 
 afterEach(() => {
 	cache.disposeAll();
