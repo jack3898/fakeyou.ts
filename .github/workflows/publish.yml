@@ -29,6 +29,7 @@ jobs:
                 rm -R .husky/
                 rm .eslintrc.cjs
                 rm .gitignore
+                rm commitlint.config.cjs
                 rm tsconfig.json
                 npm publish --access public
               env:
