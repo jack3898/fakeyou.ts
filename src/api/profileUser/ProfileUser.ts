@@ -120,6 +120,12 @@ export default class ProfileUser {
 		}
 	}
 
+	/**
+	 * Fetch the tts audio history of the user profile. Cursor pagination is supported.
+	 *
+	 * @param cursor The cursor to use for pagination. If no cursor is provided, the first page will be returned.
+	 * @returns A paginated list of tts audio files for the user profile.
+	 */
 	fetchTtsAudioHistory(cursor?: string): Promise<
 		| {
 				cursorNext: string | null;
@@ -131,6 +137,12 @@ export default class ProfileUser {
 		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
 	}
 
+	/**
+	 * Fetchg the TTS models of the user profile. These are the models that the user has uploaded.
+	 *
+	 * @returns The TTS models of the user profile. The array will be empty if the user has not uploaded any models.
+	 * @throws {FakeYouError} Fetch of user profile models failed.
+	 */
 	async fetchUserModels(): Promise<TtsModel[]> {
 		const userModels = await TtsModel.fetchModelsByUser(this.username);
 

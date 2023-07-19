@@ -32,9 +32,9 @@ export default class Leaderboard {
 	/**
 	 * Get an entry from the leaderboard using its index.
 	 *
-	 * @param index the index of the entry
-	 * @param type the type of the entry (tts or w2l)
-	 * @returns the entry
+	 * @param index the index of the entry. Starts at 0.
+	 * @param type the type of the entry (tts or w2l).
+	 * @returns the single entry.
 	 */
 	getEntry(index: number, type: 'tts' | 'w2l'): LeaderboardUser | undefined {
 		switch (type) {

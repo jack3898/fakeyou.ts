@@ -66,7 +66,7 @@ export default class TtsAudioFile implements AudioFile {
 	/**
 	 * The base64 string of the audio file.
 	 *
-	 * @returns The base64 string
+	 * @returns The base64 string. Undefined if the audio file has not been fetched yet.
 	 */
 	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
@@ -78,7 +78,7 @@ export default class TtsAudioFile implements AudioFile {
 	 * Write the audio file to disk.
 	 *
 	 * @param location The location to write the file to (must be a wav)
-	 * @returns A promise that resolves when the file has been written
+	 * @returns A promise that resolves when the file has been written. Rejects if the file could not be written.
 	 */
 	async toDisk(location: `${string}.wav`): Promise<void> {
 		const buffer = await this.toBuffer();
@@ -91,7 +91,7 @@ export default class TtsAudioFile implements AudioFile {
 	/**
 	 * Fetch the TTS model used to generate this audio file.
 	 *
-	 * @returns The TTS model used to generate this audio file
+	 * @returns The TTS model used to generate this audio file. Undefined if the model could not be fetched.
 	 */
 	async fetchModel(): Promise<TtsModel | undefined> {
 		return TtsModel.fetchModelByToken(this.modelToken);

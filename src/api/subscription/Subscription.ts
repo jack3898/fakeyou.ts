@@ -10,7 +10,7 @@ export default class Subscription {
 
 	readonly inLoyaltyProgram: boolean;
 	/**
-	 * The key is the product namespace, and value is the product slug
+	 * The key is the product namespace, and value is the product slug.
 	 */
 	readonly activeSubscriptions: Map<string, string>;
 

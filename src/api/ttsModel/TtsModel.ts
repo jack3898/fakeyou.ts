@@ -245,7 +245,7 @@ export default class TtsModel {
 	}
 
 	/**
-	 * Infer text for this model!
+	 * Infer text for this model.
 	 *
 	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
 	 */
@@ -258,6 +258,11 @@ export default class TtsModel {
 		return TtsModel.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
 	}
 
+	/**
+	 * Fetch the rating of this model by the currently logged in user.
+	 *
+	 * @returns The rating of this model by the currently logged in user. Ratings can be 'positive', 'negative', or 'neutral'. Undefined if no user is logged in.
+	 */
 	async fetchMyRating(): Promise<RatingSchema | undefined> {
 		try {
 			const response = await TtsModel.client.rest.send(
@@ -271,6 +276,12 @@ export default class TtsModel {
 		}
 	}
 
+	/**
+	 * Rate this model positively, negatively, or neutrally.
+	 *
+	 * @param decision The rating. Can be 'positive', 'negative', or 'neutral'.
+	 * @returns The new rating of this model by the currently logged in user. Undefined if no user is logged in.
+	 */
 	async rate(decision: RatingSchema): Promise<RatingSchema | undefined> {
 		try {
 			await TtsModel.client.rest.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
@@ -288,6 +299,11 @@ export default class TtsModel {
 		}
 	}
 
+	/**
+	 * Fetch the parent categories of this model.
+	 *
+	 * @returns The parent categories of this model. The array will be empty if no categories are found.
+	 */
 	async fetchParentCategories(): Promise<Category[]> {
 		const categories = await Category.fetchCategories();
 		const categoryTokens = this.categoryTokens;

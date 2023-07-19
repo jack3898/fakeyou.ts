@@ -141,7 +141,7 @@ export default class V2vModel {
 	}
 
 	/**
-	 * Infer text for this model.
+	 * Infer uploaded audio to a new voice represented by this model.
 	 *
 	 * Unlike TTS, this does NOT support rate limit safety features, so be cautious!
 	 */

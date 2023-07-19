@@ -48,6 +48,13 @@ export default class UserAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
+	/**
+	 * Fetch a user audio file by its token.
+	 *
+	 * @param username The username of the user to fetch the audio file for.
+	 * @param cursor The cursor to use for pagination. If not provided, the first page will be fetched.
+	 * @returns The user audio file. Undefined if the audio file could not be fetched.
+	 */
 	static async fetchUserAudioFiles(
 		username: string,
 		cursor?: string
@@ -105,7 +112,7 @@ export default class UserAudioFile implements AudioFile {
 	/**
 	 * Convert the audio file to a base64 string.
 	 *
-	 * @returns The base64 string
+	 * @returns The base64 string. Undefined if the audio file has not been fetched yet.
 	 */
 	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
@@ -117,7 +124,8 @@ export default class UserAudioFile implements AudioFile {
 	 * Write the audio file to disk.
 	 *
 	 * @param location The location to write the file to (including the file type)
-	 * @returns A promise that resolves when the file has been written
+	 * @returns A promise that resolves when the file has been written.
+	 * @rejects If the file could not be written.
 	 */
 	async toDisk(location: `${string}.wav`): Promise<void> {
 		const buffer = await this.toBuffer();
@@ -128,9 +136,9 @@ export default class UserAudioFile implements AudioFile {
 	}
 
 	/**
-	 * Fetch the TTS model used to generate this audio file.
+	 * Fetch the TTS model used to generate this audio file. This is a convenience method for `TtsModel.fetchModelByToken`.
 	 *
-	 * @returns The TTS model used to generate this audio file
+	 * @returns The TTS model used to generate this audio file. Undefined if the model could not be fetched.
 	 */
 	fetchTtsModel(): Promise<TtsModel | undefined> {
 		return TtsModel.fetchModelByToken(this.ttsModelToken);

@@ -85,7 +85,7 @@ export default class SessionUser {
 	}
 
 	/**
-	 * Fetch the subscription of the currently logged in user. Undefined if no user is logged in.
+	 * Fetch the subscription of the currently logged in user.
 	 * The subscription contains information about the user's current subscription status like their plan and loyalty status.
 	 *
 	 * @returns The subscription of the currently logged in user. Undefined if no user is logged in.

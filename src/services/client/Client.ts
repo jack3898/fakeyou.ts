@@ -44,6 +44,14 @@ export default class Client {
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.
+	 *
+	 * This uses session cookies to authenticate you.
+	 *
+	 * API token authentication is not supported due to the lack of support for it in the API and it not being available to the public.
+	 * If you work for FakeYou and can provide a token to test with and want help add support for it, please get in touch.
+	 *
+	 * @param credentials Your credentials to login with. Email is supported.
+	 * @rejects {AuthorisationError} If the credentials are invalid.
 	 */
 	async login(credentials: { username: string; password: string }): Promise<void> {
 		log.info('Logging in...');
@@ -78,6 +86,11 @@ export default class Client {
 		log.success('Logged in!');
 	}
 
+	/**
+	 * Logout of your account. Removes the session token from the client and FakeYou's servers.
+	 *
+	 * @returns Whether the logout was successful.
+	 */
 	async logout(): Promise<boolean> {
 		const response = await this.rest.send(new URL(`${constants.API_URL}/logout`), { method: 'POST' });
 		const { success } = prettyParse(loginSchema, await response.json());

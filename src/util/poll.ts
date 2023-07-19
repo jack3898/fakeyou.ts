@@ -2,10 +2,14 @@ import { log } from './index.js';
 import { sleep } from './sleep.js';
 
 /**
- * Run a promise over and over again until you have the right result!
+ * Run a promise over and over again until you have the right result. Useful for polling.
  *
- * NOTE: You need to explicitly control the polling behaviour with a variant of the poll enum. `poll.Status.X`.
- * For safety reasons, this function will return the result of the callback by default if it has not been told explicitly to retry.
+ * Use the enum to tell the function to retry or abort. The function will return the result (even if it is falsy) if it is not a retry or abort variant.
+ *
+ * @param callback The callback to run.
+ * @param interval The interval to wait between each try.
+ * @param maxTries The maximum number of tries to run the callback. If this is exceeded, the function will abort.
+ * @returns The result of the callback.
  */
 export async function poll<T>(
 	callback: () => Promise<T | PollStatus>,
