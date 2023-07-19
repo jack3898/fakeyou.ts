@@ -83,6 +83,11 @@ export default class UserAudioFile implements AudioFile {
 		}
 	}
 
+	/**
+	 * Convert the audio file to a buffer.
+	 *
+	 * @returns The buffer. Undefined if the audio file has not been fetched yet.
+	 */
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
@@ -97,12 +102,23 @@ export default class UserAudioFile implements AudioFile {
 		}
 	}
 
+	/**
+	 * Convert the audio file to a base64 string.
+	 *
+	 * @returns The base64 string
+	 */
 	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
 
 		return buffer && Buffer.from(buffer).toString('base64');
 	}
 
+	/**
+	 * Write the audio file to disk.
+	 *
+	 * @param location The location to write the file to (including the file type)
+	 * @returns A promise that resolves when the file has been written
+	 */
 	async toDisk(location: `${string}.wav`): Promise<void> {
 		const buffer = await this.toBuffer();
 
@@ -111,6 +127,11 @@ export default class UserAudioFile implements AudioFile {
 		}
 	}
 
+	/**
+	 * Fetch the TTS model used to generate this audio file.
+	 *
+	 * @returns The TTS model used to generate this audio file
+	 */
 	fetchTtsModel(): Promise<TtsModel | undefined> {
 		return TtsModel.fetchModelByToken(this.ttsModelToken);
 	}

@@ -53,6 +53,13 @@ export default class TtsModel {
 
 	static client: Client;
 
+	/**
+	 * Fetch all available TTS models.
+	 *
+	 * This method will return all models available on the website.
+	 *
+	 * @returns A map of all available models with their token as the key.
+	 */
 	static fetchModels(): Promise<Map<string, TtsModel>> {
 		return this.client.cache.wrap('fetch-tts-models', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/list`));
@@ -69,8 +76,10 @@ export default class TtsModel {
 	}
 
 	/**
-	 * This is the fastest method to find the model you need, the token is unique to each model and
-	 * can be found in the URL of the model's more details page on fakeyou.com.
+	 * Fetch a TTS model by its token. This is a convenience method for `TtsModel.fetchModels()`.
+	 *
+	 * @param token The token of the model to fetch
+	 * @returns The model
 	 */
 	static async fetchModelByToken(token: string): Promise<TtsModel | undefined> {
 		const models = await this.fetchModels();
@@ -78,6 +87,14 @@ export default class TtsModel {
 		return models.get(token);
 	}
 
+	/**
+	 * Fetch all models created by a user. This is a convenience method for `TtsModel.fetchModels()`.
+	 *
+	 * This method will return all models created by the user.
+	 *
+	 * @param username The username of the user
+	 * @returns A list of models created by the user
+	 */
 	static async fetchModelsByUser(username: string): Promise<TtsModel[] | undefined> {
 		try {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
@@ -90,7 +107,12 @@ export default class TtsModel {
 	}
 
 	/**
-	 * @param search Case-insensitive search query
+	 * Fetch a model by its name. This is a convenience method for `TtsModel.fetchModels()` and `TtsModel.fetchModelByToken()`.
+	 *
+	 * This method will return the first model that contains the search string in its title.
+	 *
+	 * @param search The search string (case insensitive)
+	 * @returns The model
 	 */
 	static async fetchModelByName(search: string): Promise<TtsModel | undefined> {
 		const models = await this.fetchModels();
@@ -176,6 +198,11 @@ export default class TtsModel {
 		});
 	}
 
+	/**
+	 * Fetch the user who created this model. This is a convenience method for `ProfileUser.fetchUserProfile(model.creatorUsername)`.
+	 *
+	 * @returns The user who created this model
+	 */
 	async fetchModelCreator(): Promise<ProfileUser | undefined> {
 		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}

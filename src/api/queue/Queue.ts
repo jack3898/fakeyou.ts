@@ -15,6 +15,13 @@ export default class Queue {
 
 	static client: Client;
 
+	/**
+	 * Fetch the current FakeYou TTS queue.
+	 *
+	 * This is the number of jobs that are currently waiting to be processed by the FakeYou TTS engine.
+	 *
+	 * @returns The queue
+	 */
 	static async fetchQueue(): Promise<Queue> {
 		const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/queue_length`));
 		const json = prettyParse(queueLengthResponseSchema, await response.json());

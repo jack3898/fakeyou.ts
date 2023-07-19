@@ -63,6 +63,12 @@ export default class ProfileUser {
 
 	static client: Client;
 
+	/**
+	 * Fetch a user profile by their username.
+	 *
+	 * @param username The username of the user to fetch
+	 * @returns The user profile, or undefined if the user does not exist
+	 */
 	static async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
 			const json = await this.client.cache.wrap('fetch-user-profile', async () => {

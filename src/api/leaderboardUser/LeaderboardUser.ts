@@ -21,6 +21,12 @@ export default class LeaderboardUser {
 	readonly defaultAvatarColorIndex: number;
 	readonly uploadedCount: number;
 
+	/**
+	 * Fetch the profile of the user. This contains more information than the leaderboard user.
+	 *
+	 * @returns The profile of the user in the leaderboard.
+	 * @throws {FakeYouError} Fetch of user profile failed.
+	 */
 	async fetchProfile(): Promise<ProfileUser> {
 		const profileUser = await ProfileUser.fetchUserProfile(this.username);
 

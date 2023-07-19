@@ -45,6 +45,11 @@ export default class V2vModel {
 
 	static client: Client;
 
+	/**
+	 * Fetch all available voice conversion models.
+	 *
+	 * @returns A map of all available models with their token as the key.
+	 */
 	static fetchModels(): Promise<Map<string, V2vModel>> {
 		return this.client.cache.wrap('fetch-v2v-models', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
@@ -61,8 +66,10 @@ export default class V2vModel {
 	}
 
 	/**
-	 * This is the fastest method to find the model you need, the token is unique to each model and
-	 * can be found in the URL of the model's more details page on fakeyou.com.
+	 * Fetch a voice conversion model by its token.
+	 *
+	 * @param token The token of the model to fetch
+	 * @returns The model
 	 */
 	static async fetchModelByToken(token: string): Promise<V2vModel | undefined> {
 		const models = await this.fetchModels();
@@ -134,11 +141,10 @@ export default class V2vModel {
 	}
 
 	/**
-	 * Infer text for this model!
+	 * Infer text for this model.
 	 *
 	 * Unlike TTS, this does NOT support rate limit safety features, so be cautious!
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async infer(audio: Buffer): Promise<V2vAudioFile | undefined> {
 		const uploadedAudio = await V2vModel.#uploadAudio(audio);
 

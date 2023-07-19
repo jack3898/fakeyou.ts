@@ -56,6 +56,11 @@ export default class V2vAudioFile implements AudioFile {
 
 	static client: Client;
 
+	/**
+	 * The buffer of the audio file.
+	 *
+	 * @returns The buffer of the audio file. Undefined if the audio file has not been fetched yet.
+	 */
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
 			return this.#buffer;
@@ -70,12 +75,23 @@ export default class V2vAudioFile implements AudioFile {
 		}
 	}
 
+	/**
+	 * Convert the audio file to a base64 string.
+	 *
+	 * @returns A promise that resolves to the base64 string of the audio file.
+	 */
 	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();
 
 		return buffer && Buffer.from(buffer).toString('base64');
 	}
 
+	/**
+	 * Write the audio file to disk.
+	 *
+	 * @param location The location to write the audio file to.
+	 * @returns A promise that resolves when the audio file has been written to disk.
+	 */
 	async toDisk(location: `${string}.wav`): Promise<void> {
 		const buffer = await this.toBuffer();
 
@@ -84,6 +100,11 @@ export default class V2vAudioFile implements AudioFile {
 		}
 	}
 
+	/**
+	 * Fetch the model that was used to convert this audio file.
+	 *
+	 * @returns The model that was used to convert this audio file. Undefined if no model could be found.
+	 */
 	async fetchModel(): Promise<V2vModel | undefined> {
 		return V2vModel.fetchModelByToken(this.entityToken);
 	}

@@ -59,6 +59,11 @@ export default class SessionUser {
 
 	static client: Client;
 
+	/**
+	 * Fetch the currently logged in user logged in via the login method.
+	 *
+	 * @returns The logged in user. Undefined if no user is logged in.
+	 */
 	static async fetchLoggedInUser(): Promise<SessionUser | undefined> {
 		const response = await this.client.rest.send(new URL(`${constants.API_URL}/session`));
 		const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
@@ -70,10 +75,21 @@ export default class SessionUser {
 
 	readonly fetchSubscriptions = Subscription.fetchSubscriptions;
 
+	/**
+	 * Fetch the profile of the currently logged in user which contains more information than the session user.
+	 *
+	 * @returns The profile of the currently logged in user. Undefined if no user is logged in.
+	 */
 	fetchProfile(): Promise<ProfileUser | undefined> {
 		return ProfileUser.fetchUserProfile(this.username);
 	}
 
+	/**
+	 * Fetch the subscription of the currently logged in user. Undefined if no user is logged in.
+	 * The subscription contains information about the user's current subscription status like their plan and loyalty status.
+	 *
+	 * @returns The subscription of the currently logged in user. Undefined if no user is logged in.
+	 */
 	fetchSubscription(): Promise<Subscription | undefined> {
 		return Subscription.fetchSubscriptions();
 	}

@@ -14,6 +14,11 @@ export default class Leaderboard {
 
 	static client: Client;
 
+	/**
+	 * Fetch the leaderboard. This is a global leaderboard of the top contributors to the site.
+	 *
+	 * @returns The leaderboard
+	 */
 	static async fetchLeaderboard(): Promise<Leaderboard> {
 		const json = await this.client.cache.wrap('fetch-leaderboard', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/leaderboard`));
@@ -24,6 +29,13 @@ export default class Leaderboard {
 		return new this(json);
 	}
 
+	/**
+	 * Get an entry from the leaderboard using its index.
+	 *
+	 * @param index the index of the entry
+	 * @param type the type of the entry (tts or w2l)
+	 * @returns the entry
+	 */
 	getEntry(index: number, type: 'tts' | 'w2l'): LeaderboardUser | undefined {
 		switch (type) {
 			case 'tts':

@@ -38,6 +38,11 @@ export default class Category {
 
 	static client: Client;
 
+	/**
+	 * Fetch all available categories which hold tts models and child categories.
+	 *
+	 * @returns A list of all available categories including their child categories.
+	 */
 	static async fetchCategories(): Promise<Category[]> {
 		return this.client.cache.wrap('fetch-categories', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/category/list/tts`));
@@ -47,12 +52,22 @@ export default class Category {
 		});
 	}
 
+	/**
+	 * Fetch all root categories which hold tts models and child categories. Root categories are categories which have no parent category.
+	 *
+	 * @returns A list of all root categories.
+	 */
 	static async fetchRootCategories(): Promise<Category[]> {
 		const allCategories = await this.fetchCategories();
 
 		return allCategories.filter((category) => !category.parentToken);
 	}
 
+	/**
+	 * Fetch all category to model relationships. This is used to determine which models belong to which categories.
+	 *
+	 * @returns A map of category tokens to tts model tokens.
+	 */
 	static async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
 		return this.client.cache.wrap('fetch-category-model-relationships', async () => {
 			const response = await this.client.rest.send(
@@ -64,12 +79,23 @@ export default class Category {
 		});
 	}
 
+	/**
+	 * Fetch a category by its token.
+	 *
+	 * @param token The token of the category to fetch
+	 * @returns The category
+	 */
 	static async fetchCategoryByToken(token: string): Promise<Category | undefined> {
 		const categories = await this.fetchCategories();
 
 		return categories.find((category) => category.token === token);
 	}
 
+	/**
+	 * Fetch models that belong to this category.
+	 *
+	 * @returns A list of tts models that belong to this category. The array is empty if no models belong to this category.
+	 */
 	async fetchModels(): Promise<TtsModel[]> {
 		const relationships = await Category.fetchCategoryToModelRelationships();
 		const allModels = await TtsModel.fetchModels();
@@ -79,12 +105,23 @@ export default class Category {
 
 		return models;
 	}
+
+	/**
+	 * Fetch the parent category of this category.
+	 *
+	 * @returns The parent category of this category. Undefined if this category has no parent.
+	 */
 	async getParent(): Promise<Category | undefined> {
 		const categories = await Category.fetchCategories();
 
 		return categories.find((categoryFromCache) => categoryFromCache.token === this.parentToken);
 	}
 
+	/**
+	 * Fetch the child categories of this category.
+	 *
+	 * @returns The child categories of this category. Empty array if this category has no children.
+	 */
 	async getChildren(): Promise<Category[]> {
 		const categories = await Category.fetchCategories();
 

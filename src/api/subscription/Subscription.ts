@@ -16,6 +16,12 @@ export default class Subscription {
 
 	static client: Client;
 
+	/**
+	 * Fetch the subscription of the currently logged in user.
+	 *
+	 * @returns The subscription of the currently logged in user and a map of all active subscriptions with their namespace as the key and product slug as the value.
+	 * Undefined if no user is logged in.
+	 */
 	static async fetchSubscriptions(): Promise<Subscription | undefined> {
 		try {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
