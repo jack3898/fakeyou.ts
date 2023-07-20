@@ -93,7 +93,7 @@ export default class UserAudioFile implements AudioFile {
 	/**
 	 * Convert the audio file to a buffer.
 	 *
-	 * @returns The buffer. Undefined if the audio file has not been fetched yet.
+	 * @returns The buffer.
 	 */
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
@@ -112,7 +112,7 @@ export default class UserAudioFile implements AudioFile {
 	/**
 	 * Convert the audio file to a base64 string.
 	 *
-	 * @returns The base64 string. Undefined if the audio file has not been fetched yet.
+	 * @returns The base64 string.
 	 */
 	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();

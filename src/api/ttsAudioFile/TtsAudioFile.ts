@@ -49,7 +49,7 @@ export default class TtsAudioFile implements AudioFile {
 	/**
 	 * The buffer of the audio file.
 	 *
-	 * @returns The buffer. Undefined if the audio file has not been fetched yet.
+	 * @returns The buffer.
 	 */
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
@@ -68,7 +68,7 @@ export default class TtsAudioFile implements AudioFile {
 	/**
 	 * The base64 string of the audio file.
 	 *
-	 * @returns The base64 string. Undefined if the audio file has not been fetched yet.
+	 * @returns The base64 string.
 	 */
 	async toBase64(): Promise<string | undefined> {
 		const buffer = await this.toBuffer();

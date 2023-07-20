@@ -59,7 +59,7 @@ export default class V2vAudioFile implements AudioFile {
 	/**
 	 * The buffer of the audio file.
 	 *
-	 * @returns The buffer of the audio file. Undefined if the audio file has not been fetched yet.
+	 * @returns The buffer of the audio file.
 	 */
 	async toBuffer(): Promise<Buffer | undefined> {
 		if (this.#buffer) {
