@@ -128,7 +128,7 @@ export default class TtsModel {
 	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
 	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
 	// Thanks to caching, this is not a massive performance problem!
-	static #modelDataloader = new DataLoader(TtsModel.#modelInferenceDataloader.bind(TtsModel));
+	static #modelDataloader = new DataLoader(TtsModel.#modelInferenceDataloader.bind(this));
 
 	static async #modelInferenceDataloader(
 		base64Queries: readonly `${string}:${string}`[]
@@ -181,7 +181,7 @@ export default class TtsModel {
 			}
 
 			log.success(`Inference success for "${text}"`);
-			results.push(new TtsAudioFile(audioUrl));
+			results.push(new TtsAudioFile(audioUrl, this.client.rest));
 
 			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until x seconds have passed since the start of the request
 		}
