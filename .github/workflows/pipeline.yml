@@ -16,14 +16,15 @@ jobs:
             - name: node
               uses: actions/setup-node@v3
               with:
-                  node-version: 18
+                  node-version: 20
                   registry-url: https://registry.npmjs.org
             - name: checks
               run: |
-                npm install
-                npm run test:types
-                npm run test:unit
-                npm run test:e2e
-                npm run lint
+                  npm install
+                  npm run test:types
+                  npm run test:unit
+                  npm run test:e2e
+                  npm run lint
               env:
-                NODE_ENV: development
+                  NODE_ENV: development
+                  FAKEYOU_COOKIE: ${{secrets.FAKEYOU_COOKIE}}
