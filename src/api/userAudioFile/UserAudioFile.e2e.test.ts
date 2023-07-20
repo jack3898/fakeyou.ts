@@ -23,7 +23,5 @@ it('should fetch user models with success and paginate', async () => {
 it('should return no results if no user models could be found', async () => {
 	const result = await UserAudioFile.fetchUserAudioFiles(crypto.randomUUID());
 
-	console.log(result);
-
 	expect(result?.results).toStrictEqual([]);
 });

@@ -75,6 +75,8 @@ await client.login({
 });
 ```
 
+Or set `FAKEYOU_COOKIE` as an environment variable containing your cookie and it will automatically log in. You may override the environment cookie with the above `login()` method.
+
 ## TTS rate limiting helper
 
 Let the client take away the stress of rate limiting with text-to-speech. Using the below approach with `Promise.all()` it will automatically and safely queue each inference so you aren't accidentally rate limited. It is important to note that the more you add, the longer it will take to complete your request (especially if you are not logged in)!
