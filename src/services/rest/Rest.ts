@@ -1,10 +1,12 @@
 import { log } from '../../util/index.js';
 
 export class Rest {
-	#cookie?: string;
+	#cookie?: string = process.env.FAKEYOU_COOKIE;
 
 	/**
 	 * Light wrapper over fetch. Pre-applies headers useful to this package.
+	 *
+	 * Note: If `FAKEYOU_COOKIE` environment variable is set, it will be used for authentication.
 	 *
 	 * @param url The URL to send the request to.
 	 * @param request The request options to send.
