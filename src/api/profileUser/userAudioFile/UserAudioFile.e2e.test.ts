@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import Client from '../../services/client/Client.js';
+import Client from '../../../services/client/Client.js';
 
 const client = new Client();
 

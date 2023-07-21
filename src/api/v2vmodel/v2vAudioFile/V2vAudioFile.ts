@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import type { AudioFile } from '../../interface/AudioFile.js';
-import { constants } from '../../util/index.js';
-import { type V2vInferenceStatusDoneSchema } from '../v2vmodel/v2vModel.schema.js';
-import V2vModel from '../v2vmodel/V2vModel.js';
-import type Client from '../../services/index.js';
+import type { AudioFile } from '../../../interface/AudioFile.js';
+import { constants } from '../../../util/index.js';
+import { type V2vInferenceStatusDoneSchema } from '../v2vModel.schema.js';
+import V2vModel from '../V2vModel.js';
+import type Client from '../../../services/index.js';
 
 const writeFile = promisify(fs.writeFile);
 
