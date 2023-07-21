@@ -32,9 +32,11 @@ jobs:
                   rm .gitignore
                   rm commitlint.config.cjs
                   rm tsconfig.json
+                  rm vitest.config.ts
+                  rm .env.example
                   npm publish --access public
               env:
-                  NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
                   NODE_ENV: development
-                  HUSKY: 0 # Disable Husky git hook installation
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
                   FAKEYOU_COOKIE: ${{secrets.FAKEYOU_COOKIE}}
+                  HUSKY: 0 # Disable Husky git hook installation

@@ -1,5 +1,5 @@
 import type Client from '../../index.js';
-import { constants, prettyParse } from '../../util/index.js';
+import { constants, log, prettyParse } from '../../util/index.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
 import { type SessionUserSchema, loggedInUserProfileResponseSchema } from './sessionUser.schema.js';
@@ -65,11 +65,15 @@ export default class SessionUser {
 	 * @returns The logged in user. Undefined if no user is logged in.
 	 */
 	static async fetchLoggedInUser(): Promise<SessionUser | undefined> {
-		const response = await this.client.rest.send(new URL(`${constants.API_URL}/session`));
-		const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
+		try {
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/session`));
+			const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
 
-		if (loggedInUser.logged_in) {
-			return new this(loggedInUser.user);
+			if (loggedInUser.logged_in) {
+				return new this(loggedInUser.user);
+			}
+		} catch (error) {
+			log.error(`Response from API failed validation. Could not load session user.\n${error}`);
 		}
 	}
 

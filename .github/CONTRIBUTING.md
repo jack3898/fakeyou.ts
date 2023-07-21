@@ -29,6 +29,37 @@ Of course you need to be able to test your changes!
 2. Replace use of `node` with `npx tsx`. Tsx is a high-performance way to run TypeScript code directly with zero configuration. _It does not relate to React JSX, if that is what you are thinking._
 3. Tsx will consider your `tsconfig.json` if you have one. Just make sure to never set `compilerOptions.module` to `CommonJS`!
 
+## Testing
+
+This project explicitly separates unit tests and e2e tests so unit tests can be run locally, quickly and e2e tests can run separately less frequently.
+
+_For this project there isn't much that integration testing could take away from an e2e test to simplify the testing experience. It was considered!_
+
+### Run unit tests
+
+```sh
+npm run test:unit
+```
+
+### Run e2e tests
+
+Some e2e tests (tests that require authentication to complete) will require a session cookie.
+You will need to find your session cookie and put it in the `.env` file at the root of this project.
+
+Do keep in mind that using a session cookie will add test data to a FakeYou account (like sample TTS inferences). By the very nature of e2e test, it will test the whole process as if a user was using the package to make sure nothing errors along the way. It might be best to create a new FakeYou account.
+
+```sh
+npm run test:e2e
+```
+
+### Run a specific test suite
+
+```sh
+npm run test -- FileName # Case sensitive, can use partial match
+```
+
+This project uses Vitest. Check it out [here](https://vitest.dev/) to learn more! It was made for unit testing, but fakeyou.ts does not demand much from an e2e test so this package will stick with it.
+
 ## Other things of note
 
 This project uses Husky to run pre-commit and pre-push commands to ensure that all tests pass, there are no typing issues, and that the code is formatted properly.
