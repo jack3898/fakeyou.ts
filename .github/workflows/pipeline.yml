@@ -5,6 +5,9 @@ on:
         branches:
             - feature/*
             - main
+    pull_request:
+        branches:
+            - "*"
 
 jobs:
     release:

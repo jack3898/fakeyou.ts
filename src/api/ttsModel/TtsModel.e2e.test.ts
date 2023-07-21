@@ -1,14 +1,12 @@
-import { it, expect, beforeEach } from 'vitest';
-import Client, { TtsModel } from '../../index.js';
+import { it, expect } from 'vitest';
+import Client from '../../index.js';
 
-beforeEach(() => {
-	TtsModel.client = new Client();
-});
+const client = new Client();
 
 it(
 	'should fetch models',
 	async () => {
-		const modelList = await TtsModel.fetchModels();
+		const modelList = await client.ttsModel.fetchModels();
 
 		expect(modelList.size).toBeGreaterThan(0);
 	},
@@ -18,7 +16,7 @@ it(
 it(
 	'should find model by name',
 	async () => {
-		const model = await TtsModel.fetchModelByName('Squidward Tentacles');
+		const model = await client.ttsModel.fetchModelByName('Squidward Tentacles');
 
 		expect(model?.title).toContain('Squidward');
 	},
@@ -28,7 +26,7 @@ it(
 it(
 	'should fetch model by model token',
 	async () => {
-		const model = await TtsModel.fetchModelByToken('TM:4e2xqpwqaggr');
+		const model = await client.ttsModel.fetchModelByToken('TM:4e2xqpwqaggr');
 
 		expect(model?.title).toContain('Squidward');
 	},
@@ -38,7 +36,7 @@ it(
 it(
 	'should fetch user models',
 	async () => {
-		const models = await TtsModel.fetchModelsByUser('vegito1089');
+		const models = await client.ttsModel.fetchModelsByUser('vegito1089');
 
 		expect(models?.length).toBeGreaterThan(0);
 	},
@@ -48,7 +46,7 @@ it(
 it(
 	'should process an inference to buffer with success',
 	async () => {
-		const model = await TtsModel.fetchModelByName('Squidward Tentacles');
+		const model = await client.ttsModel.fetchModelByName('Squidward Tentacles');
 		const audio = await model?.infer('hello');
 		const buffer = await audio?.toBuffer();
 

@@ -1,27 +1,24 @@
-import { it, expect, beforeEach } from 'vitest';
-import UserAudioFile from './UserAudioFile.js';
-import Client from '../../index.js';
+import { it, expect } from 'vitest';
+import Client from '../../services/client/Client.js';
 
-beforeEach(() => {
-	UserAudioFile.client = new Client();
-});
+const client = new Client();
 
 it('should fetch user models with success and paginate', async () => {
-	const result = await UserAudioFile.fetchUserAudioFiles('jackwright3898');
+	const result = await client.userTtsAudioHistory.fetchUserAudioFiles('jackwright3898');
 
 	expect(result?.results.length).toBeGreaterThan(0);
 
-	const nextPage = await UserAudioFile.fetchUserAudioFiles('jackwright3898', result?.cursorNext as string);
+	const nextPage = await client.userTtsAudioHistory.fetchUserAudioFiles('jackwright3898', result?.cursorNext as string);
 
 	expect(nextPage?.results.length).toBeGreaterThan(0);
 
-	const prevPage = await UserAudioFile.fetchUserAudioFiles('jackwright3898', nextPage?.cursorPrev as string);
+	const prevPage = await client.userTtsAudioHistory.fetchUserAudioFiles('jackwright3898', nextPage?.cursorPrev as string);
 
 	expect(prevPage?.results.length).toBeGreaterThan(0);
 });
 
 it('should return no results if no user models could be found', async () => {
-	const result = await UserAudioFile.fetchUserAudioFiles(crypto.randomUUID());
+	const result = await client.userTtsAudioHistory.fetchUserAudioFiles(crypto.randomUUID());
 
 	expect(result?.results).toStrictEqual([]);
 });
