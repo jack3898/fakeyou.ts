@@ -1,6 +1,6 @@
 import AuthorisationError from '../../error/AuthorisationError.js';
 import FakeYouError from '../../error/FakeYouError.js';
-import { constants, log, prettyParse } from '../../util/index.js';
+import { constants, log, prettyParse, extractCookieFromHeaders } from '../../util/index.js';
 import Category from '../../api/category/Category.js';
 import Leaderboard from '../../api/leaderboard/Leaderboard.js';
 import TtsModel from '../../api/ttsModel/TtsModel.js';
@@ -71,10 +71,7 @@ export default class Client {
 				throw new AuthorisationError(`Authentication failed. Status ${response.status}.`);
 			}
 
-			return response.headers
-				.get('set-cookie')
-				?.match(/^\w+.=([^;]+)/)
-				?.at(1);
+			return extractCookieFromHeaders(response.headers);
 		});
 
 		if (!cookie) {

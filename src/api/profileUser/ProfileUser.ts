@@ -12,6 +12,12 @@ import {
 	type UserProfileSchema
 } from './profileUser.schema.js';
 
+type PaginatedUserAudioFiles = {
+	cursorNext: string | null;
+	cursorPrev: string | null;
+	results: UserAudioFile[];
+};
+
 export default class ProfileUser {
 	constructor(data: UserProfileSchema) {
 		this.token = data.user_token;
@@ -126,14 +132,7 @@ export default class ProfileUser {
 	 * @param cursor The cursor to use for pagination. If no cursor is provided, the first page will be returned.
 	 * @returns A paginated list of tts audio files for the user profile.
 	 */
-	fetchTtsAudioHistory(cursor?: string): Promise<
-		| {
-				cursorNext: string | null;
-				cursorPrev: string | null;
-				results: UserAudioFile[];
-		  }
-		| undefined
-	> {
+	fetchTtsAudioHistory(cursor?: string): Promise<PaginatedUserAudioFiles | undefined> {
 		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
 	}
 
@@ -143,7 +142,7 @@ export default class ProfileUser {
 	 * @returns The TTS models of the user profile. The array will be empty if the user has not uploaded any models.
 	 * @throws {FakeYouError} Fetch of user profile models failed.
 	 */
-	async fetchUserModels(): Promise<TtsModel[]> {
+	async fetchUserModels(): Promise<Map<string, TtsModel>> {
 		const userModels = await TtsModel.fetchModelsByUser(this.username);
 
 		if (userModels) {
