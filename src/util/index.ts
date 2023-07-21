@@ -5,3 +5,5 @@ export * as log from './log.js';
 export * from './sizeof.js';
 export * from './sleep.js';
 export * from './handleValidation.js';
+export * from './cookie.js';
+export * from './map.js';

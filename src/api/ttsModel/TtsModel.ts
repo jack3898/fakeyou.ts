@@ -13,7 +13,7 @@ import {
 	type TtsInferenceResultSchema
 } from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
-import { base64, log, poll, constants, PollStatus, sleep, prettyParse } from '../../util/index.js';
+import { base64, log, poll, constants, PollStatus, sleep, prettyParse, mapify } from '../../util/index.js';
 import type Client from '../../index.js';
 
 export default class TtsModel {
@@ -64,14 +64,9 @@ export default class TtsModel {
 		return this.client.cache.wrap('fetch-tts-models', async () => {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
+			const ttsModels = json.models.map((model) => new this(model));
 
-			const map = new Map<string, TtsModel>();
-
-			for (const modelData of json.models) {
-				map.set(modelData.model_token, new this(modelData));
-			}
-
-			return map;
+			return mapify('token', ttsModels);
 		});
 	}
 
@@ -93,14 +88,15 @@ export default class TtsModel {
 	 * This method will return all models created by the user.
 	 *
 	 * @param username The username of the user
-	 * @returns A list of models created by the user
+	 * @returns A map of all models created by the user with the model token as the key.
 	 */
-	static async fetchModelsByUser(username: string): Promise<TtsModel[] | undefined> {
+	static async fetchModelsByUser(username: string): Promise<Map<string, TtsModel> | undefined> {
 		try {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
+			const ttsModels = json.models.map((model) => new this(model));
 
-			return json.models.map((model) => new this(model));
+			return mapify('token', ttsModels);
 		} catch (error) {
 			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
 		}

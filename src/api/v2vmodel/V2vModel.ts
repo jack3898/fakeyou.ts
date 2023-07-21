@@ -1,5 +1,5 @@
 import type Client from '../../index.js';
-import { PollStatus, constants, poll, log, prettyParse } from '../../util/index.js';
+import { PollStatus, constants, poll, log, prettyParse, mapify } from '../../util/index.js';
 import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
@@ -55,13 +55,9 @@ export default class V2vModel {
 			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
 			const json = prettyParse(v2vModelListSchema, await response.json());
 
-			const map = new Map<string, V2vModel>();
+			const models = json.models.map((modelData) => new this(modelData));
 
-			for (const modelData of json.models) {
-				map.set(modelData.token, new this(modelData));
-			}
-
-			return map;
+			return mapify('token', models);
 		});
 	}
 

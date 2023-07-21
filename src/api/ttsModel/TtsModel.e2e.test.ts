@@ -24,7 +24,7 @@ it('should fetch model by model token', async () => {
 it('should fetch user models', async () => {
 	const models = await client.ttsModel.fetchModelsByUser('vegito1089');
 
-	expect(models?.length).toBeGreaterThan(0);
+	expect(models?.size).toBeGreaterThan(0);
 });
 
 it(
