@@ -1,10 +1,10 @@
-import type Client from '../../index.js';
+import type Client from '../../../index.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import type { AudioFile } from '../../interface/AudioFile.js';
-import { constants, log, prettyParse } from '../../util/index.js';
-import TtsModel from '../ttsModel/TtsModel.js';
+import type { AudioFile } from '../../../interface/AudioFile.js';
+import { constants, log, prettyParse } from '../../../util/index.js';
+import TtsModel from '../../ttsModel/TtsModel.js';
 import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
 
 const writeFile = promisify(fs.writeFile);

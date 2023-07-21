@@ -10,7 +10,7 @@
         "lint": "eslint **/*.ts --max-warnings 0",
         "test": "vitest run",
         "test:unit": "vitest run unit",
-        "test:e2e": "vitest run e2e --threads false",
+        "test:e2e": "cross-env E2E=true vitest run e2e --threads false",
         "test:types": "tsc --noEmit",
         "prepare": "husky install"
     },
@@ -39,6 +39,7 @@
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
         "@vitest/ui": "^0.33.0",
+        "cross-env": "^7.0.3",
         "dotenv": "^16.3.1",
         "eslint": "^8.44.0",
         "eslint-config-prettier": "^8.8.0",

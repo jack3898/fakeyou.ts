@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { fakeyouResponse, visibilitySchema } from '../../global.schema.js';
+import { fakeyouResponse, visibilitySchema } from '../../../global.schema.js';
 
 export type UserTtsSchema = z.infer<typeof userTtsSchema>;
 export type UserTtsListResponseSchema = z.infer<typeof userTtsListResponseSchema>;

@@ -3,45 +3,29 @@ import Client from '../../index.js';
 
 const client = new Client();
 
-it(
-	'should fetch models',
-	async () => {
-		const modelList = await client.ttsModel.fetchModels();
+it('should fetch models', async () => {
+	const modelList = await client.ttsModel.fetchModels();
 
-		expect(modelList.size).toBeGreaterThan(0);
-	},
-	{ timeout: 30_000 }
-);
+	expect(modelList.size).toBeGreaterThan(0);
+});
 
-it(
-	'should find model by name',
-	async () => {
-		const model = await client.ttsModel.fetchModelByName('Squidward Tentacles');
+it('should find model by name', async () => {
+	const model = await client.ttsModel.fetchModelByName('Squidward Tentacles');
 
-		expect(model?.title).toContain('Squidward');
-	},
-	{ timeout: 30_000 }
-);
+	expect(model?.title).toContain('Squidward');
+});
 
-it(
-	'should fetch model by model token',
-	async () => {
-		const model = await client.ttsModel.fetchModelByToken('TM:4e2xqpwqaggr');
+it('should fetch model by model token', async () => {
+	const model = await client.ttsModel.fetchModelByToken('TM:4e2xqpwqaggr');
 
-		expect(model?.title).toContain('Squidward');
-	},
-	{ timeout: 30_000 }
-);
+	expect(model?.title).toContain('Squidward');
+});
 
-it(
-	'should fetch user models',
-	async () => {
-		const models = await client.ttsModel.fetchModelsByUser('vegito1089');
+it('should fetch user models', async () => {
+	const models = await client.ttsModel.fetchModelsByUser('vegito1089');
 
-		expect(models?.length).toBeGreaterThan(0);
-	},
-	{ timeout: 30_000 }
-);
+	expect(models?.length).toBeGreaterThan(0);
+});
 
 it(
 	'should process an inference to buffer with success',
@@ -52,5 +36,5 @@ it(
 
 		expect(buffer).toBeInstanceOf(Buffer);
 	},
-	{ timeout: 180_000 }
+	{ timeout: 120_000 }
 );

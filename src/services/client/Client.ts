@@ -8,7 +8,7 @@ import ProfileUser from '../../api/profileUser/ProfileUser.js';
 import Queue from '../../api/queue/Queue.js';
 import SessionUser from '../../api/sessionUser/SessionUser.js';
 import Subscription from '../../api/subscription/Subscription.js';
-import UserAudioFile from '../../api/userAudioFile/UserAudioFile.js';
+import UserAudioFile from '../../api/profileUser/userAudioFile/UserAudioFile.js';
 import V2vModel from '../../api/v2vmodel/V2vModel.js';
 import { loginSchema } from './client.schema.js';
 import { Rest } from '../rest/Rest.js';

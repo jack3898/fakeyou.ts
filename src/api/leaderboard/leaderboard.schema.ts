@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { leaderboardUserSchema } from '../leaderboardUser/leaderboardUser.schema.js';
+import { leaderboardUserSchema } from './leaderboardUser/leaderboardUser.schema.js';
 import { fakeyouResponse } from '../../global.schema.js';
 
 export type LeaderboardResponseSchema = z.infer<typeof leaderboardResponseSchema>;

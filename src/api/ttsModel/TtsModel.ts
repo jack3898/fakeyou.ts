@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import Category from '../category/Category.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
-import TtsAudioFile from '../ttsAudioFile/TtsAudioFile.js';
+import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
 import {
 	type TtsModelSchema,
 	ttsModelListSchema,

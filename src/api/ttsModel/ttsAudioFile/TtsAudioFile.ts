@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import type { AudioFile } from '../../interface/AudioFile.js';
-import { constants } from '../../util/index.js';
-import TtsModel from '../ttsModel/TtsModel.js';
-import { type TtsInferenceStatusDoneSchema } from '../ttsModel/ttsModel.schema.js';
-import { Rest } from '../../services/rest/Rest.js';
+import type { AudioFile } from '../../../interface/AudioFile.js';
+import { constants } from '../../../util/index.js';
+import TtsModel from '../TtsModel.js';
+import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
+import { Rest } from '../../../services/rest/Rest.js';
 
 const writeFile = promisify(fs.writeFile);
 

@@ -1,6 +1,6 @@
 import type Client from '../../index.js';
 import { PollStatus, constants, poll, log, prettyParse } from '../../util/index.js';
-import V2vAudioFile from '../v2vAudioFile/V2vAudioFile.js';
+import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
 	v2vModelListSchema,

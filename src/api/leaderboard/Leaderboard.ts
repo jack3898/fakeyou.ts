@@ -1,6 +1,6 @@
 import type Client from '../../index.js';
 import { constants, prettyParse } from '../../util/index.js';
-import LeaderboardUser from '../leaderboardUser/LeaderboardUser.js';
+import LeaderboardUser from './leaderboardUser/LeaderboardUser.js';
 import { type LeaderboardResponseSchema, leaderboardResponseSchema } from './leaderboard.schema.js';
 
 export default class Leaderboard {

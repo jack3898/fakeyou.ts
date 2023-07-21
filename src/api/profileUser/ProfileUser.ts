@@ -3,7 +3,7 @@ import type Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import TtsModel from '../ttsModel/TtsModel.js';
-import UserAudioFile from '../userAudioFile/UserAudioFile.js';
+import UserAudioFile from './userAudioFile/UserAudioFile.js';
 import {
 	editUserProfileInputSchema,
 	editUserProfileResponseSchema,
