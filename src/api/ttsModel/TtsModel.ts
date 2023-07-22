@@ -1,7 +1,6 @@
-import DataLoader from 'dataloader';
 import crypto from 'node:crypto';
 import { type default as Client, type ProfileUser } from '../../index.js';
-import { PollStatus, base64, constants, log, poll, prettyParse, sleep } from '../../util/index.js';
+import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
 import type Category from '../category/Category.js';
 import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
 import {
@@ -15,7 +14,7 @@ import {
 } from './ttsModel.schema.js';
 
 export default class TtsModel {
-	constructor(data: TtsModelSchema) {
+	constructor(data: TtsModelSchema, client: Client) {
 		this.token = data.model_token;
 		this.ttsModelType = data.tts_model_type;
 		this.creatorToken = data.creator_user_token;
@@ -31,6 +30,8 @@ export default class TtsModel {
 		this.categoryTokens = data.category_tokens;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
+
+		this.client = client;
 	}
 
 	readonly token: string;
@@ -49,84 +50,10 @@ export default class TtsModel {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 
-	static client: Client;
-
-	// The dataloader must be static, so that multiple different model instances can use it.
-	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
-	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
-	// Thanks to caching, this is not a massive performance problem!
-	static #modelDataloader = new DataLoader(TtsModel.#modelInferenceDataloader.bind(this));
-
-	static async #modelInferenceDataloader(
-		base64Queries: readonly `${string}:${string}`[]
-	): Promise<(TtsAudioFile | undefined)[]> {
-		if (base64Queries.length > 10) {
-			log.warn('TTS batch size is larger than 10, and will take a while to resolve all inferences.');
-		}
-
-		const authenticated = this.client.rest.isAuthenticated;
-
-		if (!authenticated) {
-			log.info('You are not logged in to your FakeYou account! Your requests will take longer to process.');
-		}
-
-		const models = await this.client.fetchTtsModels();
-		const results: TtsAudioFile[] = [];
-		const startTime = Date.now();
-
-		const decodedQueries: [string, string][] = base64Queries.map((base64Query) => {
-			const [text, modelToken] = base64Query.split(':');
-
-			return [base64.decode(text), base64.decode(modelToken)];
-		});
-
-		for (const [text, modelToken] of decodedQueries) {
-			const model = models.get(modelToken);
-
-			if (!model) {
-				continue;
-			}
-
-			const end = Date.now() + (authenticated ? 5000 : 12000);
-			const inference = await model.#fetchInference(text);
-
-			if (!inference.success) {
-				const sleepInterval = 8000;
-
-				log.error(`There was a problem fetching this inference. Will retry in ${sleepInterval / 1000} seconds.`);
-				log.error(inference.error_reason);
-
-				await sleep(sleepInterval); // Probably a rate limit. So we'll wait extra long.
-
-				continue;
-			}
-
-			const audioUrl = await model.#getAudioUrl(inference.inference_job_token);
-
-			if (!audioUrl) {
-				continue;
-			}
-
-			log.success(`Inference success for "${text}"`);
-			results.push(new TtsAudioFile(audioUrl, this.client));
-
-			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until x seconds have passed since the start of the request
-		}
-
-		const endTime = Date.now();
-		const durationSecs = Math.round((endTime - startTime) / 1000);
-
-		log.success(`Finished in ${durationSecs} seconds.`);
-
-		// The return value array must return corresponding data for each item.
-		// And be of exactly the same length so the dataloader can tie things back together.
-		return decodedQueries.map(([text]) => {
-			return results.find((result) => result.rawInferenceText === text);
-		});
-	}
+	client: Client;
 
 	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
-		const response = await TtsModel.client.rest.send(new URL(`${constants.API_URL}/tts/inference`), {
+		const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.token,
@@ -140,7 +67,7 @@ export default class TtsModel {
 
 	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
-			const response = await TtsModel.client.rest.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
 			const result = prettyParse(ttsRequestStatusResponseSchema, await response.json());
 
 			switch (result.state.status) {
@@ -167,13 +94,13 @@ export default class TtsModel {
 	 *
 	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
 	 */
-	infer(text: string): Promise<TtsAudioFile | undefined> {
-		// First encode text to base64, so that users cannot confuse this application when we pass the
-		// colon-delimited query string to the dataloader
-		const textBase64 = base64.encode(text);
-		const modelTokenBase64 = base64.encode(this.token);
+	async infer(text: string): Promise<TtsAudioFile | undefined> {
+		const inference = await this.#fetchInference(text);
+		const audio = inference.success && (await this.#getAudioUrl(inference.inference_job_token));
 
-		return TtsModel.#modelDataloader.load(`${textBase64}:${modelTokenBase64}`);
+		if (audio) {
+			return new TtsAudioFile(audio, this.client);
+		}
 	}
 
 	/**
@@ -183,7 +110,7 @@ export default class TtsModel {
 	 */
 	async fetchMyRating(): Promise<RatingSchema | undefined> {
 		try {
-			const response = await TtsModel.client.rest.send(
+			const response = await this.client.rest.send(
 				new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`)
 			);
 			const json = prettyParse(userRatingResponseSchema, await response.json());
@@ -200,7 +127,7 @@ export default class TtsModel {
 	 * @returns The user who created this model
 	 */
 	fetchModelCreator(): Promise<ProfileUser | undefined> {
-		return TtsModel.client.fetchUserProfile(this.creatorUsername);
+		return this.client.fetchUserProfile(this.creatorUsername);
 	}
 
 	/**
@@ -211,7 +138,7 @@ export default class TtsModel {
 	 */
 	async rate(decision: RatingSchema): Promise<RatingSchema | undefined> {
 		try {
-			await TtsModel.client.rest.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
+			await this.client.rest.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
 				method: 'POST',
 				body: JSON.stringify({
 					entity_type: 'tts_model',
@@ -232,7 +159,7 @@ export default class TtsModel {
 	 * @returns The parent categories of this model. The array will be empty if no categories are found.
 	 */
 	async fetchParentCategories(): Promise<Category[]> {
-		const categories = await TtsModel.client.fetchCategories();
+		const categories = await this.client.fetchCategories();
 		const categoryTokens = this.categoryTokens;
 
 		return categories.filter((category) => categoryTokens?.includes(category.token));

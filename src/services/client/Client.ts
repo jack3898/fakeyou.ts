@@ -17,8 +17,6 @@ import { loginSchema } from './client.schema.js';
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
 		log.setLogging(!!options?.logging);
-
-		TtsModel.client = this; // TODO: remove this
 	}
 
 	readonly rest = new Rest();
@@ -87,7 +85,7 @@ export default class Client {
 		return this.cache.wrap('fetch-tts-models', async () => {
 			const response = await this.rest.send(new URL(`${constants.API_URL}/tts/list`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
-			const ttsModels = json.models.map((model) => new TtsModel(model));
+			const ttsModels = json.models.map((model) => new TtsModel(model, this));
 
 			return mapify('token', ttsModels);
 		});
@@ -117,7 +115,7 @@ export default class Client {
 		try {
 			const response = await this.rest.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
 			const json = prettyParse(ttsModelListSchema, await response.json());
-			const ttsModels = json.models.map((model) => new TtsModel(model));
+			const ttsModels = json.models.map((model) => new TtsModel(model, this));
 
 			return mapify('token', ttsModels);
 		} catch (error) {
@@ -152,7 +150,6 @@ export default class Client {
 		return this.cache.wrap('fetch-v2v-models', async () => {
 			const response = await this.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
 			const json = prettyParse(v2vModelListSchema, await response.json());
-
 			const models = json.models.map((modelData) => new V2vModel(modelData, this));
 
 			return mapify('token', models);
