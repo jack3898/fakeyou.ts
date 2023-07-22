@@ -1,12 +1,12 @@
 export { default as Badge } from './api/badge/Badge.js';
 export { default as Category } from './api/category/Category.js';
-export { default } from './services/client/Client.js';
 export { default as Leaderboard } from './api/leaderboard/Leaderboard.js';
 export { default as LeaderboardUser } from './api/leaderboard/leaderboardUser/LeaderboardUser.js';
-export { default as TtsModel } from './api/ttsModel/TtsModel.js';
 export { default as ProfileUser } from './api/profileUser/ProfileUser.js';
+export { default as UserAudioFile } from './api/profileUser/userAudioFile/UserAudioFile.js';
 export { default as Queue } from './api/queue/Queue.js';
 export { default as SessionUser } from './api/sessionUser/SessionUser.js';
 export { default as Subscription } from './api/subscription/Subscription.js';
+export { default as TtsModel } from './api/ttsModel/TtsModel.js';
 export { default as TtsAudioFile } from './api/ttsModel/ttsAudioFile/TtsAudioFile.js';
-export { default as UserAudioFile } from './api/profileUser/userAudioFile/UserAudioFile.js';
+export { default } from './services/client/Client.js';

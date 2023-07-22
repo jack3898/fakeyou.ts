@@ -1,5 +1,5 @@
-import LeaderboardUser from './leaderboardUser/LeaderboardUser.js';
 import { type LeaderboardResponseSchema } from './leaderboard.schema.js';
+import LeaderboardUser from './leaderboardUser/LeaderboardUser.js';
 
 export default class Leaderboard {
 	constructor(data: LeaderboardResponseSchema) {

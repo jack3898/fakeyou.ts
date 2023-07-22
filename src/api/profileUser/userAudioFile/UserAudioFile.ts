@@ -1,7 +1,7 @@
-import type Client from '../../../index.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import type Client from '../../../index.js';
 import type { AudioFile } from '../../../interface/AudioFile.js';
 import { constants } from '../../../util/index.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';

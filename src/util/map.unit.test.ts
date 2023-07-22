@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest';
+import { expect, it } from 'vitest';
 import { mapify } from './map.js';
 
 it('should convert to map', () => {

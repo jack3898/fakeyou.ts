@@ -1,14 +1,14 @@
+import Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import type TtsModel from '../ttsModel/TtsModel.js';
-import UserAudioFile from './userAudioFile/UserAudioFile.js';
 import {
 	editUserProfileInputSchema,
 	editUserProfileResponseSchema,
 	type EditUserProfileInputSchema,
 	type UserProfileSchema
 } from './profileUser.schema.js';
-import Client from '../../index.js';
+import UserAudioFile from './userAudioFile/UserAudioFile.js';
 import { userTtsListResponseSchema } from './userAudioFile/userAudioFile.schema.js';
 
 type PaginatedUserAudioFiles = {

@@ -1,7 +1,7 @@
-import { ZodError, type ZodSchema, type z } from 'zod';
-import { fromZodError, ValidationError } from 'zod-validation-error';
-import { log } from './index.js';
 import { inspect } from 'node:util';
+import { ZodError, type ZodSchema, type z } from 'zod';
+import { ValidationError, fromZodError } from 'zod-validation-error';
+import { log } from './index.js';
 
 /**
  * Zod schema.parse wrapper that throws nicer errors than what zod gives you out of the box.

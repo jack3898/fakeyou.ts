@@ -1,7 +1,7 @@
-import { it, expect } from 'vitest';
-import Category from './Category.js';
+import { expect, it } from 'vitest';
 import { z } from 'zod';
 import Client from '../../services/index.js';
+import Category from './Category.js';
 
 const client = new Client();
 

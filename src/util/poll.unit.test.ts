@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest';
+import { expect, it } from 'vitest';
 import { PollStatus, poll } from './poll.js';
 
 it('should forward return value when not poll status enum', async () => {

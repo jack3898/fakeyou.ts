@@ -1,18 +1,18 @@
+import DataLoader from 'dataloader';
 import crypto from 'node:crypto';
+import { type default as Client, type ProfileUser } from '../../index.js';
+import { PollStatus, base64, constants, log, poll, prettyParse, sleep } from '../../util/index.js';
 import type Category from '../category/Category.js';
 import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
 import {
-	type TtsModelSchema,
-	type TtsInferenceStatusDoneSchema,
-	ttsRequestStatusResponseSchema,
-	type RatingSchema,
-	userRatingResponseSchema,
 	ttsInferenceResultSchema,
-	type TtsInferenceResultSchema
+	ttsRequestStatusResponseSchema,
+	userRatingResponseSchema,
+	type RatingSchema,
+	type TtsInferenceResultSchema,
+	type TtsInferenceStatusDoneSchema,
+	type TtsModelSchema
 } from './ttsModel.schema.js';
-import DataLoader from 'dataloader';
-import { base64, log, poll, constants, PollStatus, sleep, prettyParse } from '../../util/index.js';
-import { type default as Client, type ProfileUser } from '../../index.js';
 
 export default class TtsModel {
 	constructor(data: TtsModelSchema) {

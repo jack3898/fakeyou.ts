@@ -1,7 +1,7 @@
 import { LRUCache } from 'lru-cache';
+import crypto from 'node:crypto';
 import * as log from '../../util/log.js';
 import sizeof from '../../util/sizeof.js';
-import crypto from 'node:crypto';
 
 export class Cache {
 	namespace = crypto.randomUUID();

@@ -1,13 +1,13 @@
 import Client from '../../index.js';
-import { PollStatus, constants, poll, log, prettyParse } from '../../util/index.js';
+import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
 import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
-	type V2vModelSchema,
-	v2vVoiceUploadResponseSchema,
 	v2vInferenceResultSchema,
 	v2vRequestStatusResponseSchema,
-	type V2vInferenceStatusDoneSchema,
+	v2vVoiceUploadResponseSchema,
 	type V2vInferenceSchema,
+	type V2vInferenceStatusDoneSchema,
+	type V2vModelSchema,
 	type V2vVoiceUploadResponseSchema
 } from './v2vModel.schema.js';
 

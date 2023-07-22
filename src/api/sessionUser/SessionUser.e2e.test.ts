@@ -1,8 +1,8 @@
 import { expect, it, vi } from 'vitest';
 import Client from '../../services/client/Client.js';
-import SessionUser from './SessionUser.js';
 import ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
+import SessionUser from './SessionUser.js';
 
 const client = new Client();
 
