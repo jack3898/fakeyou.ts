@@ -1,9 +1,8 @@
-import type Client from '../../index.js';
-import { PollStatus, constants, poll, log, prettyParse, mapify } from '../../util/index.js';
+import Client from '../../index.js';
+import { PollStatus, constants, poll, log, prettyParse } from '../../util/index.js';
 import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
 	type V2vModelSchema,
-	v2vModelListSchema,
 	v2vVoiceUploadResponseSchema,
 	v2vInferenceResultSchema,
 	v2vRequestStatusResponseSchema,
@@ -13,7 +12,7 @@ import {
 } from './v2vModel.schema.js';
 
 export default class V2vModel {
-	constructor(data: V2vModelSchema) {
+	constructor(data: V2vModelSchema, client: Client) {
 		this.token = data.token;
 		this.modelType = data.model_type;
 		this.title = data.title;
@@ -27,6 +26,8 @@ export default class V2vModel {
 		this.isFrontPageFeatured = data.is_front_page_featured;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
+
+		this.#client = client;
 	}
 
 	readonly token: string;
@@ -43,39 +44,11 @@ export default class V2vModel {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 
-	static client: Client;
+	readonly #client: Client;
 
-	/**
-	 * Fetch all available voice conversion models.
-	 *
-	 * @returns A map of all available models with their token as the key.
-	 */
-	static fetchModels(): Promise<Map<string, V2vModel>> {
-		return this.client.cache.wrap('fetch-v2v-models', async () => {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
-			const json = prettyParse(v2vModelListSchema, await response.json());
-
-			const models = json.models.map((modelData) => new this(modelData));
-
-			return mapify('token', models);
-		});
-	}
-
-	/**
-	 * Fetch a voice conversion model by its token.
-	 *
-	 * @param token The token of the model to fetch
-	 * @returns The model
-	 */
-	static async fetchModelByToken(token: string): Promise<V2vModel | undefined> {
-		const models = await this.fetchModels();
-
-		return models.get(token);
-	}
-
-	static async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | undefined> {
+	async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | undefined> {
 		try {
-			const response = await this.client.rest.upload(
+			const response = await this.#client.rest.upload(
 				new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`),
 				file,
 				'audio/wav'
@@ -90,7 +63,7 @@ export default class V2vModel {
 	}
 
 	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | undefined> {
-		const response = await V2vModel.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
+		const response = await this.#client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				uuid_idempotency_token: crypto.randomUUID(),
@@ -111,29 +84,33 @@ export default class V2vModel {
 	}
 
 	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | undefined> {
-		return poll(async () => {
-			const response = await V2vModel.client.rest.send(
-				new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
-			);
-			const result = prettyParse(v2vRequestStatusResponseSchema, await response.json());
+		return poll(
+			async () => {
+				const response = await this.#client.rest.send(
+					new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
+				);
+				const result = prettyParse(v2vRequestStatusResponseSchema, await response.json());
 
-			switch (result.state.status.status) {
-				case 'pending':
-					return PollStatus.Retry;
-				case 'started':
-					return PollStatus.Retry;
-				case 'complete_success':
-					return result.state as V2vInferenceStatusDoneSchema;
-				case 'attempt_failed':
-					return PollStatus.Retry;
-				case 'complete_failure':
-					return PollStatus.Abort;
-				case 'dead':
-					return PollStatus.Abort;
-				default:
-					return PollStatus.Abort;
-			}
-		});
+				switch (result.state.status.status) {
+					case 'pending':
+						return PollStatus.Retry;
+					case 'started':
+						return PollStatus.Retry;
+					case 'complete_success':
+						return result.state as V2vInferenceStatusDoneSchema;
+					case 'attempt_failed':
+						return PollStatus.Retry;
+					case 'complete_failure':
+						return PollStatus.Abort;
+					case 'dead':
+						return PollStatus.Abort;
+					default:
+						return PollStatus.Abort;
+				}
+			},
+			3000, // 3 seconds, v2v models are slow to infer so well give it a bit more time between requests
+			240
+		);
 	}
 
 	/**
@@ -142,7 +119,7 @@ export default class V2vModel {
 	 * Unlike TTS, this does NOT support rate limit safety features, so be cautious!
 	 */
 	async infer(audio: Buffer): Promise<V2vAudioFile | undefined> {
-		const uploadedAudio = await V2vModel.#uploadAudio(audio);
+		const uploadedAudio = await this.#uploadAudio(audio);
 
 		if (!uploadedAudio) {
 			return;
@@ -157,7 +134,7 @@ export default class V2vModel {
 		const audioUrl = await this.#getAudioUrl(inference.inference_job_token);
 
 		if (audioUrl) {
-			return new V2vAudioFile(audioUrl);
+			return new V2vAudioFile(audioUrl, this.#client);
 		}
 	}
 }

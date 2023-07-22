@@ -3,9 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../../interface/AudioFile.js';
-import { constants, log, prettyParse } from '../../../util/index.js';
-import TtsModel from '../../ttsModel/TtsModel.js';
-import { type UserTtsSchema, userTtsListResponseSchema } from './userAudioFile.schema.js';
+import { constants } from '../../../util/index.js';
+import { type UserTtsSchema } from './userAudioFile.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -47,48 +46,6 @@ export default class UserAudioFile implements AudioFile {
 	static client: Client;
 
 	#buffer?: Buffer;
-
-	/**
-	 * Fetch a user audio file by its token.
-	 *
-	 * @param username The username of the user to fetch the audio file for.
-	 * @param cursor The cursor to use for pagination. If not provided, the first page will be fetched.
-	 * @returns The user audio file. Undefined if the audio file could not be fetched.
-	 */
-	static async fetchUserAudioFiles(
-		username: string,
-		cursor?: string
-	): Promise<
-		| {
-				cursorNext: string | null;
-				cursorPrev: string | null;
-				results: UserAudioFile[];
-		  }
-		| undefined
-	> {
-		const url = new URL(`${constants.API_URL}/user/${username}/tts_results?limit=10`);
-
-		if (cursor) {
-			url.searchParams.append('cursor', cursor);
-		}
-
-		try {
-			const response = await this.client.rest.send(url, {
-				method: 'GET'
-			});
-
-			const json = prettyParse(userTtsListResponseSchema, await response.json());
-			const results = json.results.map((userTtsAudioEntry) => new this(userTtsAudioEntry));
-
-			return {
-				cursorNext: json.cursor_next,
-				cursorPrev: json.cursor_previous,
-				results
-			};
-		} catch (error) {
-			log.error(`Response from API failed validation. Could not load user TTS results.\n${error}`);
-		}
-	}
 
 	/**
 	 * Convert the audio file to a buffer.
@@ -133,14 +90,5 @@ export default class UserAudioFile implements AudioFile {
 		if (buffer) {
 			return writeFile(path.resolve(location), buffer);
 		}
-	}
-
-	/**
-	 * Fetch the TTS model used to generate this audio file. This is a convenience method for `TtsModel.fetchModelByToken`.
-	 *
-	 * @returns The TTS model used to generate this audio file. Undefined if the model could not be fetched.
-	 */
-	fetchTtsModel(): Promise<TtsModel | undefined> {
-		return TtsModel.fetchModelByToken(this.ttsModelToken);
 	}
 }

@@ -1,10 +1,8 @@
 import crypto from 'node:crypto';
-import Category from '../category/Category.js';
-import ProfileUser from '../profileUser/ProfileUser.js';
+import type Category from '../category/Category.js';
 import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
 import {
 	type TtsModelSchema,
-	ttsModelListSchema,
 	type TtsInferenceStatusDoneSchema,
 	ttsRequestStatusResponseSchema,
 	type RatingSchema,
@@ -13,8 +11,8 @@ import {
 	type TtsInferenceResultSchema
 } from './ttsModel.schema.js';
 import DataLoader from 'dataloader';
-import { base64, log, poll, constants, PollStatus, sleep, prettyParse, mapify } from '../../util/index.js';
-import type Client from '../../index.js';
+import { base64, log, poll, constants, PollStatus, sleep, prettyParse } from '../../util/index.js';
+import { type default as Client, type ProfileUser } from '../../index.js';
 
 export default class TtsModel {
 	constructor(data: TtsModelSchema) {
@@ -53,73 +51,6 @@ export default class TtsModel {
 
 	static client: Client;
 
-	/**
-	 * Fetch all available TTS models.
-	 *
-	 * This method will return all models available on the website.
-	 *
-	 * @returns A map of all available models with their token as the key.
-	 */
-	static fetchModels(): Promise<Map<string, TtsModel>> {
-		return this.client.cache.wrap('fetch-tts-models', async () => {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/list`));
-			const json = prettyParse(ttsModelListSchema, await response.json());
-			const ttsModels = json.models.map((model) => new this(model));
-
-			return mapify('token', ttsModels);
-		});
-	}
-
-	/**
-	 * Fetch a TTS model by its token. This is a convenience method for `TtsModel.fetchModels()`.
-	 *
-	 * @param token The token of the model to fetch
-	 * @returns The model
-	 */
-	static async fetchModelByToken(token: string): Promise<TtsModel | undefined> {
-		const models = await this.fetchModels();
-
-		return models.get(token);
-	}
-
-	/**
-	 * Fetch all models created by a user. This is a convenience method for `TtsModel.fetchModels()`.
-	 *
-	 * This method will return all models created by the user.
-	 *
-	 * @param username The username of the user
-	 * @returns A map of all models created by the user with the model token as the key.
-	 */
-	static async fetchModelsByUser(username: string): Promise<Map<string, TtsModel> | undefined> {
-		try {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
-			const json = prettyParse(ttsModelListSchema, await response.json());
-			const ttsModels = json.models.map((model) => new this(model));
-
-			return mapify('token', ttsModels);
-		} catch (error) {
-			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
-		}
-	}
-
-	/**
-	 * Fetch a model by its name. This is a convenience method for `TtsModel.fetchModels()` and `TtsModel.fetchModelByToken()`.
-	 *
-	 * This method will return the first model that contains the search string in its title.
-	 *
-	 * @param search The search string (case insensitive)
-	 * @returns The model
-	 */
-	static async fetchModelByName(search: string): Promise<TtsModel | undefined> {
-		const models = await this.fetchModels();
-
-		for (const [, model] of models) {
-			if (model.title.toLowerCase().includes(search.toLowerCase())) {
-				return model;
-			}
-		}
-	}
-
 	// The dataloader must be static, so that multiple different model instances can use it.
 	// This does make things harder, however, due to `this` bindings so we need to resort to passing through
 	// an encoded the model token to #modelInferenceDataloader so it can fetch the model instance itself :(
@@ -139,7 +70,7 @@ export default class TtsModel {
 			log.info('You are not logged in to your FakeYou account! Your requests will take longer to process.');
 		}
 
-		const models = await TtsModel.fetchModels();
+		const models = await this.client.fetchTtsModels();
 		const results: TtsAudioFile[] = [];
 		const startTime = Date.now();
 
@@ -177,7 +108,7 @@ export default class TtsModel {
 			}
 
 			log.success(`Inference success for "${text}"`);
-			results.push(new TtsAudioFile(audioUrl, this.client.rest));
+			results.push(new TtsAudioFile(audioUrl, this.client));
 
 			await sleep(Math.max(end - Date.now(), 0)); // If it resolved fast, wait until x seconds have passed since the start of the request
 		}
@@ -192,15 +123,6 @@ export default class TtsModel {
 		return decodedQueries.map(([text]) => {
 			return results.find((result) => result.rawInferenceText === text);
 		});
-	}
-
-	/**
-	 * Fetch the user who created this model. This is a convenience method for `ProfileUser.fetchUserProfile(model.creatorUsername)`.
-	 *
-	 * @returns The user who created this model
-	 */
-	async fetchModelCreator(): Promise<ProfileUser | undefined> {
-		return ProfileUser.fetchUserProfile(this.creatorUsername);
 	}
 
 	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
@@ -273,6 +195,15 @@ export default class TtsModel {
 	}
 
 	/**
+	 * Fetch the user who created this model. This is a convenience method for `ProfileUser.fetchUserProfile(model.creatorUsername)`.
+	 *
+	 * @returns The user who created this model
+	 */
+	fetchModelCreator(): Promise<ProfileUser | undefined> {
+		return TtsModel.client.fetchUserProfile(this.creatorUsername);
+	}
+
+	/**
 	 * Rate this model positively, negatively, or neutrally.
 	 *
 	 * @param decision The rating. Can be 'positive', 'negative', or 'neutral'.
@@ -301,7 +232,7 @@ export default class TtsModel {
 	 * @returns The parent categories of this model. The array will be empty if no categories are found.
 	 */
 	async fetchParentCategories(): Promise<Category[]> {
-		const categories = await Category.fetchCategories();
+		const categories = await TtsModel.client.fetchCategories();
 		const categoryTokens = this.categoryTokens;
 
 		return categories.filter((category) => categoryTokens?.includes(category.token));

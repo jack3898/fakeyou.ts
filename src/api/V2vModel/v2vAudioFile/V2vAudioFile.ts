@@ -4,13 +4,13 @@ import { promisify } from 'node:util';
 import type { AudioFile } from '../../../interface/AudioFile.js';
 import { constants } from '../../../util/index.js';
 import { type V2vInferenceStatusDoneSchema } from '../v2vModel.schema.js';
-import V2vModel from '../V2vModel.js';
-import type Client from '../../../services/index.js';
+import Client from '../../../services/index.js';
+import type V2vModel from '../V2vModel.js';
 
 const writeFile = promisify(fs.writeFile);
 
 export default class V2vAudioFile implements AudioFile {
-	constructor(data: V2vInferenceStatusDoneSchema) {
+	constructor(data: V2vInferenceStatusDoneSchema, client: Client) {
 		this.jobToken = data.job_token;
 		this.requestInferenceCategory = data.request.inference_category;
 		this.requestMaybeModelType = data.request.maybe_model_type;
@@ -30,6 +30,8 @@ export default class V2vAudioFile implements AudioFile {
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
 		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`);
+
+		this.#client = client;
 	}
 
 	readonly jobToken: string;
@@ -54,7 +56,7 @@ export default class V2vAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
-	static client: Client;
+	readonly #client: Client;
 
 	/**
 	 * The buffer of the audio file.
@@ -66,7 +68,7 @@ export default class V2vAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const wav = await V2vAudioFile.client.rest.download(this.url, 'audio/wav');
+		const wav = await this.#client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;
@@ -106,6 +108,6 @@ export default class V2vAudioFile implements AudioFile {
 	 * @returns The model that was used to convert this audio file. Undefined if no model could be found.
 	 */
 	async fetchModel(): Promise<V2vModel | undefined> {
-		return V2vModel.fetchModelByToken(this.entityToken);
+		return this.#client.fetchV2vModelByToken(this.entityToken);
 	}
 }
