@@ -1,4 +1,3 @@
-import FakeYouError from '../../error/FakeYouError.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import type TtsModel from '../ttsModel/TtsModel.js';
@@ -135,18 +134,11 @@ export default class ProfileUser {
 	}
 
 	/**
-	 * Fetchg the TTS models of the user profile. These are the models that the user has uploaded.
+	 * Fetch the TTS models of the user profile. These are the models that the user has uploaded.
 	 *
-	 * @returns The TTS models of the user profile. The array will be empty if the user has not uploaded any models.
-	 * @throws {FakeYouError} Fetch of user profile models failed.
+	 * @returns The TTS models of the user profile. Undefined if the models could not be fetched.
 	 */
-	async fetchUserModels(): Promise<Map<string, TtsModel>> {
-		const userModels = await this.#client.fetchTtsModelsByUser(this.username);
-
-		if (userModels) {
-			return userModels;
-		}
-
-		throw new FakeYouError('Fetch of user profile models failed.');
+	fetchUserModels(): Promise<Map<string, TtsModel> | undefined> {
+		return this.#client.fetchTtsModelsByUser(this.username);
 	}
 }

@@ -1,5 +1,4 @@
 import AuthorisationError from '../../error/AuthorisationError.js';
-import FakeYouError from '../../error/FakeYouError.js';
 import { constants, log, prettyParse, extractCookieFromHeaders, mapify } from '../../util/index.js';
 import TtsModel from '../../api/ttsModel/TtsModel.js';
 import { loginSchema } from './client.schema.js';
@@ -56,10 +55,6 @@ export default class Client {
 
 			return extractCookieFromHeaders(response.headers);
 		});
-
-		if (!cookie) {
-			throw new FakeYouError('Login succeeded but there was a problem processing your session token.');
-		}
 
 		this.rest.cookie = cookie;
 

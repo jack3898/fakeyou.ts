@@ -1,7 +1,7 @@
 import { type LeaderboardUserSchema } from './leaderboardUser.schema.js';
 
 export default class LeaderboardUser {
-	constructor(public data: LeaderboardUserSchema) {
+	constructor(data: LeaderboardUserSchema) {
 		this.creatorUserToken = data.creator_user_token;
 		this.username = data.username;
 		this.displayName = data.display_name;
