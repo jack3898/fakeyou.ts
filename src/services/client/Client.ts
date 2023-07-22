@@ -5,14 +5,14 @@ import { loginSchema } from './client.schema.js';
 import { Rest } from '../rest/Rest.js';
 import { Cache } from '../cache/Cache.js';
 import { ttsModelListSchema } from '../../api/ttsModel/ttsModel.schema.js';
-import V2vModel from '../../api/v2vModel/V2vModel.js';
-import { v2vModelListSchema } from '../../api/v2vModel/v2vModel.schema.js';
 import { loggedInUserProfileResponseSchema } from '../../api/sessionUser/sessionUser.schema.js';
 import { Category, Leaderboard, ProfileUser, Queue, SessionUser } from '../../index.js';
 import { leaderboardResponseSchema } from '../../api/leaderboard/leaderboard.schema.js';
 import { userProfileResponseSchema } from '../../api/profileUser/profileUser.schema.js';
 import { queueLengthResponseSchema } from '../../api/queue/queue.schema.js';
 import { categoryListResponseSchema, categoryToModelSchema } from '../../api/category/category.schema.js';
+import { v2vModelListSchema } from '../../api/V2vModel/v2vModel.schema.js';
+import V2vModel from '../../api/V2vModel/V2vModel.js';
 
 export default class Client {
 	constructor(options?: { logging?: boolean }) {
