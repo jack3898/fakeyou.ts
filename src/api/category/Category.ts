@@ -1,10 +1,9 @@
-import type Client from '../../index.js';
-import { constants, prettyParse } from '../../util/index.js';
-import TtsModel from '../ttsModel/TtsModel.js';
-import { categoryListResponseSchema, categoryToModelSchema, type CategorySchema } from './category.schema.js';
+import Client from '../../index.js';
+import type TtsModel from '../ttsModel/TtsModel.js';
+import { type CategorySchema } from './category.schema.js';
 
 export default class Category {
-	constructor(data: CategorySchema) {
+	constructor(data: CategorySchema, client: Client) {
 		this.token = data.category_token;
 		this.parentToken = data.maybe_super_category_token;
 		this.modelType = data.model_type;
@@ -19,6 +18,8 @@ export default class Category {
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
 		this.deletedAt = data.deleted_at;
+
+		this.#client = client;
 	}
 
 	readonly token: string;
@@ -36,60 +37,7 @@ export default class Category {
 	readonly updatedAt: Date;
 	readonly deletedAt: Date | null;
 
-	static client: Client;
-
-	/**
-	 * Fetch all available categories which hold tts models and child categories.
-	 *
-	 * @returns A list of all available categories including their child categories.
-	 */
-	static async fetchCategories(): Promise<Category[]> {
-		return this.client.cache.wrap('fetch-categories', async () => {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/category/list/tts`));
-			const json = prettyParse(categoryListResponseSchema, await response.json());
-
-			return json.categories.map((category) => new this(category));
-		});
-	}
-
-	/**
-	 * Fetch all root categories which hold tts models and child categories. Root categories are categories which have no parent category.
-	 *
-	 * @returns A list of all root categories.
-	 */
-	static async fetchRootCategories(): Promise<Category[]> {
-		const allCategories = await this.fetchCategories();
-
-		return allCategories.filter((category) => !category.parentToken);
-	}
-
-	/**
-	 * Fetch all category to model relationships. This is used to determine which models belong to which categories.
-	 *
-	 * @returns A map of category tokens to tts model tokens.
-	 */
-	static async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
-		return this.client.cache.wrap('fetch-category-model-relationships', async () => {
-			const response = await this.client.rest.send(
-				new URL(`${constants.API_URL}/v1/category/computed_assignments/tts`)
-			);
-			const json = prettyParse(categoryToModelSchema, await response.json());
-
-			return json.category_token_to_tts_model_tokens.recursive;
-		});
-	}
-
-	/**
-	 * Fetch a category by its token.
-	 *
-	 * @param token The token of the category to fetch
-	 * @returns The category
-	 */
-	static async fetchCategoryByToken(token: string): Promise<Category | undefined> {
-		const categories = await this.fetchCategories();
-
-		return categories.find((category) => category.token === token);
-	}
+	readonly #client: Client;
 
 	/**
 	 * Fetch models that belong to this category.
@@ -97,8 +45,8 @@ export default class Category {
 	 * @returns A list of tts models that belong to this category. The array is empty if no models belong to this category.
 	 */
 	async fetchModels(): Promise<TtsModel[]> {
-		const relationships = await Category.fetchCategoryToModelRelationships();
-		const allModels = await TtsModel.fetchModels();
+		const relationships = await this.#client.fetchCategoryToModelRelationships();
+		const allModels = await this.#client.fetchTtsModels();
 		const models = relationships[this.token]
 			.map((modelToken) => allModels.get(modelToken))
 			.filter((model): model is TtsModel => !!model);
@@ -112,7 +60,7 @@ export default class Category {
 	 * @returns The parent category of this category. Undefined if this category has no parent.
 	 */
 	async getParent(): Promise<Category | undefined> {
-		const categories = await Category.fetchCategories();
+		const categories = await this.#client.fetchCategories();
 
 		return categories.find((categoryFromCache) => categoryFromCache.token === this.parentToken);
 	}
@@ -123,7 +71,7 @@ export default class Category {
 	 * @returns The child categories of this category. Empty array if this category has no children.
 	 */
 	async getChildren(): Promise<Category[]> {
-		const categories = await Category.fetchCategories();
+		const categories = await this.#client.fetchCategories();
 
 		return categories.filter((categoryFromCache) => categoryFromCache.parentToken === this.token);
 	}

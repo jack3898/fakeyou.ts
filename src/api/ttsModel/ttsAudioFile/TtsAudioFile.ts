@@ -3,14 +3,14 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../../interface/AudioFile.js';
 import { constants } from '../../../util/index.js';
-import TtsModel from '../TtsModel.js';
+import type TtsModel from '../TtsModel.js';
 import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
-import { Rest } from '../../../services/rest/Rest.js';
+import Client from '../../../services/client/Client.js';
 
 const writeFile = promisify(fs.writeFile);
 
 export default class TtsAudioFile implements AudioFile {
-	constructor(data: TtsInferenceStatusDoneSchema, rest: Rest) {
+	constructor(data: TtsInferenceStatusDoneSchema, client: Client) {
 		this.token = data.job_token;
 		this.status = data.status;
 		this.extraStatusDescription = data.maybe_extra_status_description;
@@ -25,7 +25,7 @@ export default class TtsAudioFile implements AudioFile {
 		this.updatedAt = data.updated_at;
 		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`);
 
-		this.rest = rest;
+		this.#client = client;
 	}
 
 	readonly token: string;
@@ -44,7 +44,7 @@ export default class TtsAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
-	rest: Rest;
+	readonly #client: Client;
 
 	/**
 	 * The buffer of the audio file.
@@ -56,7 +56,7 @@ export default class TtsAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const wav = await this.rest.download(this.url, 'audio/wav');
+		const wav = await this.#client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;
@@ -96,6 +96,6 @@ export default class TtsAudioFile implements AudioFile {
 	 * @returns The TTS model used to generate this audio file. Undefined if the model could not be fetched.
 	 */
 	async fetchModel(): Promise<TtsModel | undefined> {
-		return TtsModel.fetchModelByToken(this.modelToken);
+		return this.#client.fetchTtsModelByToken(this.modelToken);
 	}
 }

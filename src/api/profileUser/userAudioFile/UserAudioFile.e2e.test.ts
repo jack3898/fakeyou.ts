@@ -1,24 +1,30 @@
 import { it, expect } from 'vitest';
 import Client from '../../../services/client/Client.js';
 
-const client = new Client();
-
 it('should fetch user models with success and paginate', async () => {
-	const result = await client.userTtsAudioHistory.fetchUserAudioFiles('jackwright3898');
+	const client = new Client();
+	const user = await client.fetchUserProfile('jackwright3898');
+
+	const result = await user?.fetchUserAudioFiles();
 
 	expect(result?.results.length).toBeGreaterThan(0);
 
-	const nextPage = await client.userTtsAudioHistory.fetchUserAudioFiles('jackwright3898', result?.cursorNext as string);
+	const nextPage = await user?.fetchUserAudioFiles(result?.cursorNext as string);
 
 	expect(nextPage?.results.length).toBeGreaterThan(0);
 
-	const prevPage = await client.userTtsAudioHistory.fetchUserAudioFiles('jackwright3898', nextPage?.cursorPrev as string);
+	const prevPage = await user?.fetchUserAudioFiles(nextPage?.cursorPrev as string);
 
 	expect(prevPage?.results.length).toBeGreaterThan(0);
 });
 
 it('should return no results if no user models could be found', async () => {
-	const result = await client.userTtsAudioHistory.fetchUserAudioFiles(crypto.randomUUID());
+	const client = new Client();
+	const user = await client.fetchUserProfile('jackwright3898');
 
-	expect(result?.results).toStrictEqual([]);
+	expect(user).not.toBeUndefined();
+
+	const result = await user?.fetchUserAudioFiles(crypto.randomUUID());
+
+	expect(result?.results).toStrictEqual(undefined);
 });

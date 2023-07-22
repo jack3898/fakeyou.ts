@@ -1,7 +1,5 @@
-import type Client from '../../index.js';
-import { constants, prettyParse } from '../../util/index.js';
 import LeaderboardUser from './leaderboardUser/LeaderboardUser.js';
-import { type LeaderboardResponseSchema, leaderboardResponseSchema } from './leaderboard.schema.js';
+import { type LeaderboardResponseSchema } from './leaderboard.schema.js';
 
 export default class Leaderboard {
 	constructor(data: LeaderboardResponseSchema) {
@@ -11,23 +9,6 @@ export default class Leaderboard {
 
 	readonly ttsLeaderboard: LeaderboardUser[];
 	readonly w2lLeaderboard: LeaderboardUser[];
-
-	static client: Client;
-
-	/**
-	 * Fetch the leaderboard. This is a global leaderboard of the top contributors to the site.
-	 *
-	 * @returns The leaderboard
-	 */
-	static async fetchLeaderboard(): Promise<Leaderboard> {
-		const json = await this.client.cache.wrap('fetch-leaderboard', async () => {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/leaderboard`));
-
-			return prettyParse(leaderboardResponseSchema, await response.json());
-		});
-
-		return new this(json);
-	}
 
 	/**
 	 * Get an entry from the leaderboard using its index.

@@ -10,20 +10,20 @@ const client = new Client();
 // Please see CONTRIBUTING.md for more information
 
 it('should fetch session user', async () => {
-	const user = await client.sessionUser.fetchLoggedInUser();
+	const user = await client.fetchLoggedInUser();
 
 	expect(user).toBeInstanceOf(SessionUser);
 });
 
 it("should fetch user's profile", async () => {
-	const user = await client.sessionUser.fetchLoggedInUser();
+	const user = await client.fetchLoggedInUser();
 	const profile = await user?.fetchProfile();
 
 	expect(profile).toBeInstanceOf(ProfileUser);
 });
 
 it("should fetch a the session user's profile subscription", async () => {
-	const user = await client.sessionUser.fetchLoggedInUser();
+	const user = await client.fetchLoggedInUser();
 	const subscription = await user?.fetchSubscription();
 
 	expect(subscription).toBeInstanceOf(Subscription);
@@ -34,7 +34,7 @@ it('should return undefined if no user is logged in', async () => {
 
 	const loggedOutClient = new Client(); // Refresh login
 
-	const user = await loggedOutClient.sessionUser.fetchLoggedInUser();
+	const user = await loggedOutClient.fetchLoggedInUser();
 
 	expect(user).toBeUndefined();
 
