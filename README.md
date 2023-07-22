@@ -77,24 +77,6 @@ await client.login({
 
 Or set `FAKEYOU_COOKIE` as an environment variable containing your cookie and it will automatically log in. You may override the environment cookie with the above `login()` method.
 
-## TTS rate limiting helper
-
-Let the client take away the stress of rate limiting with text-to-speech. Using the below approach with `Promise.all()` it will automatically and safely queue each inference so you aren't accidentally rate limited. It is important to note that the more you add, the longer it will take to complete your request (especially if you are not logged in)!
-
-```ts
-const [audio1, audio2, audio3] = await Promise.all([
-    model.infer("Test!"),
-    differentModel.infer("Test 2!"),
-    model.infer("Test 3!"),
-]);
-
-// Do what you like with the audio files from here on!
-```
-
-And the best bit is you can mix a variety of different models within the rate limit guard, which makes it very useful for buffering up a conversation.
-
-_The voice-to-voice rate limit guard is not yet implemented._
-
 ## Features
 
 | Name                               | Description                                                                                      | Status |
@@ -103,7 +85,6 @@ _The voice-to-voice rate limit guard is not yet implemented._
 | Fetch models                       | Fetch models, and view their info, and do your own TTS                                           | ✅     |
 | Text-to-speech download            | Download text-to-speech as buffer, base64, or directly to disk                                   | ✅     |
 | Voice-to-voice download            | Upload a voice then download the voice-to-voice inference as buffer, base64, or directly to disk | ✅     |
-| TTS rate limit handling            | Tooling to help avoid the rate limiting of FakeYou's API                                         | ✅     |
 | Fetch model categories             | Fetch categories, child categories and parent categories and their models                        | ✅     |
 | View and edit user profiles        | View user profiles, and edit profiles you are privileged to edit (like your own)                 | ✅     |
 | Leaderboards                       | Fetch users from the leaderboard                                                                 | ✅     |
@@ -115,6 +96,7 @@ _The voice-to-voice rate limit guard is not yet implemented._
 ... and I will keep this list up to date with more features to come.
 
 ## Contributing
+
 If you would like to contribute, then please read the [contributing guidelines](https://github.com/jack3898/fakeyou.ts/blob/main/.github/CONTRIBUTING.md). Thank you!
 
 ## Q&A
