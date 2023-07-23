@@ -91,8 +91,6 @@ export default class TtsModel {
 
 	/**
 	 * Infer text for this model.
-	 *
-	 * Supports rate limit safety features. You can trigger the rate limit guard by passing multiple `model.infer()` calls in a `Promise.all([...])`
 	 */
 	async infer(text: string): Promise<TtsAudioFile | undefined> {
 		const inference = await this.#fetchInference(text);
