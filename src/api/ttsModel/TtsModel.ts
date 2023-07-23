@@ -1,7 +1,9 @@
 import crypto from 'node:crypto';
-import { type default as Client, type ProfileUser } from '../../index.js';
+import { type default as Client } from '../../index.js';
+import { type BaseClass } from '../../interface/BaseClass.js';
 import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
 import type Category from '../category/Category.js';
+import type ProfileUser from '../profileUser/ProfileUser.js';
 import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
 import {
 	ttsInferenceResultSchema,
@@ -13,8 +15,10 @@ import {
 	type TtsModelSchema
 } from './ttsModel.schema.js';
 
-export default class TtsModel {
+export default class TtsModel implements BaseClass {
 	constructor(data: TtsModelSchema, client: Client) {
+		this.client = client;
+
 		this.token = data.model_token;
 		this.ttsModelType = data.tts_model_type;
 		this.creatorToken = data.creator_user_token;
@@ -30,9 +34,9 @@ export default class TtsModel {
 		this.categoryTokens = data.category_tokens;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-
-		this.client = client;
 	}
+
+	readonly client: Client;
 
 	readonly token: string;
 	readonly ttsModelType: string;
@@ -49,8 +53,6 @@ export default class TtsModel {
 	readonly categoryTokens: string[] | null;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-
-	client: Client;
 
 	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
 		const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/inference`), {
@@ -97,7 +99,7 @@ export default class TtsModel {
 		const audio = inference.success && (await this.#getAudioUrl(inference.inference_job_token));
 
 		if (audio) {
-			return new TtsAudioFile(audio, this.client);
+			return new TtsAudioFile(this.client, audio);
 		}
 	}
 

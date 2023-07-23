@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { AudioFile } from '../../../interface/AudioFile.js';
+import { type BaseClass } from '../../../interface/BaseClass.js';
 import Client from '../../../services/client/Client.js';
 import { constants } from '../../../util/index.js';
 import type TtsModel from '../TtsModel.js';
@@ -9,8 +10,10 @@ import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 
-export default class TtsAudioFile implements AudioFile {
-	constructor(data: TtsInferenceStatusDoneSchema, client: Client) {
+export default class TtsAudioFile implements AudioFile, BaseClass {
+	constructor(client: Client, data: TtsInferenceStatusDoneSchema) {
+		this.client = client;
+
 		this.token = data.job_token;
 		this.status = data.status;
 		this.extraStatusDescription = data.maybe_extra_status_description;
@@ -24,9 +27,9 @@ export default class TtsAudioFile implements AudioFile {
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
 		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`);
-
-		this.#client = client;
 	}
+
+	readonly client: Client;
 
 	readonly token: string;
 	readonly status: string;
@@ -44,8 +47,6 @@ export default class TtsAudioFile implements AudioFile {
 
 	#buffer?: Buffer;
 
-	readonly #client: Client;
-
 	/**
 	 * The buffer of the audio file.
 	 *
@@ -56,7 +57,7 @@ export default class TtsAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const wav = await this.#client.rest.download(this.url, 'audio/wav');
+		const wav = await this.client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;
@@ -96,6 +97,6 @@ export default class TtsAudioFile implements AudioFile {
 	 * @returns The TTS model used to generate this audio file. Undefined if the model could not be fetched.
 	 */
 	async fetchModel(): Promise<TtsModel | undefined> {
-		return this.#client.fetchTtsModelByToken(this.modelToken);
+		return this.client.fetchTtsModelByToken(this.modelToken);
 	}
 }

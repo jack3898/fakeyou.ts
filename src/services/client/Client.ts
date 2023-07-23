@@ -1,14 +1,18 @@
 import V2vModel from '../../api/V2vModel/V2vModel.js';
 import { v2vModelListSchema } from '../../api/V2vModel/v2vModel.schema.js';
+import Category from '../../api/category/Category.js';
 import { categoryListResponseSchema, categoryToModelSchema } from '../../api/category/category.schema.js';
+import Leaderboard from '../../api/leaderboard/Leaderboard.js';
 import { leaderboardResponseSchema } from '../../api/leaderboard/leaderboard.schema.js';
+import ProfileUser from '../../api/profileUser/ProfileUser.js';
 import { userProfileResponseSchema } from '../../api/profileUser/profileUser.schema.js';
+import Queue from '../../api/queue/Queue.js';
 import { queueLengthResponseSchema } from '../../api/queue/queue.schema.js';
+import SessionUser from '../../api/sessionUser/SessionUser.js';
 import { loggedInUserProfileResponseSchema } from '../../api/sessionUser/sessionUser.schema.js';
 import TtsModel from '../../api/ttsModel/TtsModel.js';
 import { ttsModelListSchema } from '../../api/ttsModel/ttsModel.schema.js';
 import AuthorisationError from '../../error/AuthorisationError.js';
-import { Category, Leaderboard, ProfileUser, Queue, SessionUser } from '../../index.js';
 import { constants, extractCookieFromHeaders, log, mapify, prettyParse } from '../../util/index.js';
 import { Cache } from '../cache/Cache.js';
 import { Rest } from '../rest/Rest.js';
@@ -150,7 +154,7 @@ export default class Client {
 		return this.cache.wrap('fetch-v2v-models', async () => {
 			const response = await this.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
 			const json = prettyParse(v2vModelListSchema, await response.json());
-			const models = json.models.map((modelData) => new V2vModel(modelData, this));
+			const models = json.models.map((modelData) => new V2vModel(this, modelData));
 
 			return mapify('token', models);
 		});
@@ -179,7 +183,7 @@ export default class Client {
 			const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
 
 			if (loggedInUser.logged_in) {
-				return new SessionUser(loggedInUser.user, this);
+				return new SessionUser(this, loggedInUser.user);
 			}
 		} catch (error) {
 			log.error(`Response from API failed validation. Could not load session user.\n${error}`);
@@ -215,7 +219,7 @@ export default class Client {
 				return prettyParse(userProfileResponseSchema, await response.json());
 			});
 
-			return new ProfileUser(json.user, this);
+			return new ProfileUser(this, json.user);
 		} catch (error) {
 			log.error(
 				`Response from API failed validation. Check the username you provided, it can be different to their display name.\n${error}`
@@ -247,7 +251,7 @@ export default class Client {
 			const response = await this.rest.send(new URL(`${constants.API_URL}/category/list/tts`));
 			const json = prettyParse(categoryListResponseSchema, await response.json());
 
-			return json.categories.map((category) => new Category(category, this));
+			return json.categories.map((category) => new Category(this, category));
 		});
 	}
 

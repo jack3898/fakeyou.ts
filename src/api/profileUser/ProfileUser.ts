@@ -1,4 +1,5 @@
 import Client from '../../index.js';
+import { type BaseClass } from '../../interface/BaseClass.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import type TtsModel from '../ttsModel/TtsModel.js';
@@ -17,8 +18,10 @@ type PaginatedUserAudioFiles = {
 	results: UserAudioFile[];
 };
 
-export default class ProfileUser {
-	constructor(data: UserProfileSchema, client: Client) {
+export default class ProfileUser implements BaseClass {
+	constructor(client: Client, data: UserProfileSchema) {
+		this.client = client;
+
 		this.token = data.user_token;
 		this.username = data.username;
 		this.displayName = data.display_name;
@@ -41,9 +44,9 @@ export default class ProfileUser {
 		this.createdAt = data.created_at;
 		this.moderatorFields = data.maybe_moderator_fields;
 		this.badges = data.badges.map((badge) => new Badge(badge));
-
-		this.#client = client;
 	}
+
+	readonly client: Client;
 
 	readonly token: string;
 	readonly username: string;
@@ -68,8 +71,6 @@ export default class ProfileUser {
 	readonly moderatorFields: string | null;
 	readonly badges: Badge[];
 
-	readonly #client: Client;
-
 	/**
 	 * Edit the user profile.
 	 *
@@ -90,7 +91,7 @@ export default class ProfileUser {
 				...newValues
 			});
 
-			const result = await this.#client.rest.send(new URL(`${constants.API_URL}/user/${this.username}/edit_profile`), {
+			const result = await this.client.rest.send(new URL(`${constants.API_URL}/user/${this.username}/edit_profile`), {
 				method: 'POST',
 				body: JSON.stringify(body)
 			});
@@ -119,9 +120,9 @@ export default class ProfileUser {
 		}
 
 		try {
-			const response = await this.#client.rest.send(url);
+			const response = await this.client.rest.send(url);
 			const json = prettyParse(userTtsListResponseSchema, await response.json());
-			const results = json.results.map((userTtsAudioEntry) => new UserAudioFile(userTtsAudioEntry));
+			const results = json.results.map((userTtsAudioEntry) => new UserAudioFile(this.client, userTtsAudioEntry));
 
 			return {
 				cursorNext: json.cursor_next,
@@ -139,6 +140,6 @@ export default class ProfileUser {
 	 * @returns The TTS models of the user profile. Undefined if the models could not be fetched.
 	 */
 	fetchUserModels(): Promise<Map<string, TtsModel> | undefined> {
-		return this.#client.fetchTtsModelsByUser(this.username);
+		return this.client.fetchTtsModelsByUser(this.username);
 	}
 }
