@@ -8,7 +8,8 @@
         "rootDir": "src",
         "types": ["node"],
         "declaration": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "sourceMap": true
     },
-    "exclude": ["dist", "vitest.config.ts"],
+    "exclude": ["dist", "vitest.config.ts", "**/*.e2e.test.ts", "**/*.unit.test.ts"],
 }
