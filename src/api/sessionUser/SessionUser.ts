@@ -80,7 +80,7 @@ export default class SessionUser implements BaseClass {
 	 */
 	async fetchSubscription(): Promise<Subscription | undefined> {
 		try {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
+			const response = await this.client.rest.send(`${constants.API_URL}/v1/billing/active_subscriptions`);
 			const json = prettyParse(activeSubscriptionsResponseSchema, await response.json());
 
 			return new Subscription(json);

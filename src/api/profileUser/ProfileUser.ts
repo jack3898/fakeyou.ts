@@ -91,7 +91,7 @@ export default class ProfileUser implements BaseClass {
 				...newValues
 			});
 
-			const result = await this.client.rest.send(new URL(`${constants.API_URL}/user/${this.username}/edit_profile`), {
+			const result = await this.client.rest.send(`${constants.API_URL}/user/${this.username}/edit_profile`, {
 				method: 'POST',
 				body: JSON.stringify(body)
 			});
@@ -113,14 +113,15 @@ export default class ProfileUser implements BaseClass {
 	 * @returns The user audio file. Undefined if the audio file could not be fetched.
 	 */
 	async fetchUserAudioFiles(cursor?: string): Promise<PaginatedUserAudioFiles | undefined> {
-		const url = new URL(`${constants.API_URL}/user/${this.username}/tts_results?limit=10`);
+		const url = new URL(`${constants.API_URL}/user/${this.username}/tts_results`);
 
 		if (cursor) {
+			url.searchParams.append('limit', '10');
 			url.searchParams.append('cursor', cursor);
 		}
 
 		try {
-			const response = await this.client.rest.send(url);
+			const response = await this.client.rest.send(url.href);
 			const json = prettyParse(userTtsListResponseSchema, await response.json());
 			const results = json.results.map((userTtsAudioEntry) => new UserAudioFile(this.client, userTtsAudioEntry));
 

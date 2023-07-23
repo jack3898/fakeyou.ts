@@ -7,13 +7,13 @@ import Client from '../client/Client.js';
 const writeFile = promisify(fs.writeFile);
 
 export class AudioFile implements BaseClass {
-	constructor(client: Client, url: URL) {
+	constructor(client: Client, url: string) {
 		this.client = client;
 		this.resourceUrl = url;
 	}
 
 	readonly client: Client;
-	readonly resourceUrl: URL;
+	readonly resourceUrl: string;
 
 	#buffer?: Buffer;
 

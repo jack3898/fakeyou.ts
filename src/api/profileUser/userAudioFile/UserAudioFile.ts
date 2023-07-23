@@ -6,7 +6,7 @@ import { type UserTtsSchema } from './userAudioFile.schema.js';
 
 export default class UserAudioFile implements Audio {
 	constructor(client: Client, data: UserTtsSchema) {
-		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`);
+		this.url = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;
 		this.audioFile = new AudioFile(client, this.url);
 
 		this.ttsResultToken = data.tts_result_token;
@@ -25,7 +25,7 @@ export default class UserAudioFile implements Audio {
 		this.updatedAt = data.updated_at;
 	}
 
-	readonly url: URL;
+	readonly url: string;
 	readonly audioFile: AudioFile;
 
 	readonly ttsResultToken: string;

@@ -41,7 +41,7 @@ export default class Client {
 		log.info('Logging in...');
 
 		const cookie = await this.cache.wrap('login', async () => {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/login`), {
+			const response = await this.rest.send(`${constants.API_URL}/login`, {
 				method: 'POST',
 				body: JSON.stringify({
 					username_or_email: credentials.username,
@@ -69,7 +69,7 @@ export default class Client {
 	 * @returns Whether the logout was successful.
 	 */
 	async logout(): Promise<boolean> {
-		const response = await this.rest.send(new URL(`${constants.API_URL}/logout`), { method: 'POST' });
+		const response = await this.rest.send(`${constants.API_URL}/logout`, { method: 'POST' });
 		const { success } = prettyParse(loginSchema, await response.json());
 
 		this.rest.cookie = undefined;
@@ -87,7 +87,7 @@ export default class Client {
 	 */
 	fetchTtsModels(): Promise<Map<string, TtsModel>> {
 		return this.cache.wrap('fetch-tts-models', async () => {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/tts/list`));
+			const response = await this.rest.send(`${constants.API_URL}/tts/list`);
 			const json = prettyParse(ttsModelListSchema, await response.json());
 			const ttsModels = json.models.map((model) => new TtsModel(model, this));
 
@@ -117,7 +117,7 @@ export default class Client {
 	 */
 	async fetchTtsModelsByUser(username: string): Promise<Map<string, TtsModel> | undefined> {
 		try {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/user/${username}/tts_models`));
+			const response = await this.rest.send(`${constants.API_URL}/user/${username}/tts_models`);
 			const json = prettyParse(ttsModelListSchema, await response.json());
 			const ttsModels = json.models.map((model) => new TtsModel(model, this));
 
@@ -152,7 +152,7 @@ export default class Client {
 	 */
 	fetchV2vModels(): Promise<Map<string, V2vModel>> {
 		return this.cache.wrap('fetch-v2v-models', async () => {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/model_list`));
+			const response = await this.rest.send(`${constants.API_URL}/v1/voice_conversion/model_list`);
 			const json = prettyParse(v2vModelListSchema, await response.json());
 			const models = json.models.map((modelData) => new V2vModel(this, modelData));
 
@@ -179,7 +179,7 @@ export default class Client {
 	 */
 	async fetchLoggedInUser(): Promise<SessionUser | undefined> {
 		try {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/session`));
+			const response = await this.rest.send(`${constants.API_URL}/session`);
 			const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
 
 			if (loggedInUser.logged_in) {
@@ -197,7 +197,7 @@ export default class Client {
 	 */
 	async fetchLeaderboard(): Promise<Leaderboard> {
 		const json = await this.cache.wrap('fetch-leaderboard', async () => {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/leaderboard`));
+			const response = await this.rest.send(`${constants.API_URL}/leaderboard`);
 
 			return prettyParse(leaderboardResponseSchema, await response.json());
 		});
@@ -214,7 +214,7 @@ export default class Client {
 	async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
 			const json = await this.cache.wrap('fetch-user-profile', async () => {
-				const response = await this.rest.send(new URL(`${constants.API_URL}/user/${username}/profile`));
+				const response = await this.rest.send(`${constants.API_URL}/user/${username}/profile`);
 
 				return prettyParse(userProfileResponseSchema, await response.json());
 			});
@@ -235,7 +235,7 @@ export default class Client {
 	 * @returns The queue
 	 */
 	async fetchQueue(): Promise<Queue> {
-		const response = await this.rest.send(new URL(`${constants.API_URL}/tts/queue_length`));
+		const response = await this.rest.send(`${constants.API_URL}/tts/queue_length`);
 		const json = prettyParse(queueLengthResponseSchema, await response.json());
 
 		return new Queue(json);
@@ -248,7 +248,7 @@ export default class Client {
 	 */
 	async fetchCategories(): Promise<Category[]> {
 		return this.cache.wrap('fetch-categories', async () => {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/category/list/tts`));
+			const response = await this.rest.send(`${constants.API_URL}/category/list/tts`);
 			const json = prettyParse(categoryListResponseSchema, await response.json());
 
 			return json.categories.map((category) => new Category(this, category));
@@ -273,7 +273,7 @@ export default class Client {
 	 */
 	async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
 		return this.cache.wrap('fetch-category-model-relationships', async () => {
-			const response = await this.rest.send(new URL(`${constants.API_URL}/v1/category/computed_assignments/tts`));
+			const response = await this.rest.send(`${constants.API_URL}/v1/category/computed_assignments/tts`);
 			const json = prettyParse(categoryToModelSchema, await response.json());
 
 			return json.category_token_to_tts_model_tokens.recursive;
