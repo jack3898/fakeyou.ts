@@ -55,7 +55,7 @@ export default class TtsModel implements BaseClass {
 	readonly updatedAt: Date;
 
 	async #fetchInference(text: string): Promise<TtsInferenceResultSchema> {
-		const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/inference`), {
+		const response = await this.client.rest.send(`${constants.API_URL}/tts/inference`, {
 			method: 'POST',
 			body: JSON.stringify({
 				tts_model_token: this.token,
@@ -69,7 +69,7 @@ export default class TtsModel implements BaseClass {
 
 	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | undefined> {
 		return poll(async () => {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/tts/job/${inferenceJobToken}`));
+			const response = await this.client.rest.send(`${constants.API_URL}/tts/job/${inferenceJobToken}`);
 			const result = prettyParse(ttsRequestStatusResponseSchema, await response.json());
 
 			switch (result.state.status) {
@@ -110,9 +110,7 @@ export default class TtsModel implements BaseClass {
 	 */
 	async fetchMyRating(): Promise<RatingSchema | undefined> {
 		try {
-			const response = await this.client.rest.send(
-				new URL(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`)
-			);
+			const response = await this.client.rest.send(`${constants.API_URL}/v1/user_rating/view/tts_model/${this.token}`);
 			const json = prettyParse(userRatingResponseSchema, await response.json());
 
 			return json.maybe_rating_value;
@@ -138,7 +136,7 @@ export default class TtsModel implements BaseClass {
 	 */
 	async rate(decision: RatingSchema): Promise<RatingSchema | undefined> {
 		try {
-			await this.client.rest.send(new URL(`${constants.API_URL}/v1/user_rating/rate`), {
+			await this.client.rest.send(`${constants.API_URL}/v1/user_rating/rate`, {
 				method: 'POST',
 				body: JSON.stringify({
 					entity_type: 'tts_model',

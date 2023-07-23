@@ -9,7 +9,7 @@ import { type V2vInferenceStatusDoneSchema } from '../v2vModel.schema.js';
 export default class V2vAudioFile implements Audio, BaseClass {
 	constructor(client: Client, data: V2vInferenceStatusDoneSchema) {
 		this.client = client;
-		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`);
+		this.url = `${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`;
 		this.audioFile = new AudioFile(client, this.url);
 
 		this.jobToken = data.job_token;
@@ -34,7 +34,7 @@ export default class V2vAudioFile implements Audio, BaseClass {
 
 	readonly client: Client;
 	readonly audioFile: AudioFile;
-	readonly url: URL;
+	readonly url: string;
 
 	readonly jobToken: string;
 	readonly requestInferenceCategory: string;

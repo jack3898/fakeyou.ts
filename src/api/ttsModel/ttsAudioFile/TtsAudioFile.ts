@@ -9,7 +9,7 @@ import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
 export default class TtsAudioFile implements Audio, BaseClass {
 	constructor(client: Client, data: TtsInferenceStatusDoneSchema) {
 		this.client = client;
-		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`);
+		this.url = `${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`;
 		this.audioFile = new AudioFile(client, this.url);
 
 		this.token = data.job_token;
@@ -41,7 +41,7 @@ export default class TtsAudioFile implements Audio, BaseClass {
 	readonly rawInferenceText: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-	readonly url: URL;
+	readonly url: string;
 
 	/**
 	 * Fetch the TTS model used to generate this audio file.

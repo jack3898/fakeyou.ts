@@ -11,8 +11,10 @@ export class Rest {
 	 * @param url The URL to send the request to.
 	 * @param request The request options to send.
 	 */
-	send(url: URL, request?: RequestInit): Promise<Response> {
-		log.http(url);
+	send(url: string, request?: RequestInit): Promise<Response> {
+		const urlInstance = new URL(url);
+
+		log.http(urlInstance);
 
 		const headers = new Headers();
 
@@ -28,7 +30,7 @@ export class Rest {
 			headers.append('cookie', `session=${this.#cookie}`);
 		}
 
-		return fetch(url, {
+		return fetch(urlInstance, {
 			headers,
 			...request
 		});
@@ -40,7 +42,7 @@ export class Rest {
 	 * @param url The URL to download from.
 	 * @param mime The mime type of the file.
 	 */
-	async download(url: URL, mime: string): Promise<Buffer | undefined> {
+	async download(url: string, mime: string): Promise<Buffer | undefined> {
 		const headers = new Headers();
 
 		headers.append('content-type', mime);
@@ -77,7 +79,7 @@ export class Rest {
 	 * @param mime The mime type of the file.
 	 * @returns The response from the server.
 	 */
-	async upload(url: URL, data: Buffer, mime: string): Promise<Response> {
+	async upload(url: string, data: Buffer, mime: string): Promise<Response> {
 		const headers = new Headers();
 		const formData = new FormData();
 		const blob = new Blob([data], { type: mime });

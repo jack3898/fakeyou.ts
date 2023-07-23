@@ -50,7 +50,7 @@ export default class V2vModel implements BaseClass {
 	async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | undefined> {
 		try {
 			const response = await this.client.rest.upload(
-				new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`),
+				`${constants.API_URL}/v1/media_uploads/upload_audio`,
 				file,
 				'audio/wav'
 			);
@@ -64,7 +64,7 @@ export default class V2vModel implements BaseClass {
 	}
 
 	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | undefined> {
-		const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
+		const response = await this.client.rest.send(`${constants.API_URL}/v1/voice_conversion/inference`, {
 			method: 'POST',
 			body: JSON.stringify({
 				uuid_idempotency_token: crypto.randomUUID(),
@@ -88,7 +88,7 @@ export default class V2vModel implements BaseClass {
 		return poll(
 			async () => {
 				const response = await this.client.rest.send(
-					new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
+					`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`
 				);
 				const result = prettyParse(v2vRequestStatusResponseSchema, await response.json());
 
