@@ -1,18 +1,16 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { promisify } from 'node:util';
-import type { AudioFile } from '../../../interface/AudioFile.js';
+import { type Audio } from '../../../interface/Audio.js';
 import { type BaseClass } from '../../../interface/BaseClass.js';
+import { AudioFile } from '../../../services/audioFile/AudioFile.js';
 import Client from '../../../services/index.js';
 import { constants } from '../../../util/index.js';
 import type V2vModel from '../V2vModel.js';
 import { type V2vInferenceStatusDoneSchema } from '../v2vModel.schema.js';
 
-const writeFile = promisify(fs.writeFile);
-
-export default class V2vAudioFile implements AudioFile, BaseClass {
+export default class V2vAudioFile implements Audio, BaseClass {
 	constructor(client: Client, data: V2vInferenceStatusDoneSchema) {
 		this.client = client;
+		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`);
+		this.audioFile = new AudioFile(client, this.url);
 
 		this.jobToken = data.job_token;
 		this.requestInferenceCategory = data.request.inference_category;
@@ -32,10 +30,11 @@ export default class V2vAudioFile implements AudioFile, BaseClass {
 		this.maybeSuccessfullyCompletedAt = data.maybe_result.maybe_successfully_completed_at;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`);
 	}
 
 	readonly client: Client;
+	readonly audioFile: AudioFile;
+	readonly url: URL;
 
 	readonly jobToken: string;
 	readonly requestInferenceCategory: string;
@@ -55,53 +54,6 @@ export default class V2vAudioFile implements AudioFile, BaseClass {
 	readonly maybeSuccessfullyCompletedAt: Date | null;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-	readonly url: URL;
-
-	#buffer?: Buffer;
-
-	/**
-	 * The buffer of the audio file.
-	 *
-	 * @returns The buffer of the audio file.
-	 */
-	async toBuffer(): Promise<Buffer | undefined> {
-		if (this.#buffer) {
-			return this.#buffer;
-		}
-
-		const wav = await this.client.rest.download(this.url, 'audio/wav');
-
-		if (wav) {
-			this.#buffer = wav;
-
-			return this.#buffer;
-		}
-	}
-
-	/**
-	 * Convert the audio file to a base64 string.
-	 *
-	 * @returns A promise that resolves to the base64 string of the audio file.
-	 */
-	async toBase64(): Promise<string | undefined> {
-		const buffer = await this.toBuffer();
-
-		return buffer && Buffer.from(buffer).toString('base64');
-	}
-
-	/**
-	 * Write the audio file to disk.
-	 *
-	 * @param location The location to write the audio file to.
-	 * @returns A promise that resolves when the audio file has been written to disk.
-	 */
-	async toDisk(location: `${string}.wav`): Promise<void> {
-		const buffer = await this.toBuffer();
-
-		if (buffer) {
-			return writeFile(path.resolve(location), buffer);
-		}
-	}
 
 	/**
 	 * Fetch the model that was used to convert this audio file.

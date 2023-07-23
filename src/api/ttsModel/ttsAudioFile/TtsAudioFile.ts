@@ -1,18 +1,16 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { promisify } from 'node:util';
-import type { AudioFile } from '../../../interface/AudioFile.js';
+import { type Audio } from '../../../interface/Audio.js';
 import { type BaseClass } from '../../../interface/BaseClass.js';
+import { AudioFile } from '../../../services/audioFile/AudioFile.js';
 import Client from '../../../services/client/Client.js';
 import { constants } from '../../../util/index.js';
 import type TtsModel from '../TtsModel.js';
 import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
 
-const writeFile = promisify(fs.writeFile);
-
-export default class TtsAudioFile implements AudioFile, BaseClass {
+export default class TtsAudioFile implements Audio, BaseClass {
 	constructor(client: Client, data: TtsInferenceStatusDoneSchema) {
 		this.client = client;
+		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`);
+		this.audioFile = new AudioFile(client, this.url);
 
 		this.token = data.job_token;
 		this.status = data.status;
@@ -26,10 +24,10 @@ export default class TtsAudioFile implements AudioFile, BaseClass {
 		this.rawInferenceText = data.raw_inference_text;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`);
 	}
 
 	readonly client: Client;
+	readonly audioFile: AudioFile;
 
 	readonly token: string;
 	readonly status: string;
@@ -44,52 +42,6 @@ export default class TtsAudioFile implements AudioFile, BaseClass {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 	readonly url: URL;
-
-	#buffer?: Buffer;
-
-	/**
-	 * The buffer of the audio file.
-	 *
-	 * @returns The buffer.
-	 */
-	async toBuffer(): Promise<Buffer | undefined> {
-		if (this.#buffer) {
-			return this.#buffer;
-		}
-
-		const wav = await this.client.rest.download(this.url, 'audio/wav');
-
-		if (wav) {
-			this.#buffer = wav;
-
-			return this.#buffer;
-		}
-	}
-
-	/**
-	 * The base64 string of the audio file.
-	 *
-	 * @returns The base64 string.
-	 */
-	async toBase64(): Promise<string | undefined> {
-		const buffer = await this.toBuffer();
-
-		return buffer && Buffer.from(buffer).toString('base64');
-	}
-
-	/**
-	 * Write the audio file to disk.
-	 *
-	 * @param location The location to write the file to (must be a wav)
-	 * @returns A promise that resolves when the file has been written. Rejects if the file could not be written.
-	 */
-	async toDisk(location: `${string}.wav`): Promise<void> {
-		const buffer = await this.toBuffer();
-
-		if (buffer) {
-			return writeFile(path.resolve(location), buffer);
-		}
-	}
 
 	/**
 	 * Fetch the TTS model used to generate this audio file.

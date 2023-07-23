@@ -1,17 +1,13 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { promisify } from 'node:util';
 import Client from '../../../index.js';
-import type { AudioFile } from '../../../interface/AudioFile.js';
-import { type BaseClass } from '../../../interface/BaseClass.js';
+import type { Audio } from '../../../interface/Audio.js';
+import { AudioFile } from '../../../services/audioFile/AudioFile.js';
 import { constants } from '../../../util/index.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
 
-const writeFile = promisify(fs.writeFile);
-
-export default class UserAudioFile implements AudioFile, BaseClass {
+export default class UserAudioFile implements Audio {
 	constructor(client: Client, data: UserTtsSchema) {
-		this.client = client;
+		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`);
+		this.audioFile = new AudioFile(client, this.url);
 
 		this.ttsResultToken = data.tts_result_token;
 		this.ttsModelToken = data.tts_model_token;
@@ -27,10 +23,10 @@ export default class UserAudioFile implements AudioFile, BaseClass {
 		this.visibility = data.visibility;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`);
 	}
 
-	readonly client: Client;
+	readonly url: URL;
+	readonly audioFile: AudioFile;
 
 	readonly ttsResultToken: string;
 	readonly ttsModelToken: string;
@@ -46,52 +42,4 @@ export default class UserAudioFile implements AudioFile, BaseClass {
 	readonly visibility: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-	readonly url: URL;
-
-	#buffer?: Buffer;
-
-	/**
-	 * Convert the audio file to a buffer.
-	 *
-	 * @returns The buffer.
-	 */
-	async toBuffer(): Promise<Buffer | undefined> {
-		if (this.#buffer) {
-			return this.#buffer;
-		}
-
-		const wav = await this.client.rest.download(this.url, 'audio/wav');
-
-		if (wav) {
-			this.#buffer = wav;
-
-			return this.#buffer;
-		}
-	}
-
-	/**
-	 * Convert the audio file to a base64 string.
-	 *
-	 * @returns The base64 string.
-	 */
-	async toBase64(): Promise<string | undefined> {
-		const buffer = await this.toBuffer();
-
-		return buffer && Buffer.from(buffer).toString('base64');
-	}
-
-	/**
-	 * Write the audio file to disk.
-	 *
-	 * @param location The location to write the file to (including the file type)
-	 * @returns A promise that resolves when the file has been written.
-	 * @rejects If the file could not be written.
-	 */
-	async toDisk(location: `${string}.wav`): Promise<void> {
-		const buffer = await this.toBuffer();
-
-		if (buffer) {
-			return writeFile(path.resolve(location), buffer);
-		}
-	}
 }
