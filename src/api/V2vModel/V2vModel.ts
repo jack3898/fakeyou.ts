@@ -1,4 +1,5 @@
 import Client from '../../index.js';
+import { type BaseClass } from '../../interface/BaseClass.js';
 import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
 import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
@@ -11,8 +12,10 @@ import {
 	type V2vVoiceUploadResponseSchema
 } from './v2vModel.schema.js';
 
-export default class V2vModel {
-	constructor(data: V2vModelSchema, client: Client) {
+export default class V2vModel implements BaseClass {
+	constructor(client: Client, data: V2vModelSchema) {
+		this.client = client;
+
 		this.token = data.token;
 		this.modelType = data.model_type;
 		this.title = data.title;
@@ -26,9 +29,9 @@ export default class V2vModel {
 		this.isFrontPageFeatured = data.is_front_page_featured;
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
-
-		this.#client = client;
 	}
+
+	readonly client: Client;
 
 	readonly token: string;
 	readonly modelType: string;
@@ -44,11 +47,9 @@ export default class V2vModel {
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
 
-	readonly #client: Client;
-
 	async #uploadAudio(file: Buffer): Promise<V2vVoiceUploadResponseSchema | undefined> {
 		try {
-			const response = await this.#client.rest.upload(
+			const response = await this.client.rest.upload(
 				new URL(`${constants.API_URL}/v1/media_uploads/upload_audio`),
 				file,
 				'audio/wav'
@@ -63,7 +64,7 @@ export default class V2vModel {
 	}
 
 	async #fetchInference(uploadToken: string): Promise<V2vInferenceSchema | undefined> {
-		const response = await this.#client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
+		const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/voice_conversion/inference`), {
 			method: 'POST',
 			body: JSON.stringify({
 				uuid_idempotency_token: crypto.randomUUID(),
@@ -86,7 +87,7 @@ export default class V2vModel {
 	#getAudioUrl(inferenceJobToken: string): Promise<V2vInferenceStatusDoneSchema | undefined> {
 		return poll(
 			async () => {
-				const response = await this.#client.rest.send(
+				const response = await this.client.rest.send(
 					new URL(`${constants.API_URL}/v1/model_inference/job_status/${inferenceJobToken}`)
 				);
 				const result = prettyParse(v2vRequestStatusResponseSchema, await response.json());
@@ -134,7 +135,7 @@ export default class V2vModel {
 		const audioUrl = await this.#getAudioUrl(inference.inference_job_token);
 
 		if (audioUrl) {
-			return new V2vAudioFile(audioUrl, this.#client);
+			return new V2vAudioFile(this.client, audioUrl);
 		}
 	}
 }

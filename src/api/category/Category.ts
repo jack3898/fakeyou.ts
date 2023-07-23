@@ -1,9 +1,12 @@
 import Client from '../../index.js';
+import { type BaseClass } from '../../interface/BaseClass.js';
 import type TtsModel from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';
 
-export default class Category {
-	constructor(data: CategorySchema, client: Client) {
+export default class Category implements BaseClass {
+	constructor(client: Client, data: CategorySchema) {
+		this.client = client;
+
 		this.token = data.category_token;
 		this.parentToken = data.maybe_super_category_token;
 		this.modelType = data.model_type;
@@ -18,9 +21,9 @@ export default class Category {
 		this.createdAt = data.created_at;
 		this.updatedAt = data.updated_at;
 		this.deletedAt = data.deleted_at;
-
-		this.#client = client;
 	}
+
+	readonly client: Client;
 
 	readonly token: string;
 	readonly parentToken: string | null;
@@ -37,16 +40,14 @@ export default class Category {
 	readonly updatedAt: Date;
 	readonly deletedAt: Date | null;
 
-	readonly #client: Client;
-
 	/**
 	 * Fetch models that belong to this category.
 	 *
 	 * @returns A list of tts models that belong to this category. The array is empty if no models belong to this category.
 	 */
 	async fetchModels(): Promise<TtsModel[]> {
-		const relationships = await this.#client.fetchCategoryToModelRelationships();
-		const allModels = await this.#client.fetchTtsModels();
+		const relationships = await this.client.fetchCategoryToModelRelationships();
+		const allModels = await this.client.fetchTtsModels();
 		const models = relationships[this.token]
 			.map((modelToken) => allModels.get(modelToken))
 			.filter((model): model is TtsModel => !!model);
@@ -60,7 +61,7 @@ export default class Category {
 	 * @returns The parent category of this category. Undefined if this category has no parent.
 	 */
 	async getParent(): Promise<Category | undefined> {
-		const categories = await this.#client.fetchCategories();
+		const categories = await this.client.fetchCategories();
 
 		return categories.find((categoryFromCache) => categoryFromCache.token === this.parentToken);
 	}
@@ -71,7 +72,7 @@ export default class Category {
 	 * @returns The child categories of this category. Empty array if this category has no children.
 	 */
 	async getChildren(): Promise<Category[]> {
-		const categories = await this.#client.fetchCategories();
+		const categories = await this.client.fetchCategories();
 
 		return categories.filter((categoryFromCache) => categoryFromCache.parentToken === this.token);
 	}

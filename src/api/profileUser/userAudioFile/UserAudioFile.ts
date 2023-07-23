@@ -1,15 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import type Client from '../../../index.js';
+import Client from '../../../index.js';
 import type { AudioFile } from '../../../interface/AudioFile.js';
+import { type BaseClass } from '../../../interface/BaseClass.js';
 import { constants } from '../../../util/index.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 
-export default class UserAudioFile implements AudioFile {
-	constructor(data: UserTtsSchema) {
+export default class UserAudioFile implements AudioFile, BaseClass {
+	constructor(client: Client, data: UserTtsSchema) {
+		this.client = client;
+
 		this.ttsResultToken = data.tts_result_token;
 		this.ttsModelToken = data.tts_model_token;
 		this.ttsModelTitle = data.tts_model_title;
@@ -27,6 +30,8 @@ export default class UserAudioFile implements AudioFile {
 		this.url = new URL(`${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`);
 	}
 
+	readonly client: Client;
+
 	readonly ttsResultToken: string;
 	readonly ttsModelToken: string;
 	readonly ttsModelTitle: string;
@@ -43,8 +48,6 @@ export default class UserAudioFile implements AudioFile {
 	readonly updatedAt: Date;
 	readonly url: URL;
 
-	static client: Client;
-
 	#buffer?: Buffer;
 
 	/**
@@ -57,7 +60,7 @@ export default class UserAudioFile implements AudioFile {
 			return this.#buffer;
 		}
 
-		const wav = await UserAudioFile.client.rest.download(this.url, 'audio/wav');
+		const wav = await this.client.rest.download(this.url, 'audio/wav');
 
 		if (wav) {
 			this.#buffer = wav;

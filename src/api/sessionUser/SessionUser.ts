@@ -1,12 +1,15 @@
 import Client from '../../index.js';
+import { type BaseClass } from '../../interface/BaseClass.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import type ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
 import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
 import { type SessionUserSchema } from './sessionUser.schema.js';
 
-export default class SessionUser {
-	constructor(data: SessionUserSchema, client: Client) {
+export default class SessionUser implements BaseClass {
+	constructor(client: Client, data: SessionUserSchema) {
+		this.client = client;
+
 		this.token = data.user_token;
 		this.username = data.username;
 		this.displayName = data.display_name;
@@ -31,9 +34,9 @@ export default class SessionUser {
 		this.canDeleteOtherUsersW2lResults = data.can_delete_other_users_w2l_results;
 		this.canBanUsers = data.can_ban_users;
 		this.canDeleteUsers = data.can_delete_users;
-
-		this.#client = client;
 	}
+
+	readonly client: Client;
 
 	readonly token: string;
 	readonly username: string;
@@ -60,15 +63,13 @@ export default class SessionUser {
 	readonly canBanUsers: boolean;
 	readonly canDeleteUsers: boolean;
 
-	readonly #client: Client;
-
 	/**
 	 * Fetch the profile of the currently logged in user which contains more information than the session user.
 	 *
 	 * @returns The profile of the currently logged in user. Undefined if no user is logged in.
 	 */
 	fetchProfile(): Promise<ProfileUser | undefined> {
-		return this.#client.fetchUserProfile(this.username);
+		return this.client.fetchUserProfile(this.username);
 	}
 
 	/**
@@ -79,7 +80,7 @@ export default class SessionUser {
 	 */
 	async fetchSubscription(): Promise<Subscription | undefined> {
 		try {
-			const response = await this.#client.rest.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
+			const response = await this.client.rest.send(new URL(`${constants.API_URL}/v1/billing/active_subscriptions`));
 			const json = prettyParse(activeSubscriptionsResponseSchema, await response.json());
 
 			return new Subscription(json);
