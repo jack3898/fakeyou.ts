@@ -66,6 +66,7 @@ export default class SessionUser implements User {
 	 * Fetch the profile of the currently logged in user which contains more information than the session user.
 	 *
 	 * @returns The profile of the currently logged in user. Undefined if no user is logged in.
+	 * @function
 	 */
 	fetchProfile = implFetchUser;
 

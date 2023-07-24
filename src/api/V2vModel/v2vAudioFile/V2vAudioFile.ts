@@ -62,6 +62,8 @@ export default class V2vAudioFile implements Audio {
 
 	/**
 	 * Fetch the audio file as a buffer.
+	 *
+	 * @function
 	 */
 	toBuffer = implToBuffer;
 

@@ -55,7 +55,7 @@ export default class UserAudioFile implements Audio, User {
 	readonly updatedAt: Date;
 
 	/**
-	 * Fetch the profile of the user that created this audio file.
+	 * Fetch the user that created this audio file.
 	 */
 	fetchProfile = implFetchUser;
 
