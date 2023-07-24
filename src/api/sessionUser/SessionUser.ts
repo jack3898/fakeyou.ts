@@ -1,11 +1,14 @@
-import type Client from '../../index.js';
+import { implFetchUser, type User } from '../../implementation/index.js';
+import Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
-import ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
-import { type SessionUserSchema, loggedInUserProfileResponseSchema } from './sessionUser.schema.js';
+import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
+import { type SessionUserSchema } from './sessionUser.schema.js';
 
-export default class SessionUser {
-	constructor(data: SessionUserSchema) {
+export default class SessionUser implements User {
+	constructor(client: Client, data: SessionUserSchema) {
+		this.client = client;
+
 		this.token = data.user_token;
 		this.username = data.username;
 		this.displayName = data.display_name;
@@ -32,6 +35,8 @@ export default class SessionUser {
 		this.canDeleteUsers = data.can_delete_users;
 	}
 
+	readonly client: Client;
+
 	readonly token: string;
 	readonly username: string;
 	readonly displayName: string;
@@ -57,36 +62,13 @@ export default class SessionUser {
 	readonly canBanUsers: boolean;
 	readonly canDeleteUsers: boolean;
 
-	static client: Client;
-
-	/**
-	 * Fetch the currently logged in user logged in via the login method.
-	 *
-	 * @returns The logged in user. Undefined if no user is logged in.
-	 */
-	static async fetchLoggedInUser(): Promise<SessionUser | undefined> {
-		try {
-			const response = await this.client.rest.send(new URL(`${constants.API_URL}/session`));
-			const loggedInUser = prettyParse(loggedInUserProfileResponseSchema, await response.json());
-
-			if (loggedInUser.logged_in) {
-				return new this(loggedInUser.user);
-			}
-		} catch (error) {
-			log.error(`Response from API failed validation. Could not load session user.\n${error}`);
-		}
-	}
-
-	readonly fetchSubscriptions = Subscription.fetchSubscriptions;
-
 	/**
 	 * Fetch the profile of the currently logged in user which contains more information than the session user.
 	 *
 	 * @returns The profile of the currently logged in user. Undefined if no user is logged in.
+	 * @function
 	 */
-	fetchProfile(): Promise<ProfileUser | undefined> {
-		return ProfileUser.fetchUserProfile(this.username);
-	}
+	fetchProfile = implFetchUser;
 
 	/**
 	 * Fetch the subscription of the currently logged in user.
@@ -94,7 +76,14 @@ export default class SessionUser {
 	 *
 	 * @returns The subscription of the currently logged in user. Undefined if no user is logged in.
 	 */
-	fetchSubscription(): Promise<Subscription | undefined> {
-		return Subscription.fetchSubscriptions();
+	async fetchSubscription(): Promise<Subscription | undefined> {
+		try {
+			const response = await this.client.rest.send(`${constants.API_URL}/v1/billing/active_subscriptions`);
+			const json = prettyParse(activeSubscriptionsResponseSchema, await response.json());
+
+			return new Subscription(json);
+		} catch (error) {
+			log.error(`Response from API failed validation. Are you logged in?\n${error}`);
+		}
 	}
 }

@@ -37,10 +37,10 @@ import Client from "fakeyou.ts";
 
 const client = new Client();
 
-const model = await client.ttsModel.fetchModelByToken("TM:4e2xqpwqaggr");
-const audio = await model?.infer("hello!");
+const model = await client.fetchTtsModelByToken("TM:4e2xqpwqaggr");
+const inference = await model?.infer("hello!");
 
-await audio?.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw URL!
+await inference?.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw URL!
 ```
 
 ## Or voice-to-voice!
@@ -53,11 +53,11 @@ import { readFileSync } from "node:fs";
 
 const client = new Client();
 
-const model = await client.v2vModel.fetchModelByToken("vcm_tes015h65n6h");
+const model = await client.fetchV2vModelByToken("vcm_tes015h65n6h");
 const audioFile = readFileSync("./localAudioFile.wav"); // Wav is only supported for simplicity, as validating the type is not reliable
-const audio = await model?.infer(audioFile);
+const inference = await model?.infer(audioFile);
 
-await audio?.toDisk("./local/name.wav"); // Same API as TTS!
+await inference?.toDisk("./local/name.wav"); // Same API as TTS!
 ```
 
 ## Login to FakeYou
@@ -77,24 +77,6 @@ await client.login({
 
 Or set `FAKEYOU_COOKIE` as an environment variable containing your cookie and it will automatically log in. You may override the environment cookie with the above `login()` method.
 
-## TTS rate limiting helper
-
-Let the client take away the stress of rate limiting with text-to-speech. Using the below approach with `Promise.all()` it will automatically and safely queue each inference so you aren't accidentally rate limited. It is important to note that the more you add, the longer it will take to complete your request (especially if you are not logged in)!
-
-```ts
-const [audio1, audio2, audio3] = await Promise.all([
-    model.infer("Test!"),
-    differentModel.infer("Test 2!"),
-    model.infer("Test 3!"),
-]);
-
-// Do what you like with the audio files from here on!
-```
-
-And the best bit is you can mix a variety of different models within the rate limit guard, which makes it very useful for buffering up a conversation.
-
-_The voice-to-voice rate limit guard is not yet implemented._
-
 ## Features
 
 | Name                               | Description                                                                                      | Status |
@@ -103,7 +85,6 @@ _The voice-to-voice rate limit guard is not yet implemented._
 | Fetch models                       | Fetch models, and view their info, and do your own TTS                                           | ✅     |
 | Text-to-speech download            | Download text-to-speech as buffer, base64, or directly to disk                                   | ✅     |
 | Voice-to-voice download            | Upload a voice then download the voice-to-voice inference as buffer, base64, or directly to disk | ✅     |
-| TTS rate limit handling            | Tooling to help avoid the rate limiting of FakeYou's API                                         | ✅     |
 | Fetch model categories             | Fetch categories, child categories and parent categories and their models                        | ✅     |
 | View and edit user profiles        | View user profiles, and edit profiles you are privileged to edit (like your own)                 | ✅     |
 | Leaderboards                       | Fetch users from the leaderboard                                                                 | ✅     |
@@ -115,6 +96,7 @@ _The voice-to-voice rate limit guard is not yet implemented._
 ... and I will keep this list up to date with more features to come.
 
 ## Contributing
+
 If you would like to contribute, then please read the [contributing guidelines](https://github.com/jack3898/fakeyou.ts/blob/main/.github/CONTRIBUTING.md). Thank you!
 
 ## Q&A
@@ -137,25 +119,34 @@ Yes! You still get all of the types out of the box even with JS, but you won't b
 
 ### Do I need to log in to my FakeYou account to use this package?
 
-It's totally optional. You can still request TTS, but you will be missing out on any premium benefits and linking your TTS history to your account.
+Nope! As an anonymous user, you can still request TTS, but you will be missing out on any premium benefits and linking your TTS history to your account and some methods like `client.fetchLoggedInUser()` will return `undefined`.
 
 ### What versions of Node.js do you support?
 
-Node.js v18 and up are the only versions of Node.js that this package supports. You will know if you have an invalid version, because npm will say `EBADENGINE` upon install!
+Node.js v18 and up are the only versions of Node.js that this package supports. You will know if you have an invalid version, because npm will say `EBADENGINE` upon install.
+
+This package aims for LTS support, and will deprecate any versions under LTS.
 
 ### Does it work in the browser?
 
 No, unfortunately. 😔 It is best you create your own web server that uses this package to build your app.
 
+Interestingly, the packages this project depends on are cross-platform, and it uses JS-native APIs when available like `crypto` and `fetch` and will work if it wasn't for CORS! If CORS did not exist, I could tweak this project in only a few hours for first-class browser support. This package is 99% ready! There's just a technical limitation that I cannot overcome.
+
+## Does it work with Deno?
+
+In theory, it should! But I haven't tried. Deno has first-class support for npm modules, so it should be possible.
+
+If you have tried it, let me know, and I will update this README!
+
 ### Why this over fakeyou.**js**?
 
-Fakeyou.js is a great project (if you haven't seen it, you can check it out [here!](https://github.com/leunamcrack/fakeyou.js/)) but I wrote this package to address its shortcomings. For example, fakeyou.ts is...
+Fakeyou.js is a great project (if you haven't seen it, you can check it out [here!](https://github.com/leunamcrack/fakeyou.js/)) but I wrote this package to address its shortcomings. For example and in comparison, fakeyou.ts is...
 
 -   [x] Safe; All API responses are validated at runtime with type-smart schemas, which provides type-safety guarantees as well as the package just being fully type-safe. When using this package you will get autocomplete for every function, types for every return and compile-time errors for improper usage.
--   [x] Scalable; All classes and components are almost all independent from one-another, making refactors and feature additions easy. No class inheritance to be found.
--   [x] Feature-rich; Not only does fakeyou.ts have pretty much the same featureset at fakeyou.js, it also supports voice-to-voice.
+-   [x] End-to-end and unit tested; Before this package is deployed or pull-requests merged, a branch must pass through user-simulated automated tests to reduce the likelihood of deploying bugs.
+-   [x] Scalable; All classes and components are all independent from one-another, making refactors and feature additions easy. Composition is favoured over inheritance with isolated implementation functions.
+-   [x] Feature-rich; Not only does fakeyou.ts have pretty much the same feature set at fakeyou.js, it also supports voice-to-voice.
 -   [x] Modern; Fakeyou.ts works with ESModules, supporting next-generation JavaScript projects and supports top-level await.
--   [x] Relies on packages only when it needs to; Fakeyou.ts uses native Node.js modules if they are available (like fetch).
--   [x] Smart; More implementation details are hidden away. It will contact the API only when it needs to. No need to run any `.init()` or `.start()` functions at the top of your app.
 -   [x] Easy to work with; Not only does fakeyou.ts give you type-safety guarantees, it has a logging flag you can enable to inspect all of its network traffic, and if you're unfortunate enough, see nicely-formatted errors.
 -   [x] Active on Discord; The maintainer (me!) of this project is active on FakeYou's official Discord! If there are any problems you are having, you can either contact me there (#api channel) or submit an issue on this GitHub page. Make sure to tag me so I don't miss you! For safety reasons I will not display my discord tag here.

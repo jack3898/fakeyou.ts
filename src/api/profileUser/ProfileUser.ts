@@ -1,16 +1,16 @@
-import FakeYouError from '../../error/FakeYouError.js';
-import type Client from '../../index.js';
+import Client from '../../index.js';
+import { type BaseClass } from '../../interface/index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
-import TtsModel from '../ttsModel/TtsModel.js';
-import UserAudioFile from './userAudioFile/UserAudioFile.js';
+import type TtsModel from '../ttsModel/TtsModel.js';
 import {
 	editUserProfileInputSchema,
 	editUserProfileResponseSchema,
-	userProfileResponseSchema,
 	type EditUserProfileInputSchema,
 	type UserProfileSchema
 } from './profileUser.schema.js';
+import UserAudioFile from './userAudioFile/UserAudioFile.js';
+import { userTtsListResponseSchema } from './userAudioFile/userAudioFile.schema.js';
 
 type PaginatedUserAudioFiles = {
 	cursorNext: string | null;
@@ -18,8 +18,10 @@ type PaginatedUserAudioFiles = {
 	results: UserAudioFile[];
 };
 
-export default class ProfileUser {
-	constructor(data: UserProfileSchema) {
+export default class ProfileUser implements BaseClass {
+	constructor(client: Client, data: UserProfileSchema) {
+		this.client = client;
+
 		this.token = data.user_token;
 		this.username = data.username;
 		this.displayName = data.display_name;
@@ -44,6 +46,8 @@ export default class ProfileUser {
 		this.badges = data.badges.map((badge) => new Badge(badge));
 	}
 
+	readonly client: Client;
+
 	readonly token: string;
 	readonly username: string;
 	readonly displayName: string;
@@ -67,30 +71,6 @@ export default class ProfileUser {
 	readonly moderatorFields: string | null;
 	readonly badges: Badge[];
 
-	static client: Client;
-
-	/**
-	 * Fetch a user profile by their username.
-	 *
-	 * @param username The username of the user to fetch
-	 * @returns The user profile, or undefined if the user does not exist
-	 */
-	static async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
-		try {
-			const json = await this.client.cache.wrap('fetch-user-profile', async () => {
-				const response = await this.client.rest.send(new URL(`${constants.API_URL}/user/${username}/profile`));
-
-				return prettyParse(userProfileResponseSchema, await response.json());
-			});
-
-			return new this(json.user);
-		} catch (error) {
-			log.error(
-				`Response from API failed validation. Check the username you provided, it can be different to their display name.\n${error}`
-			);
-		}
-	}
-
 	/**
 	 * Edit the user profile.
 	 *
@@ -111,10 +91,10 @@ export default class ProfileUser {
 				...newValues
 			});
 
-			const result = await ProfileUser.client.rest.send(
-				new URL(`${constants.API_URL}/user/${this.username}/edit_profile`),
-				{ method: 'POST', body: JSON.stringify(body) }
-			);
+			const result = await this.client.rest.send(`${constants.API_URL}/user/${this.username}/edit_profile`, {
+				method: 'POST',
+				body: JSON.stringify(body)
+			});
 
 			const json = prettyParse(editUserProfileResponseSchema, await result.json());
 
@@ -127,28 +107,40 @@ export default class ProfileUser {
 	}
 
 	/**
-	 * Fetch the tts audio history of the user profile. Cursor pagination is supported.
+	 * Fetch a user audio file by its token.
 	 *
-	 * @param cursor The cursor to use for pagination. If no cursor is provided, the first page will be returned.
-	 * @returns A paginated list of tts audio files for the user profile.
+	 * @param cursor The cursor to use for pagination. If not provided, the first page will be fetched.
+	 * @returns The user audio file. Undefined if the audio file could not be fetched.
 	 */
-	fetchTtsAudioHistory(cursor?: string): Promise<PaginatedUserAudioFiles | undefined> {
-		return UserAudioFile.fetchUserAudioFiles(this.username, cursor);
+	async fetchUserAudioFiles(cursor?: string): Promise<PaginatedUserAudioFiles | undefined> {
+		const url = new URL(`${constants.API_URL}/user/${this.username}/tts_results`);
+
+		if (cursor) {
+			url.searchParams.append('limit', '10');
+			url.searchParams.append('cursor', cursor);
+		}
+
+		try {
+			const response = await this.client.rest.send(url.href);
+			const json = prettyParse(userTtsListResponseSchema, await response.json());
+			const results = json.results.map((userTtsAudioEntry) => new UserAudioFile(this.client, userTtsAudioEntry));
+
+			return {
+				cursorNext: json.cursor_next,
+				cursorPrev: json.cursor_previous,
+				results
+			};
+		} catch (error) {
+			log.error(`Response from API failed validation. Could not load user TTS results.\n${error}`);
+		}
 	}
 
 	/**
-	 * Fetchg the TTS models of the user profile. These are the models that the user has uploaded.
+	 * Fetch the TTS models of the user profile. These are the models that the user has uploaded.
 	 *
-	 * @returns The TTS models of the user profile. The array will be empty if the user has not uploaded any models.
-	 * @throws {FakeYouError} Fetch of user profile models failed.
+	 * @returns The TTS models of the user profile. Undefined if the models could not be fetched.
 	 */
-	async fetchUserModels(): Promise<Map<string, TtsModel>> {
-		const userModels = await TtsModel.fetchModelsByUser(this.username);
-
-		if (userModels) {
-			return userModels;
-		}
-
-		throw new FakeYouError('Fetch of user profile models failed.');
+	fetchUserModels(): Promise<Map<string, TtsModel> | undefined> {
+		return this.client.fetchTtsModelsByUser(this.username);
 	}
 }

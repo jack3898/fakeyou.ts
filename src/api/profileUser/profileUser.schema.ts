@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { userBadgeSchema } from '../badge/badge.schema.js';
 import { fakeyouResponse, visibilitySchema } from '../../global.schema.js';
+import { userBadgeSchema } from '../badge/badge.schema.js';
 
 export type UserProfileSchema = z.infer<typeof userProfileSchema>;
 export type UserProfileResponseSchema = z.infer<typeof userProfileResponseSchema>;

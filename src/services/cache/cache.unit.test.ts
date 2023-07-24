@@ -1,4 +1,4 @@
-import { it, vitest, expect, afterEach } from 'vitest';
+import { afterEach, expect, it, vitest } from 'vitest';
 import { Cache } from './Cache.js';
 
 const cache = new Cache();

@@ -1,5 +1,5 @@
-import { it, expect } from 'vitest';
-import { mapify } from './map.js';
+import { expect, it } from 'vitest';
+import { mapify } from './mapify.js';
 
 it('should convert to map', () => {
 	const map = mapify('id', [

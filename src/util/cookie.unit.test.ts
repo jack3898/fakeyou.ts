@@ -1,5 +1,5 @@
+import { expect, it } from 'vitest';
 import { extractCookieFromHeaders } from './cookie.js';
-import { it, expect } from 'vitest';
 
 it('get be undefined with no set-cookie ', () => {
 	const headers = new Headers();
