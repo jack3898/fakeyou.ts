@@ -32,7 +32,7 @@ it(
 	async () => {
 		const model = await client.fetchTtsModelByName('Squidward Tentacles');
 		const audio = await model?.infer('hello');
-		const buffer = await audio?.audioFile.toBuffer();
+		const buffer = await audio?.toBuffer();
 
 		expect(buffer).toBeInstanceOf(Buffer);
 	},

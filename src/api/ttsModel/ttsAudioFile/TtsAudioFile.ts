@@ -1,16 +1,13 @@
-import { type Audio } from '../../../interface/Audio.js';
-import { type BaseClass } from '../../../interface/BaseClass.js';
-import { AudioFile } from '../../../services/audioFile/AudioFile.js';
+import { implToBase64, implToBuffer, implToDisk, type Audio } from '../../../implementation/index.js';
 import Client from '../../../services/client/Client.js';
 import { constants } from '../../../util/index.js';
 import type TtsModel from '../TtsModel.js';
 import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
 
-export default class TtsAudioFile implements Audio, BaseClass {
+export default class TtsAudioFile implements Audio {
 	constructor(client: Client, data: TtsInferenceStatusDoneSchema) {
 		this.client = client;
-		this.url = `${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`;
-		this.audioFile = new AudioFile(client, this.url);
+		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`;
 
 		this.token = data.job_token;
 		this.status = data.status;
@@ -27,7 +24,7 @@ export default class TtsAudioFile implements Audio, BaseClass {
 	}
 
 	readonly client: Client;
-	readonly audioFile: AudioFile;
+	readonly resourceUrl: string;
 
 	readonly token: string;
 	readonly status: string;
@@ -41,7 +38,6 @@ export default class TtsAudioFile implements Audio, BaseClass {
 	readonly rawInferenceText: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
-	readonly url: string;
 
 	/**
 	 * Fetch the TTS model used to generate this audio file.
@@ -51,4 +47,19 @@ export default class TtsAudioFile implements Audio, BaseClass {
 	async fetchModel(): Promise<TtsModel | undefined> {
 		return this.client.fetchTtsModelByToken(this.modelToken);
 	}
+
+	/**
+	 * Fetch the audio file as a buffer.
+	 */
+	toBuffer = implToBuffer;
+
+	/**
+	 * Convert the audio file to a base64 string.
+	 */
+	toBase64 = implToBase64;
+
+	/**
+	 * Write the audio file to disk.
+	 */
+	toDisk = implToDisk;
 }

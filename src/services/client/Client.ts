@@ -202,7 +202,7 @@ export default class Client {
 			return prettyParse(leaderboardResponseSchema, await response.json());
 		});
 
-		return new Leaderboard(json);
+		return new Leaderboard(this, json);
 	}
 
 	/**

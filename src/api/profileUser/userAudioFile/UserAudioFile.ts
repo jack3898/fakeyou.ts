@@ -1,13 +1,19 @@
+import {
+	implFetchUser,
+	implToBase64,
+	implToBuffer,
+	implToDisk,
+	type Audio,
+	type User
+} from '../../../implementation/index.js';
 import Client from '../../../index.js';
-import type { Audio } from '../../../interface/Audio.js';
-import { AudioFile } from '../../../services/audioFile/AudioFile.js';
 import { constants } from '../../../util/index.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
 
-export default class UserAudioFile implements Audio {
+export default class UserAudioFile implements Audio, User {
 	constructor(client: Client, data: UserTtsSchema) {
-		this.url = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;
-		this.audioFile = new AudioFile(client, this.url);
+		this.client = client;
+		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;
 
 		this.ttsResultToken = data.tts_result_token;
 		this.ttsModelToken = data.tts_model_token;
@@ -16,6 +22,7 @@ export default class UserAudioFile implements Audio {
 		this.publicBucketWavAudioPath = data.public_bucket_wav_audio_path;
 		this.creatorUserToken = data.maybe_creator_user_token;
 		this.creatorUsername = data.maybe_creator_username;
+		this.username = data.maybe_creator_username;
 		this.creatorDisplayName = data.maybe_creator_display_name;
 		this.creatorResultId = data.maybe_creator_result_id;
 		this.fileSizeBytes = data.file_size_bytes;
@@ -25,8 +32,8 @@ export default class UserAudioFile implements Audio {
 		this.updatedAt = data.updated_at;
 	}
 
-	readonly url: string;
-	readonly audioFile: AudioFile;
+	readonly client: Client;
+	readonly resourceUrl: string;
 
 	readonly ttsResultToken: string;
 	readonly ttsModelToken: string;
@@ -35,6 +42,10 @@ export default class UserAudioFile implements Audio {
 	readonly publicBucketWavAudioPath: string;
 	readonly creatorUserToken: string;
 	readonly creatorUsername: string;
+	/**
+	 * @alias creatorUsername
+	 */
+	readonly username: string;
 	readonly creatorDisplayName: string;
 	readonly creatorResultId: number;
 	readonly fileSizeBytes: number;
@@ -42,4 +53,24 @@ export default class UserAudioFile implements Audio {
 	readonly visibility: string;
 	readonly createdAt: Date;
 	readonly updatedAt: Date;
+
+	/**
+	 * Fetch the profile of the user that created this audio file.
+	 */
+	fetchProfile = implFetchUser;
+
+	/**
+	 * Fetch the audio file as a buffer.
+	 */
+	toBuffer = implToBuffer;
+
+	/**
+	 * Convert the audio file to a base64 string.
+	 */
+	toBase64 = implToBase64;
+
+	/**
+	 * Write the audio file to disk.
+	 */
+	toDisk = implToDisk;
 }

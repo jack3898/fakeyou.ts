@@ -1,9 +1,8 @@
 import crypto from 'node:crypto';
+import { implFetchUser, type User } from '../../implementation/index.js';
 import { type default as Client } from '../../index.js';
-import { type BaseClass } from '../../interface/BaseClass.js';
-import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
+import { constants, log, poll, PollStatus, prettyParse } from '../../util/index.js';
 import type Category from '../category/Category.js';
-import type ProfileUser from '../profileUser/ProfileUser.js';
 import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
 import {
 	ttsInferenceResultSchema,
@@ -15,7 +14,7 @@ import {
 	type TtsModelSchema
 } from './ttsModel.schema.js';
 
-export default class TtsModel implements BaseClass {
+export default class TtsModel implements User {
 	constructor(data: TtsModelSchema, client: Client) {
 		this.client = client;
 
@@ -23,6 +22,7 @@ export default class TtsModel implements BaseClass {
 		this.ttsModelType = data.tts_model_type;
 		this.creatorToken = data.creator_user_token;
 		this.creatorUsername = data.creator_username;
+		this.username = data.creator_username;
 		this.creatorDisplayName = data.creator_display_name;
 		this.creatorGravatarHash = data.creator_gravatar_hash;
 		this.title = data.title;
@@ -42,6 +42,10 @@ export default class TtsModel implements BaseClass {
 	readonly ttsModelType: string;
 	readonly creatorToken: string;
 	readonly creatorUsername: string;
+	/**
+	 * @alias creatorUsername
+	 */
+	readonly username: string;
 	readonly creatorDisplayName: string;
 	readonly creatorGravatarHash: string;
 	readonly title: string;
@@ -120,15 +124,6 @@ export default class TtsModel implements BaseClass {
 	}
 
 	/**
-	 * Fetch the user who created this model. This is a convenience method for `ProfileUser.fetchUserProfile(model.creatorUsername)`.
-	 *
-	 * @returns The user who created this model
-	 */
-	fetchModelCreator(): Promise<ProfileUser | undefined> {
-		return this.client.fetchUserProfile(this.creatorUsername);
-	}
-
-	/**
 	 * Rate this model positively, negatively, or neutrally.
 	 *
 	 * @param decision The rating. Can be 'positive', 'negative', or 'neutral'.
@@ -162,4 +157,9 @@ export default class TtsModel implements BaseClass {
 
 		return categories.filter((category) => categoryTokens?.includes(category.token));
 	}
+
+	/**
+	 * Fetch the user who created this model.
+	 */
+	fetchProfile = implFetchUser;
 }
