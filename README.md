@@ -133,7 +133,7 @@ No, unfortunately. 😔 It is best you create your own web server that uses this
 
 Interestingly, the packages this project depends on are cross-platform, and it uses JS-native APIs when available like `crypto` and `fetch` and will work if it wasn't for CORS! If CORS did not exist, I could tweak this project in only a few hours for first-class browser support. This package is 99% ready! There's just a technical limitation that I cannot overcome.
 
-## Does it work with Deno?
+### Does it work with Deno?
 
 In theory, it should! But I haven't tried. Deno has first-class support for npm modules, so it should be possible.
 
