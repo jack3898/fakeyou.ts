@@ -1,5 +1,5 @@
 import Client from '../../index.js';
-import { type BaseClass } from '../../interface/BaseClass.js';
+import { type BaseClass } from '../../interface/index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import Badge from '../badge/Badge.js';
 import type TtsModel from '../ttsModel/TtsModel.js';

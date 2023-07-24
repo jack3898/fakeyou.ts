@@ -1,12 +1,11 @@
+import { implFetchUser, type User } from '../../implementation/index.js';
 import Client from '../../index.js';
-import { type BaseClass } from '../../interface/BaseClass.js';
 import { constants, log, prettyParse } from '../../util/index.js';
-import type ProfileUser from '../profileUser/ProfileUser.js';
 import Subscription from '../subscription/Subscription.js';
 import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
 import { type SessionUserSchema } from './sessionUser.schema.js';
 
-export default class SessionUser implements BaseClass {
+export default class SessionUser implements User {
 	constructor(client: Client, data: SessionUserSchema) {
 		this.client = client;
 
@@ -68,9 +67,7 @@ export default class SessionUser implements BaseClass {
 	 *
 	 * @returns The profile of the currently logged in user. Undefined if no user is logged in.
 	 */
-	fetchProfile(): Promise<ProfileUser | undefined> {
-		return this.client.fetchUserProfile(this.username);
-	}
+	fetchProfile = implFetchUser;
 
 	/**
 	 * Fetch the subscription of the currently logged in user.

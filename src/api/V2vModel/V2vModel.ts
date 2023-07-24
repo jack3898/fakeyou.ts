@@ -1,5 +1,5 @@
+import { implFetchUser, type User } from '../../implementation/index.js';
 import Client from '../../index.js';
-import { type BaseClass } from '../../interface/BaseClass.js';
 import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
 import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
@@ -12,7 +12,7 @@ import {
 	type V2vVoiceUploadResponseSchema
 } from './v2vModel.schema.js';
 
-export default class V2vModel implements BaseClass {
+export default class V2vModel implements User {
 	constructor(client: Client, data: V2vModelSchema) {
 		this.client = client;
 
@@ -21,6 +21,7 @@ export default class V2vModel implements BaseClass {
 		this.title = data.title;
 		this.creatorUserToken = data.creator.user_token;
 		this.creatorUsername = data.creator.username;
+		this.username = data.creator.username;
 		this.creatorDisplayName = data.creator.display_name;
 		this.creatorGravatarHash = data.creator.gravatar_hash;
 		this.creatorSetVisibility = data.creator_set_visibility;
@@ -37,6 +38,10 @@ export default class V2vModel implements BaseClass {
 	readonly modelType: string;
 	readonly title: string;
 	readonly creatorUserToken: string;
+	/**
+	 * @alias creatorUsername
+	 */
+	readonly username: string;
 	readonly creatorUsername: string;
 	readonly creatorDisplayName: string;
 	readonly creatorGravatarHash: string;
@@ -138,4 +143,9 @@ export default class V2vModel implements BaseClass {
 			return new V2vAudioFile(this.client, audioUrl);
 		}
 	}
+
+	/**
+	 * Fetch the profile of the user who created this model.
+	 */
+	fetchProfile = implFetchUser;
 }

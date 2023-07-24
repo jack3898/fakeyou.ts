@@ -1,16 +1,13 @@
-import { type Audio } from '../../../interface/Audio.js';
-import { type BaseClass } from '../../../interface/BaseClass.js';
-import { AudioFile } from '../../../services/audioFile/AudioFile.js';
+import { implToBase64, implToBuffer, implToDisk, type Audio } from '../../../implementation/index.js';
 import Client from '../../../services/index.js';
 import { constants } from '../../../util/index.js';
 import type V2vModel from '../V2vModel.js';
 import { type V2vInferenceStatusDoneSchema } from '../v2vModel.schema.js';
 
-export default class V2vAudioFile implements Audio, BaseClass {
+export default class V2vAudioFile implements Audio {
 	constructor(client: Client, data: V2vInferenceStatusDoneSchema) {
 		this.client = client;
-		this.url = `${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`;
-		this.audioFile = new AudioFile(client, this.url);
+		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.maybe_result.maybe_public_bucket_media_path}`;
 
 		this.jobToken = data.job_token;
 		this.requestInferenceCategory = data.request.inference_category;
@@ -33,8 +30,7 @@ export default class V2vAudioFile implements Audio, BaseClass {
 	}
 
 	readonly client: Client;
-	readonly audioFile: AudioFile;
-	readonly url: string;
+	readonly resourceUrl: string;
 
 	readonly jobToken: string;
 	readonly requestInferenceCategory: string;
@@ -63,4 +59,19 @@ export default class V2vAudioFile implements Audio, BaseClass {
 	async fetchModel(): Promise<V2vModel | undefined> {
 		return this.client.fetchV2vModelByToken(this.entityToken);
 	}
+
+	/**
+	 * Fetch the audio file as a buffer.
+	 */
+	toBuffer = implToBuffer;
+
+	/**
+	 * Convert the audio file to a base64 string.
+	 */
+	toBase64 = implToBase64;
+
+	/**
+	 * Write the audio file to disk.
+	 */
+	toDisk = implToDisk;
 }
