@@ -72,27 +72,31 @@ export default class TtsModel implements User {
 	}
 
 	#getAudioUrl(inferenceJobToken: string): Promise<TtsInferenceStatusDoneSchema | undefined> {
-		return poll(async () => {
-			const response = await this.client.rest.send(`${constants.API_URL}/tts/job/${inferenceJobToken}`);
-			const result = prettyParse(ttsRequestStatusResponseSchema, await response.json());
+		return poll(
+			async () => {
+				const response = await this.client.rest.send(`${constants.API_URL}/tts/job/${inferenceJobToken}`);
+				const result = prettyParse(ttsRequestStatusResponseSchema, await response.json());
 
-			switch (result.state.status) {
-				case 'pending':
-					return PollStatus.Retry;
-				case 'started':
-					return PollStatus.Retry;
-				case 'complete_success':
-					return result.state;
-				case 'attempt_failed':
-					return PollStatus.Retry;
-				case 'complete_failure':
-					return PollStatus.Abort;
-				case 'dead':
-					return PollStatus.Abort;
-				default:
-					return PollStatus.Abort;
-			}
-		});
+				switch (result.state.status) {
+					case 'pending':
+						return PollStatus.Retry;
+					case 'started':
+						return PollStatus.Retry;
+					case 'complete_success':
+						return result.state;
+					case 'attempt_failed':
+						return PollStatus.Retry;
+					case 'complete_failure':
+						return PollStatus.Abort;
+					case 'dead':
+						return PollStatus.Abort;
+					default:
+						return PollStatus.Abort;
+				}
+			},
+			1000,
+			360
+		);
 	}
 
 	/**
