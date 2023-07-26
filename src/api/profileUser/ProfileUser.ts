@@ -140,7 +140,7 @@ export default class ProfileUser implements BaseClass {
 	 *
 	 * @returns The TTS models of the user profile. Undefined if the models could not be fetched.
 	 */
-	fetchUserModels(): Promise<Map<string, TtsModel> | undefined> {
+	fetchUserModels(): Promise<TtsModel[]> {
 		return this.client.fetchTtsModelsByUser(this.username);
 	}
 }
