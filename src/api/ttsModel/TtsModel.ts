@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { implFetchUser, type User } from '../../implementation/index.js';
-import { type Client } from '../../index.js';
+import Client from '../../index.js';
 import { constants, log, poll, PollStatus, prettyParse } from '../../util/index.js';
 import type Category from '../category/Category.js';
 import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';

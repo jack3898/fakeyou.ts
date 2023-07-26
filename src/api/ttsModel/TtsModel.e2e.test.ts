@@ -1,5 +1,5 @@
 import { expect, it, describe } from 'vitest';
-import { Client } from '../../index.js';
+import Client from '../../index.js';
 import TtsModel from './TtsModel.js';
 
 const client = new Client();

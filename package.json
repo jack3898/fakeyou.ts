@@ -13,7 +13,7 @@
         "test:e2e": "cross-env E2E=true vitest run e2e --threads false",
         "test:types": "tsc --noEmit",
         "prepare": "husky install",
-        "docs": "typedoc src/index.ts"
+        "docs": "typedoc"
     },
     "files": [
         "./dist",

@@ -1,5 +1,5 @@
 import { implFetchUser, type User } from '../../implementation/index.js';
-import { Client } from '../../index.js';
+import Client from '../../index.js';
 import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
 import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
 import {
