@@ -1,5 +1,5 @@
 import { implToBase64, implToBuffer, implToDisk, type Audio } from '../../../implementation/index.js';
-import Client from '../../../services/client/Client.js';
+import { Client } from '../../../services/client/Client.js';
 import { constants } from '../../../util/index.js';
 import type TtsModel from '../TtsModel.js';
 import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';

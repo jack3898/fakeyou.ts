@@ -1,4 +1,4 @@
-import type Client from '../services/client/Client.js';
+import { type Client } from '../services/client/Client.js';
 
 /**
  * Ensure that all classes that extend this interface have a client property.

@@ -18,7 +18,7 @@ import { Cache } from '../cache/Cache.js';
 import { Rest } from '../rest/Rest.js';
 import { loginSchema } from './client.schema.js';
 
-export default class Client {
+export class Client {
 	constructor(options?: { logging?: boolean }) {
 		log.setLogging(!!options?.logging);
 	}

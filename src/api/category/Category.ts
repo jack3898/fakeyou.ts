@@ -1,4 +1,4 @@
-import Client from '../../index.js';
+import { Client } from '../../index.js';
 import { type BaseClass } from '../../interface/BaseClass.js';
 import type TtsModel from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';

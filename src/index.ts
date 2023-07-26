@@ -1,1 +1,1 @@
-export { default } from './services/client/Client.js';
+export { Client } from './services/client/Client.js';

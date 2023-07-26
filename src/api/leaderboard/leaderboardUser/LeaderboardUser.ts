@@ -1,5 +1,5 @@
 import { implFetchUser, type User } from '../../../implementation/index.js';
-import Client from '../../../index.js';
+import { Client } from '../../../index.js';
 import { type LeaderboardUserSchema } from './leaderboardUser.schema.js';
 
 export default class LeaderboardUser implements User {

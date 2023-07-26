@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import Client from '../../../services/client/Client.js';
+import { Client } from '../../../services/client/Client.js';
 
 it('should fetch user models with success and paginate', async () => {
 	const client = new Client();
