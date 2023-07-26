@@ -1,5 +1,6 @@
-import { expect, it } from 'vitest';
+import { expect, it, describe } from 'vitest';
 import Client from '../../index.js';
+import TtsModel from './TtsModel.js';
 
 const client = new Client();
 
@@ -9,22 +10,50 @@ it('should fetch models', async () => {
 	expect(modelList.size).toBeGreaterThan(0);
 });
 
-it('should find model by name', async () => {
-	const model = await client.fetchTtsModelByName('Squidward Tentacles');
+describe('fetchTtsModelByName', () => {
+	it('should find model by name', async () => {
+		const model = await client.fetchTtsModelByName('Squidward Tentacles');
 
-	expect(model?.title).toContain('Squidward');
+		expect(model?.title).toContain('Squidward');
+	});
+
+	it("should return undefined when a model doesn't exist", async () => {
+		const model = await client.fetchTtsModelByName(crypto.randomUUID());
+
+		expect(model).toBeUndefined();
+	});
 });
 
-it('should fetch model by model token', async () => {
-	const model = await client.fetchTtsModelByToken('TM:4e2xqpwqaggr');
+describe('fetchTtsModelByToken', () => {
+	it('should fetch model by model token', async () => {
+		const model = await client.fetchTtsModelByToken('TM:4e2xqpwqaggr');
 
-	expect(model?.title).toContain('Squidward');
+		expect(model?.title).toContain('Squidward');
+	});
+
+	it("should return undefined when a model doesn't exist", async () => {
+		const model = await client.fetchTtsModelByToken(crypto.randomUUID());
+
+		expect(model).toBeUndefined();
+	});
 });
 
-it('should fetch user models', async () => {
-	const models = await client.fetchTtsModelsByUser('vegito1089');
+describe('fetchTtsModelsByUser', () => {
+	it('should fetch user models', async () => {
+		const models = await client.fetchTtsModelsByUser('vegito1089');
 
-	expect(models?.size).toBeGreaterThan(0);
+		expect(models.length).toBeGreaterThan(0);
+
+		for (const model of models) {
+			expect(model).toBeInstanceOf(TtsModel);
+		}
+	});
+
+	it("should return undefined when a user doesn't exist", async () => {
+		const models = await client.fetchTtsModelsByUser(crypto.randomUUID());
+
+		expect(models).toHaveLength(0);
+	});
 });
 
 it(

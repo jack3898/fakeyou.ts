@@ -108,37 +108,36 @@ export default class Client {
 	}
 
 	/**
-	 * Fetch all models created by a user. This is a convenience method for `TtsModel.fetchModels()`.
-	 *
-	 * This method will return all models created by the user.
+	 * Fetch all models created by a user.
 	 *
 	 * @param username The username of the user
-	 * @returns A map of all models created by the user with the model token as the key.
+	 * @returns An array of all models created by the user
 	 */
-	async fetchTtsModelsByUser(username: string): Promise<Map<string, TtsModel> | undefined> {
+	async fetchTtsModelsByUser(username: string): Promise<TtsModel[]> {
 		try {
 			const response = await this.rest.send(`${constants.API_URL}/user/${username}/tts_models`);
 			const json = prettyParse(ttsModelListSchema, await response.json());
-			const ttsModels = json.models.map((model) => new TtsModel(model, this));
 
-			return mapify('token', ttsModels);
+			return json.models.map((model) => new TtsModel(model, this));
 		} catch (error) {
 			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
+
+			return [];
 		}
 	}
 
 	/**
-	 * Fetch a model by its name. This is a convenience method for `TtsModel.fetchModels()` and `TtsModel.fetchModelByToken()`.
+	 * Fetch a model by its name.
 	 *
 	 * This method will return the first model that contains the search string in its title.
 	 *
 	 * @param search The search string (case insensitive)
-	 * @returns The model
+	 * @returns The model or undefined if no model was found
 	 */
 	async fetchTtsModelByName(search: string): Promise<TtsModel | undefined> {
 		const models = await this.fetchTtsModels();
 
-		for (const [, model] of models) {
+		for (const model of models.values()) {
 			if (model.title.toLowerCase().includes(search.toLowerCase())) {
 				return model;
 			}
@@ -170,6 +169,36 @@ export default class Client {
 		const models = await this.fetchV2vModels();
 
 		return models.get(token);
+	}
+
+	/**
+	 * Fetch all voice-to-voice models by its name.
+	 *
+	 * This method will return the first model that contains the search string in its title.
+	 *
+	 * @param search The search string (case insensitive)
+	 * @returns The model or undefined if no model was found
+	 */
+	async fetchV2vModelByName(search: string): Promise<V2vModel | undefined> {
+		const models = await this.fetchV2vModels();
+
+		for (const model of models.values()) {
+			if (model.title.toLowerCase().includes(search.toLowerCase())) {
+				return model;
+			}
+		}
+	}
+
+	/**
+	 * Fetch all voice-to-voice models created by a user's username.
+	 *
+	 * @param username The username of the user
+	 * @returns An array of all models created by the user
+	 */
+	async fetchV2vModelsByUser(username: string): Promise<V2vModel[]> {
+		const userModels = await this.fetchV2vModels();
+
+		return Array.from(userModels.values()).filter((model) => model.username === username);
 	}
 
 	/**
