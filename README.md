@@ -8,25 +8,16 @@ A modern, light, 100% type-safe, and easy-to-use unofficial API wrapper for [Fak
 
 NOTE: Node v18 and higher is only supported.
 
-```bash
+```sh
 npm install fakeyou.ts
+npm pkg set type=module
 ```
 
-`package.json` must include:
+If you use TypeScript it is recommended to include this in your `tsconfig.json`:
 
 ```json
 {
-    "type": "module"
-}
-```
-
-If you use TypeScript `tsconfig.json` must include:
-
-```json
-{
-    "compilerOptions": {
-        "module": "NodeNext"
-    }
+    "extends": "fakeyou.ts/tsconfig.recommended.json"
 }
 ```
 
@@ -131,7 +122,7 @@ This package aims for LTS support, and will deprecate any versions under LTS.
 
 No, unfortunately. 😔 It is best you create your own web server that uses this package to build your app.
 
-Interestingly, the packages this project depends on are cross-platform, and it uses JS-native APIs when available like `crypto` and `fetch` and will work if it wasn't for CORS! If CORS did not exist, I could tweak this project in only a few hours for first-class browser support. This package is 99% ready! There's just a technical limitation that I cannot overcome.
+Interestingly, the packages this project depends on are cross-platform, and it uses JS-native APIs when available like `crypto` and `fetch` so if CORS did not exist, I could tweak this project in only a few hours for first-class browser support. This package is 99% ready! CORS is just the blocker.
 
 ### Does it work with Deno?
 
@@ -143,7 +134,7 @@ If you have tried it, let me know, and I will update this README!
 
 Fakeyou.js is a great project (if you haven't seen it, you can check it out [here!](https://github.com/leunamcrack/fakeyou.js/)) but I wrote this package to address its shortcomings. For example and in comparison, fakeyou.ts is...
 
--   [x] Safe; All API responses are validated at runtime with type-smart schemas, which provides type-safety guarantees as well as the package just being fully type-safe. When using this package you will get autocomplete for every function, types for every return and compile-time errors for improper usage.
+-   [x] Safe; All API responses are validated at runtime with type-smart schemas, which provides type-safety guarantees as well as the package just being fully type-safe. When using this package you will get autocomplete for every function, types for every return and compile-time errors for improper usage. No fragile conditional checks spread throughout the code.
 -   [x] End-to-end and unit tested; Before this package is deployed or pull-requests merged, a branch must pass through user-simulated automated tests to reduce the likelihood of deploying bugs.
 -   [x] Scalable; All classes and components are all independent from one-another, making refactors and feature additions easy. Composition is favoured over inheritance with isolated implementation functions.
 -   [x] Feature-rich; Not only does fakeyou.ts have pretty much the same feature set at fakeyou.js, it also supports voice-to-voice.
