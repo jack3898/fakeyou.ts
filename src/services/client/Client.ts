@@ -1,5 +1,5 @@
-import V2vModel from '../../api/V2vModel/V2vModel.js';
-import { v2vModelListSchema } from '../../api/V2vModel/v2vModel.schema.js';
+import V2vModel from '../../api/v2vModel/V2vModel.js';
+import { v2vModelListSchema } from '../../api/v2vModel/v2vModel.schema.js';
 import Category from '../../api/category/Category.js';
 import { categoryListResponseSchema, categoryToModelSchema } from '../../api/category/category.schema.js';
 import Leaderboard from '../../api/leaderboard/Leaderboard.js';
