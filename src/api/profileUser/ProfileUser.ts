@@ -12,7 +12,7 @@ import {
 import { UserAudioFile } from './userAudioFile/UserAudioFile.js';
 import { userTtsListResponseSchema } from './userAudioFile/userAudioFile.schema.js';
 
-type PaginatedUserAudioFiles = {
+export type PaginatedUserAudioFiles = {
 	cursorNext: string | null;
 	cursorPrev: string | null;
 	results: UserAudioFile[];
