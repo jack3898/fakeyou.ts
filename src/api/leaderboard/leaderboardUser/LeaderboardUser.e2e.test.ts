@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { Client } from '../../../services/client/Client.js';
-import LeaderboardUser from './LeaderboardUser.js';
+import { LeaderboardUser } from './LeaderboardUser.js';
 
 const client = new Client();
 

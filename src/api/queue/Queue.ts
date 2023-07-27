@@ -1,6 +1,6 @@
 import { type QueueLengthResponseSchema } from './queue.schema.js';
 
-export default class Queue {
+export class Queue {
 	constructor(data: QueueLengthResponseSchema) {
 		this.pendingJobCount = data.pending_job_count;
 		this.cacheTime = data.cache_time;

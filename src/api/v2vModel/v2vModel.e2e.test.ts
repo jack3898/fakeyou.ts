@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import Client from '../../index.js';
-import V2vModel from './V2vModel.js';
+import { V2vModel } from './V2vModel.js';
 
 const client = new Client();
 

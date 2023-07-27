@@ -1,7 +1,7 @@
 import { implFetchUser, type User } from '../../implementation/index.js';
 import Client from '../../index.js';
-import { PollStatus, constants, log, poll, prettyParse } from '../../util/index.js';
-import V2vAudioFile from './v2vAudioFile/V2vAudioFile.js';
+import { constants, log, poll, PollStatus, prettyParse } from '../../util/index.js';
+import { V2vAudioFile } from './v2vAudioFile/V2vAudioFile.js';
 import {
 	v2vInferenceResultSchema,
 	v2vRequestStatusResponseSchema,
@@ -12,7 +12,7 @@ import {
 	type V2vVoiceUploadResponseSchema
 } from './v2vModel.schema.js';
 
-export default class V2vModel implements User {
+export class V2vModel implements User {
 	constructor(client: Client, data: V2vModelSchema) {
 		this.client = client;
 

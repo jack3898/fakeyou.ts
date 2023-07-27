@@ -1,6 +1,6 @@
 import { type ActiveSubscriptionsResponseSchema } from './subscription.schema.js';
 
-export default class Subscription {
+export class Subscription {
 	constructor(data: ActiveSubscriptionsResponseSchema) {
 		this.inLoyaltyProgram = data.maybe_loyalty_program;
 		this.activeSubscriptions = new Map(data.active_subscriptions.map((sub) => [sub.namespace, sub.product_slug]));

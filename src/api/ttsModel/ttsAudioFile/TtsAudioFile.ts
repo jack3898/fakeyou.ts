@@ -1,10 +1,10 @@
 import { implToBase64, implToBuffer, implToDisk, type Audio } from '../../../implementation/index.js';
 import { Client } from '../../../services/client/Client.js';
 import { constants } from '../../../util/index.js';
-import type TtsModel from '../TtsModel.js';
+import type { TtsModel } from '../TtsModel.js';
 import { type TtsInferenceStatusDoneSchema } from '../ttsModel.schema.js';
 
-export default class TtsAudioFile implements Audio {
+export class TtsAudioFile implements Audio {
 	constructor(client: Client, data: TtsInferenceStatusDoneSchema) {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`;

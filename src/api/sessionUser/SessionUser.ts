@@ -1,11 +1,11 @@
 import { implFetchUser, type User } from '../../implementation/index.js';
 import Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
-import Subscription from '../subscription/Subscription.js';
+import { Subscription } from '../subscription/Subscription.js';
 import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
 import { type SessionUserSchema } from './sessionUser.schema.js';
 
-export default class SessionUser implements User {
+export class SessionUser implements User {
 	constructor(client: Client, data: SessionUserSchema) {
 		this.client = client;
 

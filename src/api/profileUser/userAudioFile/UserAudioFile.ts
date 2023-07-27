@@ -10,7 +10,7 @@ import Client from '../../../index.js';
 import { constants } from '../../../util/index.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
 
-export default class UserAudioFile implements Audio, User {
+export class UserAudioFile implements Audio, User {
 	constructor(client: Client, data: UserTtsSchema) {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;

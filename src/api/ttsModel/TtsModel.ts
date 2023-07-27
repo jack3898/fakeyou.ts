@@ -2,8 +2,8 @@ import crypto from 'node:crypto';
 import { implFetchUser, type User } from '../../implementation/index.js';
 import Client from '../../index.js';
 import { constants, log, poll, PollStatus, prettyParse } from '../../util/index.js';
-import type Category from '../category/Category.js';
-import TtsAudioFile from './ttsAudioFile/TtsAudioFile.js';
+import type { Category } from '../category/Category.js';
+import { TtsAudioFile } from './ttsAudioFile/TtsAudioFile.js';
 import {
 	ttsInferenceResultSchema,
 	ttsRequestStatusResponseSchema,
@@ -14,7 +14,7 @@ import {
 	type TtsModelSchema
 } from './ttsModel.schema.js';
 
-export default class TtsModel implements User {
+export class TtsModel implements User {
 	constructor(data: TtsModelSchema, client: Client) {
 		this.client = client;
 

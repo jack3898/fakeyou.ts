@@ -1,6 +1,6 @@
-import { expect, it, describe } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import Client from '../../index.js';
-import TtsModel from './TtsModel.js';
+import { TtsModel } from './TtsModel.js';
 
 const client = new Client();
 

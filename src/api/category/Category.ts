@@ -1,9 +1,9 @@
 import Client from '../../index.js';
 import { type BaseClass } from '../../interface/BaseClass.js';
-import type TtsModel from '../ttsModel/TtsModel.js';
+import type { TtsModel } from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';
 
-export default class Category implements BaseClass {
+export class Category implements BaseClass {
 	constructor(client: Client, data: CategorySchema) {
 		this.client = client;
 

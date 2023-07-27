@@ -1,4 +1,4 @@
-import type ProfileUser from '../api/profileUser/ProfileUser.js';
+import type { ProfileUser } from '../api/profileUser/ProfileUser.js';
 import { type BaseClass } from '../interface/index.js';
 
 /**

@@ -1,6 +1,6 @@
 import { type UserBadgeSchema } from './badge.schema.js';
 
-export default class Badge {
+export class Badge {
 	constructor(data: UserBadgeSchema) {
 		this.slug = data.slug;
 		this.title = data.title;

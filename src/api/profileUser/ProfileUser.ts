@@ -1,15 +1,15 @@
 import Client from '../../index.js';
 import { type BaseClass } from '../../interface/index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
-import Badge from '../badge/Badge.js';
-import type TtsModel from '../ttsModel/TtsModel.js';
+import { Badge } from '../badge/Badge.js';
+import type { TtsModel } from '../ttsModel/TtsModel.js';
 import {
 	editUserProfileInputSchema,
 	editUserProfileResponseSchema,
 	type EditUserProfileInputSchema,
 	type UserProfileSchema
 } from './profileUser.schema.js';
-import UserAudioFile from './userAudioFile/UserAudioFile.js';
+import { UserAudioFile } from './userAudioFile/UserAudioFile.js';
 import { userTtsListResponseSchema } from './userAudioFile/userAudioFile.schema.js';
 
 type PaginatedUserAudioFiles = {
@@ -18,7 +18,7 @@ type PaginatedUserAudioFiles = {
 	results: UserAudioFile[];
 };
 
-export default class ProfileUser implements BaseClass {
+export class ProfileUser implements BaseClass {
 	constructor(client: Client, data: UserProfileSchema) {
 		this.client = client;
 

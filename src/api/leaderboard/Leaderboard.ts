@@ -1,8 +1,8 @@
 import Client from '../../index.js';
 import { type LeaderboardResponseSchema } from './leaderboard.schema.js';
-import LeaderboardUser from './leaderboardUser/LeaderboardUser.js';
+import { LeaderboardUser } from './leaderboardUser/LeaderboardUser.js';
 
-export default class Leaderboard {
+export class Leaderboard {
 	constructor(client: Client, data: LeaderboardResponseSchema) {
 		this.ttsLeaderboard = data.tts_leaderboard.map((leaderboardUser) => new LeaderboardUser(client, leaderboardUser));
 		this.w2lLeaderboard = data.w2l_leaderboard.map((leaderboardUser) => new LeaderboardUser(client, leaderboardUser));

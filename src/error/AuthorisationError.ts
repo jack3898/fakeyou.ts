@@ -1,4 +1,4 @@
-export default class AuthorisationError extends Error {
+export class AuthorisationError extends Error {
 	constructor(message: string) {
 		super(message);
 	}
