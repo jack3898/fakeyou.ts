@@ -14,6 +14,10 @@ import {
 	type TtsModelSchema
 } from './ttsModel.schema.js';
 
+/**
+ * A text-to-speech model. This is a model that can be used to generate audio from text.
+ * Models are trained to synthesize speech in a specific language and voice.
+ */
 export class TtsModel implements User {
 	constructor(data: TtsModelSchema, client: Client) {
 		this.client = client;
@@ -39,6 +43,9 @@ export class TtsModel implements User {
 	readonly client: Client;
 
 	readonly token: string;
+	/**
+	 * The type of this model. E.g. 'tacotron2'.
+	 */
 	readonly ttsModelType: string;
 	readonly creatorToken: string;
 	readonly creatorUsername: string;
@@ -48,6 +55,9 @@ export class TtsModel implements User {
 	readonly username: string;
 	readonly creatorDisplayName: string;
 	readonly creatorGravatarHash: string;
+	/**
+	 * The name of this model, which is shown on the website's dropdown menu.
+	 */
 	readonly title: string;
 	readonly ietfLanguageTag: string;
 	readonly ietfPrimaryLanguageSubtag: string;
@@ -101,6 +111,9 @@ export class TtsModel implements User {
 
 	/**
 	 * Infer text for this model.
+	 *
+	 * @param text The text to infer.
+	 * @returns The audio file of the inference. Undefined if the inference failed or took too long.
 	 */
 	async infer(text: string): Promise<TtsAudioFile | undefined> {
 		const inference = await this.#fetchInference(text);
@@ -128,7 +141,7 @@ export class TtsModel implements User {
 	}
 
 	/**
-	 * Rate this model positively, negatively, or neutrally.
+	 * Rate this model positively, negatively, or neutrally. Neutral is the same as removing your rating.
 	 *
 	 * @param decision The rating. Can be 'positive', 'negative', or 'neutral'.
 	 * @returns The new rating of this model by the currently logged in user. Undefined if no user is logged in.

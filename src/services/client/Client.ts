@@ -18,8 +18,31 @@ import { Cache } from '../cache/Cache.js';
 import { Rest } from '../rest/Rest.js';
 import { loginSchema } from './client.schema.js';
 
+export type ClientOptions = {
+	/**
+	 * Whether to enable logging. This is useful for debugging or seeing what the library is doing.
+	 */
+	logging?: boolean;
+};
+
+/**
+ * The FakeYou API client. This is the main entry point for the library.
+ * It provides methods to fetch data from the FakeYou API.
+ *
+ * @example ```ts
+ * import { Client } from 'fakeyou.ts';
+ *
+ * const client = new Client();
+ *
+ * // Optional
+ * await client.login({
+ * 	username: 'username',
+ * 	password: 'password'
+ * });
+ * ```
+ */
 export class Client {
-	constructor(options?: { logging?: boolean }) {
+	constructor(options?: ClientOptions) {
 		log.setLogging(!!options?.logging);
 	}
 
@@ -64,7 +87,8 @@ export class Client {
 	}
 
 	/**
-	 * Logout of your account. Removes the session token from the client and FakeYou's servers.
+	 * Logout of your account. Permanently invalidates the session cookie.
+	 * Use `client.login()` to create a new session.
 	 *
 	 * @returns Whether the logout was successful.
 	 */
@@ -96,10 +120,10 @@ export class Client {
 	}
 
 	/**
-	 * Fetch a TTS model by its token. This is a convenience method for `TtsModel.fetchModels()`.
+	 * Fetch a single TTS model by its token.
 	 *
-	 * @param token The token of the model to fetch
-	 * @returns The model
+	 * @param token The token of the model to fetch. You can find this in the URL of the model page.
+	 * @returns The model.
 	 */
 	async fetchTtsModelByToken(token: string): Promise<TtsModel | undefined> {
 		const models = await this.fetchTtsModels();
@@ -110,8 +134,8 @@ export class Client {
 	/**
 	 * Fetch all models created by a user.
 	 *
-	 * @param username The username of the user
-	 * @returns An array of all models created by the user
+	 * @param username The username of the user, this is not the display name and is case sensitive.
+	 * @returns An array of all models created by the user. Empty array if no models were found.
 	 */
 	async fetchTtsModelsByUser(username: string): Promise<TtsModel[]> {
 		try {
@@ -127,12 +151,14 @@ export class Client {
 	}
 
 	/**
-	 * Fetch a model by its name.
+	 * Fetch a model by its display name. Case insensitive.
 	 *
 	 * This method will return the first model that contains the search string in its title.
+	 * This may not return the right model you are after if there are multiple models with the same substring,
+	 * so it is recommended to use `fetchTtsModelByToken` if you know the token of the model.
 	 *
-	 * @param search The search string (case insensitive)
-	 * @returns The model or undefined if no model was found
+	 * @param search The search string (case insensitive).
+	 * @returns The model or undefined if no model was found.
 	 */
 	async fetchTtsModelByName(search: string): Promise<TtsModel | undefined> {
 		const models = await this.fetchTtsModels();
@@ -147,6 +173,8 @@ export class Client {
 	/**
 	 * Fetch all available voice conversion models.
 	 *
+	 * This method will return all models available on the website.
+	 *
 	 * @returns A map of all available models with their token as the key.
 	 */
 	fetchV2vModels(): Promise<Map<string, V2vModel>> {
@@ -160,10 +188,11 @@ export class Client {
 	}
 
 	/**
-	 * Fetch a voice conversion model by its token.
+	 * Fetch a voice conversion model by its token. This is tricker to locate, as it is not displayed in the UI or in the URL.
+	 * You can find the token by inspecting the network requests on the FakeYou website or by using fetchV2vModelByName and making note of the token.
 	 *
-	 * @param token The token of the model to fetch
-	 * @returns The model
+	 * @param token The token of the model to fetch.
+	 * @returns The voice conversion model.
 	 */
 	async fetchV2vModelByToken(token: string): Promise<V2vModel | undefined> {
 		const models = await this.fetchV2vModels();
@@ -172,9 +201,10 @@ export class Client {
 	}
 
 	/**
-	 * Fetch all voice-to-voice models by its name.
-	 *
+	 * Fetch a voice conversion model by its display name. Case insensitive.
 	 * This method will return the first model that contains the search string in its title.
+	 * This may not return the right model you are after if there are multiple models with the same substring,
+	 * so it is recommended to use `fetchV2vModelByToken` if you know the token of the model.
 	 *
 	 * @param search The search string (case insensitive)
 	 * @returns The model or undefined if no model was found
@@ -220,9 +250,9 @@ export class Client {
 	}
 
 	/**
-	 * Fetch the leaderboard. This is a global leaderboard of the top contributors to the site.
+	 * Fetch the TTS and W2L leaderboards.
 	 *
-	 * @returns The leaderboard
+	 * @returns The leaderboards.
 	 */
 	async fetchLeaderboard(): Promise<Leaderboard> {
 		const json = await this.cache.wrap('fetch-leaderboard', async () => {
@@ -237,12 +267,12 @@ export class Client {
 	/**
 	 * Fetch a user profile by their username.
 	 *
-	 * @param username The username of the user to fetch
-	 * @returns The user profile, or undefined if the user does not exist
+	 * @param username The username of the user to fetch. This is not the display name and is case sensitive.
+	 * @returns The user profile, or undefined if the user does not exist.
 	 */
 	async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
-			const json = await this.cache.wrap('fetch-user-profile', async () => {
+			const json = await this.cache.wrap(`fetch-user-profile-${username}`, async () => {
 				const response = await this.rest.send(`${constants.API_URL}/user/${username}/profile`);
 
 				return prettyParse(userProfileResponseSchema, await response.json());
@@ -257,11 +287,11 @@ export class Client {
 	}
 
 	/**
-	 * Fetch the current FakeYou TTS queue.
+	 * Fetch the current FakeYou TTS queue and other related information.
 	 *
 	 * This is the number of jobs that are currently waiting to be processed by the FakeYou TTS engine.
 	 *
-	 * @returns The queue
+	 * @returns The queue.
 	 */
 	async fetchQueue(): Promise<Queue> {
 		const response = await this.rest.send(`${constants.API_URL}/tts/queue_length`);
@@ -271,7 +301,7 @@ export class Client {
 	}
 
 	/**
-	 * Fetch all available categories which hold tts models and child categories.
+	 * Fetch all available categories which hold TTS models and child categories.
 	 *
 	 * @returns A list of all available categories including their child categories.
 	 */
@@ -285,7 +315,8 @@ export class Client {
 	}
 
 	/**
-	 * Fetch all root categories which hold tts models and child categories. Root categories are categories which have no parent category.
+	 * Fetch all root categories which hold TTS models and child categories.
+	 * Root categories are categories which have no parent category.
 	 *
 	 * @returns A list of all root categories.
 	 */
@@ -296,9 +327,10 @@ export class Client {
 	}
 
 	/**
-	 * Fetch all category to model relationships. This is used to determine which models belong to which categories.
+	 * Fetch all category to model relationships.
+	 * This is used to determine which models belong to which categories.
 	 *
-	 * @returns A map of category tokens to tts model tokens.
+	 * @returns An object where the key is the category token and the value is an array of model tokens.
 	 */
 	async fetchCategoryToModelRelationships(): Promise<Record<string, string[]>> {
 		return this.cache.wrap('fetch-category-model-relationships', async () => {
@@ -310,10 +342,11 @@ export class Client {
 	}
 
 	/**
-	 * Fetch a category by its token.
+	 * Fetch a category by its token. Categories are used to group TTS models together.
+	 * NOTE: Voice conversion models are not grouped into categories so this method will not return any voice conversion model categories.
 	 *
-	 * @param token The token of the category to fetch
-	 * @returns The category
+	 * @param token The token of the category to fetch.
+	 * @returns The category or undefined if no category was found.
 	 */
 	async fetchCategoryByToken(token: string): Promise<Category | undefined> {
 		const categories = await this.fetchCategories();

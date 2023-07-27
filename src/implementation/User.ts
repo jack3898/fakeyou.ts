@@ -2,19 +2,22 @@ import type { ProfileUser } from '../api/profileUser/ProfileUser.js';
 import { type BaseClass } from '../interface/index.js';
 
 /**
- * The given class has information about the user.
- * Contractual methods to extend this behavior.
+ * An implementation to fetch user related data.
  */
 export interface User extends BaseClass {
+	/**
+	 * The username of the user.
+	 */
 	username: string;
 
 	fetchProfile(): Promise<ProfileUser | undefined>;
 }
 
 /**
- * Implement the {@link User} interface and bind this function to the given class.
+ * Fetch the profile of the user.
  *
- * Fetches the user's profile when the class contains their username.
+ * @param this The class that implements this {@link User} interface.
+ * @returns The profile of the user.
  */
 export function implFetchUser(this: User): Promise<ProfileUser | undefined> {
 	return this.client.fetchUserProfile(this.username);

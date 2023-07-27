@@ -3,6 +3,10 @@ import { type BaseClass } from '../../interface/BaseClass.js';
 import type { TtsModel } from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';
 
+/**
+ * A TTS category. This is a category that TTS models can belong to.
+ * Categories can also have subcategories.
+ */
 export class Category implements BaseClass {
 	constructor(client: Client, data: CategorySchema) {
 		this.client = client;

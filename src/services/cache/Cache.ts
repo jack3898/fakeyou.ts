@@ -3,7 +3,43 @@ import crypto from 'node:crypto';
 import * as log from '../../util/log.js';
 import sizeof from '../../util/sizeof.js';
 
+/**
+ * The key to used to identify the cached data.
+ *
+ * Keys:
+ * - `login` - The login response from the FakeYou API.
+ * - `fetch-category-model-relationships` - The relationships between categories and models.
+ * - `fetch-categories` - All of the categories from the FakeYou API.
+ * - `fetch-user-profile-[username]` - The profile of a user. The profile username is appended to the key.
+ * - `fetch-leaderboard` - The FakeYou leaderboards.
+ * - `fetch-v2v-models` - All of the V2V models from the FakeYou API.
+ * - `fetch-tts-models` - All of the TTS models from the FakeYou API.
+ */
+export type CacheKey =
+	| 'login'
+	| 'fetch-category-model-relationships'
+	| 'fetch-categories'
+	| `fetch-user-profile-${string}`
+	| 'fetch-leaderboard'
+	| 'fetch-v2v-models'
+	| 'fetch-tts-models';
+
+/**
+ * A cache that can be used to store data for the lifetime of the this object.
+ *
+ * It uses LRU caching, so it will automatically remove the least recently used items when it reaches its limits.
+ * And also has a TTL, so it will automatically remove items that have not been used for a while.
+ *
+ * It's a small wrapper over LRUCache npm package.
+ *
+ * @see https://www.npmjs.com/package/lru-cache
+ */
 export class Cache {
+	/**
+	 * The namespace to use for the cache.
+	 *
+	 * NOTE: Will be removed in the future as it is not needed.
+	 */
 	namespace = crypto.randomUUID();
 
 	lruCache = new LRUCache<string, NonNullable<unknown>>({
@@ -18,16 +54,18 @@ export class Cache {
 	});
 
 	/**
-	 * Using a key, cache the result of an async function!
+	 * Wrap an async function with a cache.
 	 *
-	 * Global cache use only. I.e. data that is useful for the entire lifetime of the application that just needs an occasional refresh.
-	 * If you find yourself making the key dynamic, this cache is not the tool to use.
+	 * If the cache is empty, the async function will be run and the result will be stored in the cache.
+	 * If the cache is not empty, the async function will not be run and the result will be returned from the cache.
 	 *
-	 * @param key The key to use for this cache item
-	 * @param operation The async function to run if the cache is empty
-	 * @returns The result of the async function
+	 * This is useful for caching data that is expensive to fetch, such as data from the FakeYou API.
+	 *
+	 * @param key The key to used to identify the cached data.
+	 * @param operation The async function to run if the cache is empty.
+	 * @returns The result of the async function.
 	 */
-	async wrap<T>(key: string, operation: () => Promise<T>): Promise<T> {
+	async wrap<T>(key: CacheKey, operation: () => Promise<T>): Promise<T> {
 		const namespacedKey = `${this.namespace}:${key}`;
 		const cacheItem = this.lruCache.get(namespacedKey);
 
@@ -48,12 +86,22 @@ export class Cache {
 		return freshData;
 	}
 
-	dispose(key: string): boolean {
+	/**
+	 * Invalidate a cache item, so that it will be fetched again the next time it is requested.
+	 *
+	 * @param key The key to used to identify the cached data.
+	 * @returns Whether the cache item was invalidated.
+	 */
+	dispose(key: CacheKey): boolean {
 		const namespacedKey = `${this.namespace}:${key}`;
 
 		return this.lruCache.delete(namespacedKey);
 	}
 
+	/**
+	 * Invalidate all cache items.
+	 * This will cause all cache items to be fetched again the next time they are requested.
+	 */
 	disposeAll(): void {
 		return this.lruCache.clear();
 	}
