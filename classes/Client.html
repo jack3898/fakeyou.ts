@@ -15,12 +15,20 @@
 <li><a href="../modules.html">fakeyou.ts</a></li>
 <li><a href="Client.html">Client</a></li></ul>
 <h1>Class Client</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>The FakeYou API client. This is the main entry point for the library.
+It provides methods to fetch data from the FakeYou API.</p>
+</div>
+<div class="tsd-comment tsd-typography">
+<h4>Example</h4><pre><code class="language-ts"><span class="hl-4">import</span><span class="hl-1"> { </span><span class="hl-5">Client</span><span class="hl-1"> } </span><span class="hl-4">from</span><span class="hl-1"> </span><span class="hl-2">&#39;fakeyou.ts&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">client</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Client</span><span class="hl-1">();</span><br/><br/><span class="hl-8">// Optional</span><br/><span class="hl-4">await</span><span class="hl-1"> </span><span class="hl-5">client</span><span class="hl-1">.</span><span class="hl-0">login</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-5">username:</span><span class="hl-1"> </span><span class="hl-2">&#39;username&#39;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-5">password:</span><span class="hl-1"> </span><span class="hl-2">&#39;password&#39;</span><br/><span class="hl-1">});</span>
+</code><button>Copy</button></pre>
+</div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li><span class="target">Client</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L21">src/services/client/Client.ts:21</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L44">src/services/client/Client.ts:44</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -67,25 +75,22 @@
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">logging</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
-<ul class="tsd-parameters">
-<li class="tsd-parameter">
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-property">logging</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5></li></ul></li></ul></div>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-parameter">options</span>: <a href="../types/ClientOptions.html" class="tsd-signature-type tsd-kind-type-alias">ClientOptions</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="Client.html" class="tsd-signature-type tsd-kind-class">Client</a></h4><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L22">src/services/client/Client.ts:22</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L45">src/services/client/Client.ts:45</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="cache" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>cache</span><a href="#cache" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cache</span><span class="tsd-signature-symbol">:</span> <a href="Cache.html" class="tsd-signature-type tsd-kind-class">Cache</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L27">src/services/client/Client.ts:27</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L50">src/services/client/Client.ts:50</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="rest" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>rest</span><a href="#rest" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">rest</span><span class="tsd-signature-symbol">:</span> <a href="Rest.html" class="tsd-signature-type tsd-kind-class">Rest</a><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L26">src/services/client/Client.ts:26</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L49">src/services/client/Client.ts:49</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member"><a id="fetchCategories" class="tsd-anchor"></a>
@@ -93,57 +98,59 @@
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchCategories.fetchCategories-1"><span class="tsd-kind-call-signature">fetch<wbr/>Categories</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#fetchCategories.fetchCategories-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch all available categories which hold tts models and child categories.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch all available categories which hold TTS models and child categories.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><p>A list of all available categories including their child categories.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L278">src/services/client/Client.ts:278</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L308">src/services/client/Client.ts:308</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchCategoryByToken" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Category<wbr/>By<wbr/>Token</span><a href="#fetchCategoryByToken" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchCategoryByToken.fetchCategoryByToken-1"><span class="tsd-kind-call-signature">fetch<wbr/>Category<wbr/>By<wbr/>Token</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">token</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchCategoryByToken.fetchCategoryByToken-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch a category by its token.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch a category by its token. Categories are used to group TTS models together.
+NOTE: Voice conversion models are not grouped into categories so this method will not return any voice conversion model categories.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">token</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The token of the category to fetch</p>
+<div class="tsd-comment tsd-typography"><p>The token of the category to fetch.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The category</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The category or undefined if no category was found.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L318">src/services/client/Client.ts:318</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L351">src/services/client/Client.ts:351</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchCategoryToModelRelationships" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Category<wbr/>To<wbr/>Model<wbr/>Relationships</span><a href="#fetchCategoryToModelRelationships" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchCategoryToModelRelationships.fetchCategoryToModelRelationships-1"><span class="tsd-kind-call-signature">fetch<wbr/>Category<wbr/>To<wbr/>Model<wbr/>Relationships</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#fetchCategoryToModelRelationships.fetchCategoryToModelRelationships-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch all category to model relationships. This is used to determine which models belong to which categories.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch all category to model relationships.
+This is used to determine which models belong to which categories.</p>
 </div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><p>A map of category tokens to tts model tokens.</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><p>An object where the key is the category token and the value is an array of model tokens.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L303">src/services/client/Client.ts:303</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L335">src/services/client/Client.ts:335</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchLeaderboard" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Leaderboard</span><a href="#fetchLeaderboard" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchLeaderboard.fetchLeaderboard-1"><span class="tsd-kind-call-signature">fetch<wbr/>Leaderboard</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Leaderboard.html" class="tsd-signature-type tsd-kind-class">Leaderboard</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchLeaderboard.fetchLeaderboard-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch the leaderboard. This is a global leaderboard of the top contributors to the site.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch the TTS and W2L leaderboards.</p>
 </div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Leaderboard.html" class="tsd-signature-type tsd-kind-class">Leaderboard</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The leaderboard</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Leaderboard.html" class="tsd-signature-type tsd-kind-class">Leaderboard</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The leaderboards.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L227">src/services/client/Client.ts:227</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L257">src/services/client/Client.ts:257</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchLoggedInUser" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Logged<wbr/>In<wbr/>User</span><a href="#fetchLoggedInUser" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -155,73 +162,76 @@
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L209">src/services/client/Client.ts:209</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L239">src/services/client/Client.ts:239</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchQueue" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Queue</span><a href="#fetchQueue" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchQueue.fetchQueue-1"><span class="tsd-kind-call-signature">fetch<wbr/>Queue</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Queue.html" class="tsd-signature-type tsd-kind-class">Queue</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchQueue.fetchQueue-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch the current FakeYou TTS queue.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch the current FakeYou TTS queue and other related information.</p>
 <p>This is the number of jobs that are currently waiting to be processed by the FakeYou TTS engine.</p>
 </div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Queue.html" class="tsd-signature-type tsd-kind-class">Queue</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The queue</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Queue.html" class="tsd-signature-type tsd-kind-class">Queue</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The queue.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L266">src/services/client/Client.ts:266</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L296">src/services/client/Client.ts:296</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchRootCategories" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Root<wbr/>Categories</span><a href="#fetchRootCategories" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchRootCategories.fetchRootCategories-1"><span class="tsd-kind-call-signature">fetch<wbr/>Root<wbr/>Categories</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><a href="#fetchRootCategories.fetchRootCategories-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch all root categories which hold tts models and child categories. Root categories are categories which have no parent category.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch all root categories which hold TTS models and child categories.
+Root categories are categories which have no parent category.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Category.html" class="tsd-signature-type tsd-kind-class">Category</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><p>A list of all root categories.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L292">src/services/client/Client.ts:292</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L323">src/services/client/Client.ts:323</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchTtsModelByName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Tts<wbr/>Model<wbr/>By<wbr/>Name</span><a href="#fetchTtsModelByName" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchTtsModelByName.fetchTtsModelByName-1"><span class="tsd-kind-call-signature">fetch<wbr/>Tts<wbr/>Model<wbr/>By<wbr/>Name</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">search</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchTtsModelByName.fetchTtsModelByName-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch a model by its name.</p>
-<p>This method will return the first model that contains the search string in its title.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch a model by its display name. Case insensitive.</p>
+<p>This method will return the first model that contains the search string in its title.
+This may not return the right model you are after if there are multiple models with the same substring,
+so it is recommended to use <code>fetchTtsModelByToken</code> if you know the token of the model.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">search</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The search string (case insensitive)</p>
+<div class="tsd-comment tsd-typography"><p>The search string (case insensitive).</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The model or undefined if no model was found</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The model or undefined if no model was found.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L137">src/services/client/Client.ts:137</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L163">src/services/client/Client.ts:163</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchTtsModelByToken" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Tts<wbr/>Model<wbr/>By<wbr/>Token</span><a href="#fetchTtsModelByToken" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchTtsModelByToken.fetchTtsModelByToken-1"><span class="tsd-kind-call-signature">fetch<wbr/>Tts<wbr/>Model<wbr/>By<wbr/>Token</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">token</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchTtsModelByToken.fetchTtsModelByToken-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch a TTS model by its token. This is a convenience method for <code>TtsModel.fetchModels()</code>.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch a single TTS model by its token.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">token</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The token of the model to fetch</p>
+<div class="tsd-comment tsd-typography"><p>The token of the model to fetch. You can find this in the URL of the model page.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The model</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The model.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L104">src/services/client/Client.ts:104</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L128">src/services/client/Client.ts:128</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchTtsModels" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Tts<wbr/>Models</span><a href="#fetchTtsModels" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -234,7 +244,7 @@
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L88">src/services/client/Client.ts:88</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L112">src/services/client/Client.ts:112</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchTtsModelsByUser" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>Tts<wbr/>Models<wbr/>By<wbr/>User</span><a href="#fetchTtsModelsByUser" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -247,14 +257,14 @@
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">username</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The username of the user</p>
+<div class="tsd-comment tsd-typography"><p>The username of the user, this is not the display name and is case sensitive.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><p>An array of all models created by the user</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="TtsModel.html" class="tsd-signature-type tsd-kind-class">TtsModel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4><p>An array of all models created by the user. Empty array if no models were found.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L116">src/services/client/Client.ts:116</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L140">src/services/client/Client.ts:140</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchUserProfile" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>User<wbr/>Profile</span><a href="#fetchUserProfile" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -267,21 +277,23 @@
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">username</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The username of the user to fetch</p>
+<div class="tsd-comment tsd-typography"><p>The username of the user to fetch. This is not the display name and is case sensitive.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="ProfileUser.html" class="tsd-signature-type tsd-kind-class">ProfileUser</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The user profile, or undefined if the user does not exist</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="ProfileUser.html" class="tsd-signature-type tsd-kind-class">ProfileUser</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The user profile, or undefined if the user does not exist.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L243">src/services/client/Client.ts:243</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L273">src/services/client/Client.ts:273</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchV2vModelByName" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>V2v<wbr/>Model<wbr/>By<wbr/>Name</span><a href="#fetchV2vModelByName" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchV2vModelByName.fetchV2vModelByName-1"><span class="tsd-kind-call-signature">fetch<wbr/>V2v<wbr/>Model<wbr/>By<wbr/>Name</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">search</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="V2vModel.html" class="tsd-signature-type tsd-kind-class">V2vModel</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchV2vModelByName.fetchV2vModelByName-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch all voice-to-voice models by its name.</p>
-<p>This method will return the first model that contains the search string in its title.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch a voice conversion model by its display name. Case insensitive.
+This method will return the first model that contains the search string in its title.
+This may not return the right model you are after if there are multiple models with the same substring,
+so it is recommended to use <code>fetchV2vModelByToken</code> if you know the token of the model.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -295,39 +307,41 @@
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L182">src/services/client/Client.ts:182</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L212">src/services/client/Client.ts:212</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchV2vModelByToken" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>V2v<wbr/>Model<wbr/>By<wbr/>Token</span><a href="#fetchV2vModelByToken" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchV2vModelByToken.fetchV2vModelByToken-1"><span class="tsd-kind-call-signature">fetch<wbr/>V2v<wbr/>Model<wbr/>By<wbr/>Token</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">token</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="V2vModel.html" class="tsd-signature-type tsd-kind-class">V2vModel</a><span class="tsd-signature-symbol">&gt;</span><a href="#fetchV2vModelByToken.fetchV2vModelByToken-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Fetch a voice conversion model by its token.</p>
+<div class="tsd-comment tsd-typography"><p>Fetch a voice conversion model by its token. This is tricker to locate, as it is not displayed in the UI or in the URL.
+You can find the token by inspecting the network requests on the FakeYou website or by using fetchV2vModelByName and making note of the token.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">token</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The token of the model to fetch</p>
+<div class="tsd-comment tsd-typography"><p>The token of the model to fetch.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="V2vModel.html" class="tsd-signature-type tsd-kind-class">V2vModel</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The model</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="V2vModel.html" class="tsd-signature-type tsd-kind-class">V2vModel</a><span class="tsd-signature-symbol">&gt;</span></h4><p>The voice conversion model.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L168">src/services/client/Client.ts:168</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L197">src/services/client/Client.ts:197</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchV2vModels" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>V2v<wbr/>Models</span><a href="#fetchV2vModels" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="fetchV2vModels.fetchV2vModels-1"><span class="tsd-kind-call-signature">fetch<wbr/>V2v<wbr/>Models</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="V2vModel.html" class="tsd-signature-type tsd-kind-class">V2vModel</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#fetchV2vModels.fetchV2vModels-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Fetch all available voice conversion models.</p>
+<p>This method will return all models available on the website.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type ">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="V2vModel.html" class="tsd-signature-type tsd-kind-class">V2vModel</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4><p>A map of all available models with their token as the key.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L152">src/services/client/Client.ts:152</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L180">src/services/client/Client.ts:180</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="fetchV2vModelsByUser" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>fetch<wbr/>V2v<wbr/>Models<wbr/>By<wbr/>User</span><a href="#fetchV2vModelsByUser" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -347,7 +361,7 @@
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L198">src/services/client/Client.ts:198</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L228">src/services/client/Client.ts:228</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="login" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>login</span><a href="#login" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -376,19 +390,20 @@ If you work for FakeYou and can provide a token to test with and want help add s
 <h4>Rejects</h4><p>If the credentials are invalid.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L40">src/services/client/Client.ts:40</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L63">src/services/client/Client.ts:63</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="logout" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>logout</span><a href="#logout" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="logout.logout-1"><span class="tsd-kind-call-signature">logout</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><a href="#logout.logout-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Logout of your account. Removes the session token from the client and FakeYou&#39;s servers.</p>
+<div class="tsd-comment tsd-typography"><p>Logout of your account. Permanently invalidates the session cookie.
+Use <code>client.login()</code> to create a new session.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4><p>Whether the logout was successful.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/client/Client.ts#L71">src/services/client/Client.ts:71</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/client/Client.ts#L95">src/services/client/Client.ts:95</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -452,7 +467,9 @@ If you work for FakeYou and can provide a token to test with and want help add s
 <li><a href="../interfaces/Audio.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-256"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)"></path></g></svg><span>Audio</span></a></li>
 <li><a href="../interfaces/BaseClass.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Base<wbr/>Class</span></a></li>
 <li><a href="../interfaces/User.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>User</span></a></li>
-<li><a href="../types/PaginatedUserAudioFiles.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Paginated<wbr/>User<wbr/>Audio<wbr/>Files</span></a></li></ul></nav></div></div></div>
+<li><a href="../types/CacheKey.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Cache<wbr/>Key</span></a></li>
+<li><a href="../types/ClientOptions.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Client<wbr/>Options</span></a></li>
+<li><a href="../types/PaginatedUserAudioFiles.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Paginated<wbr/>User<wbr/>Audio<wbr/>Files</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>

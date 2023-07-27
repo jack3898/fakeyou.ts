@@ -15,12 +15,21 @@
 <li><a href="../modules.html">fakeyou.ts</a></li>
 <li><a href="Cache.html">Cache</a></li></ul>
 <h1>Class Cache</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>A cache that can be used to store data for the lifetime of the this object.</p>
+<p>It uses LRU caching, so it will automatically remove the least recently used items when it reaches its limits.
+And also has a TTL, so it will automatically remove items that have not been used for a while.</p>
+<p>It&#39;s a small wrapper over LRUCache npm package.</p>
+</div>
+<div class="tsd-comment tsd-typography">
+<h4>See</h4><p><a href="https://www.npmjs.com/package/lru-cache">https://www.npmjs.com/package/lru-cache</a></p>
+</div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li><span class="target">Cache</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/cache/Cache.ts#L6">src/services/cache/Cache.ts:6</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L37">src/services/cache/Cache.ts:37</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -58,12 +67,16 @@
 <h4>Type declaration</h4>
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/cache/Cache.ts#L9">src/services/cache/Cache.ts:9</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L45">src/services/cache/Cache.ts:45</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="namespace" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>namespace</span><a href="#namespace" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">namespace</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol"> = ...</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">namespace</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol"> = ...</span></div>
+<div class="tsd-comment tsd-typography"><p>The namespace to use for the cache.</p>
+<p>NOTE: Will be removed in the future as it is not needed.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/cache/Cache.ts#L7">src/services/cache/Cache.ts:7</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L43">src/services/cache/Cache.ts:43</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member"><a id="dispose" class="tsd-anchor"></a>
@@ -71,30 +84,42 @@
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="dispose.dispose-1"><span class="tsd-kind-call-signature">dispose</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">key</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><a href="#dispose.dispose-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Invalidate a cache item, so that it will be fetched again the next time it is requested.</p>
+</div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">key</span>: <span class="tsd-signature-type">string</span></h5></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><aside class="tsd-sources">
+<h5><span class="tsd-kind-parameter">key</span>: <a href="../types/CacheKey.html" class="tsd-signature-type tsd-kind-type-alias">CacheKey</a></h5>
+<div class="tsd-comment tsd-typography"><p>The key to used to identify the cached data.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4><p>Whether the cache item was invalidated.</p>
+
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/cache/Cache.ts#L51">src/services/cache/Cache.ts:51</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L95">src/services/cache/Cache.ts:95</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="disposeAll" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>dispose<wbr/>All</span><a href="#disposeAll" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="disposeAll.disposeAll-1"><span class="tsd-kind-call-signature">dispose<wbr/>All</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#disposeAll.disposeAll-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
+<div class="tsd-comment tsd-typography"><p>Invalidate all cache items.
+This will cause all cache items to be fetched again the next time they are requested.</p>
+</div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/cache/Cache.ts#L57">src/services/cache/Cache.ts:57</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L105">src/services/cache/Cache.ts:105</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="wrap" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>wrap</span><a href="#wrap" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="tsd-signature tsd-anchor-link" id="wrap.wrap-1"><span class="tsd-kind-call-signature">wrap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">key</span>, <span class="tsd-kind-parameter">operation</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span><a href="#wrap.wrap-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Using a key, cache the result of an async function!</p>
-<p>Global cache use only. I.e. data that is useful for the entire lifetime of the application that just needs an occasional refresh.
-If you find yourself making the key dynamic, this cache is not the tool to use.</p>
+<div class="tsd-comment tsd-typography"><p>Wrap an async function with a cache.</p>
+<p>If the cache is empty, the async function will be run and the result will be stored in the cache.
+If the cache is not empty, the async function will not be run and the result will be returned from the cache.</p>
+<p>This is useful for caching data that is expensive to fetch, such as data from the FakeYou API.</p>
 </div>
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
@@ -105,13 +130,13 @@ If you find yourself making the key dynamic, this cache is not the tool to use.<
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">key</span>: <span class="tsd-signature-type">string</span></h5>
-<div class="tsd-comment tsd-typography"><p>The key to use for this cache item</p>
+<h5><span class="tsd-kind-parameter">key</span>: <a href="../types/CacheKey.html" class="tsd-signature-type tsd-kind-type-alias">CacheKey</a></h5>
+<div class="tsd-comment tsd-typography"><p>The key to used to identify the cached data.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li>
 <li>
 <h5><span class="tsd-kind-parameter">operation</span>: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span></h5>
-<div class="tsd-comment tsd-typography"><p>The async function to run if the cache is empty</p>
+<div class="tsd-comment tsd-typography"><p>The async function to run if the cache is empty.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div>
 <ul class="tsd-parameters">
@@ -120,11 +145,11 @@ If you find yourself making the key dynamic, this cache is not the tool to use.<
 <li class="tsd-signature"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span></h4></li></ul></li></ul></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span></h4><p>The result of the async function</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type ">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">T</span><span class="tsd-signature-symbol">&gt;</span></h4><p>The result of the async function.</p>
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/9839998/src/services/cache/Cache.ts#L30">src/services/cache/Cache.ts:30</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L68">src/services/cache/Cache.ts:68</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -173,7 +198,9 @@ If you find yourself making the key dynamic, this cache is not the tool to use.<
 <li><a href="../interfaces/Audio.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-256"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)"></path></g></svg><span>Audio</span></a></li>
 <li><a href="../interfaces/BaseClass.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>Base<wbr/>Class</span></a></li>
 <li><a href="../interfaces/User.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg><span>User</span></a></li>
-<li><a href="../types/PaginatedUserAudioFiles.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Paginated<wbr/>User<wbr/>Audio<wbr/>Files</span></a></li></ul></nav></div></div></div>
+<li><a href="../types/CacheKey.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4194304"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-type-alias)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)"></path></g></svg><span>Cache<wbr/>Key</span></a></li>
+<li><a href="../types/ClientOptions.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Client<wbr/>Options</span></a></li>
+<li><a href="../types/PaginatedUserAudioFiles.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-4194304"></use></svg><span>Paginated<wbr/>User<wbr/>Audio<wbr/>Files</span></a></li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div>
 <div class="overlay"></div></body></html>
