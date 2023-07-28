@@ -1,10 +1,14 @@
 import { log } from '../../util/index.js';
 
+/**
+ * The Rest service provides functionality for interacting with the FakeYou API and handles authentication.
+ */
 export class Rest {
 	#cookie?: string = process.env.FAKEYOU_COOKIE;
 
 	/**
-	 * Light wrapper over fetch. Pre-applies headers useful to this package.
+	 * Light wrapper over fetch, provides authentication and logging automatically.
+	 * The correct headers are automatically set to comply with the FakeYou API.
 	 *
 	 * Note: If `FAKEYOU_COOKIE` environment variable is set, it will be used for authentication.
 	 *

@@ -2,7 +2,14 @@ import Client from '../../index.js';
 import { type LeaderboardResponseSchema } from './leaderboard.schema.js';
 import { LeaderboardUser } from './leaderboardUser/LeaderboardUser.js';
 
+/**
+ * The leaderboard class for the TTS and W2L leaderboards.
+ */
 export class Leaderboard {
+	/**
+	 * @param client The main client.
+	 * @param data The raw leaderboard data from the FakeYou API.
+	 */
 	constructor(client: Client, data: LeaderboardResponseSchema) {
 		this.ttsLeaderboard = data.tts_leaderboard.map((leaderboardUser) => new LeaderboardUser(client, leaderboardUser));
 		this.w2lLeaderboard = data.w2l_leaderboard.map((leaderboardUser) => new LeaderboardUser(client, leaderboardUser));

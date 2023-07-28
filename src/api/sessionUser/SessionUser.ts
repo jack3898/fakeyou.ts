@@ -5,7 +5,14 @@ import { Subscription } from '../subscription/Subscription.js';
 import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
 import { type SessionUserSchema } from './sessionUser.schema.js';
 
+/**
+ * The user who is logged in to this client. This is the user that is used to make authenticated requests to the FakeYou API.
+ */
 export class SessionUser implements User {
+	/**
+	 * @param client The main client.
+	 * @param data The raw session user data from the FakeYou API.
+	 */
 	constructor(client: Client, data: SessionUserSchema) {
 		this.client = client;
 
@@ -66,13 +73,11 @@ export class SessionUser implements User {
 	 * Fetch the profile of the currently logged in user which contains more information than the session user.
 	 *
 	 * @returns The profile of the currently logged in user. Undefined if no user is logged in.
-	 * @function
 	 */
 	fetchProfile = implFetchUser;
 
 	/**
 	 * Fetch the subscription of the currently logged in user.
-	 * The subscription contains information about the user's current subscription status like their plan and loyalty status.
 	 *
 	 * @returns The subscription of the currently logged in user. Undefined if no user is logged in.
 	 */

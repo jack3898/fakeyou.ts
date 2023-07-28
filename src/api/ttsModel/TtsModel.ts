@@ -19,7 +19,11 @@ import {
  * Models are trained to synthesize speech in a specific language and voice.
  */
 export class TtsModel implements User {
-	constructor(data: TtsModelSchema, client: Client) {
+	/**
+	 * @param client The main client.
+	 * @param data The data that has arrived from the FakeYou API.
+	 */
+	constructor(client: Client, data: TtsModelSchema) {
 		this.client = client;
 
 		this.token = data.model_token;

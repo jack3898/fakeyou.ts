@@ -12,7 +12,15 @@ import {
 	type V2vVoiceUploadResponseSchema
 } from './v2vModel.schema.js';
 
+/**
+ * A voice conversion model.
+ * This is a model that can be used to convert audio from one voice to another.
+ */
 export class V2vModel implements User {
+	/**
+	 * @param client The main client.
+	 * @param data The raw model data from the FakeYou API.
+	 */
 	constructor(client: Client, data: V2vModelSchema) {
 		this.client = client;
 
@@ -122,7 +130,10 @@ export class V2vModel implements User {
 	/**
 	 * Infer uploaded audio to a new voice represented by this model.
 	 *
-	 * Unlike TTS, this does NOT support rate limit safety features, so be cautious!
+	 * NOTE: Voice conversion models are very slow to infer. It may take multiple minutes for the inference to complete.
+	 *
+	 * @param audio The audio to infer as a wav file.
+	 * @returns The inferred audio file. Undefined if the audio could not be inferred.
 	 */
 	async infer(audio: Buffer): Promise<V2vAudioFile | undefined> {
 		const uploadedAudio = await this.#uploadAudio(audio);

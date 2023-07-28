@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import { type BaseClass } from '../interface/BaseClass.js';
+import { type BaseClass } from './BaseClass.js';
 
 const writeFile = promisify(fs.writeFile);
 

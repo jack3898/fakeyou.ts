@@ -11,6 +11,10 @@ import { constants } from '../../../util/index.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
 
 export class UserAudioFile implements Audio, User {
+	/**
+	 * @param client The main client.
+	 * @param data The raw user audio file data from the FakeYou API.
+	 */
 	constructor(client: Client, data: UserTtsSchema) {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;

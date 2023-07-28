@@ -1,9 +1,10 @@
 {
     "name": "fakeyou.ts",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "description": "FakeYou API made easy, with ESM and TypeScript support!",
     "type": "module",
     "main": "dist/index.js",
+    "homepage": "https://fakeyouts.js.org/",
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",

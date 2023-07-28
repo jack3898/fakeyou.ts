@@ -1,5 +1,5 @@
 import type { ProfileUser } from '../api/profileUser/ProfileUser.js';
-import { type BaseClass } from '../interface/index.js';
+import { type BaseClass } from '../implementation/index.js';
 
 /**
  * An implementation to fetch user related data.
