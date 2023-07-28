@@ -9,7 +9,8 @@ export class Queue {
 	 * @param data The raw queue data from the FakeYou API.
 	 */
 	constructor(data: QueueLengthResponseSchema) {
-		this.pendingJobCount = data.pending_job_count;
+		this.ttsQueued = data.legacy_tts.pending_job_count;
+		this.v2vQueued = data.inference.pending_job_count;
 		this.cacheTime = data.cache_time;
 		this.refreshIntervalMillis = data.refresh_interval_millis;
 	}
@@ -17,10 +18,13 @@ export class Queue {
 	/**
 	 * The number of jobs that are currently pending.
 	 * The bigger this number is, the longer it will take for your job to be processed.
-	 * If this number is above 2000 then your request may take multiple minutes.
-	 * If this number is below 100 then your request will come through momentarily.
 	 */
-	readonly pendingJobCount: number;
+	readonly ttsQueued: number;
+	/**
+	 * The number of jobs that are currently pending for the voice to voice.
+	 * The bigger this number is, the longer it will take for your job to be processed.
+	 */
+	readonly v2vQueued: number;
 	readonly cacheTime: Date;
 	readonly refreshIntervalMillis: number;
 }

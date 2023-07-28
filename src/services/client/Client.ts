@@ -294,7 +294,7 @@ export class Client {
 	 * @returns The queue.
 	 */
 	async fetchQueue(): Promise<Queue> {
-		const response = await this.rest.send(`${constants.API_URL}/tts/queue_length`);
+		const response = await this.rest.send(`${constants.API_URL}/v1/stats/queues`);
 		const json = prettyParse(queueLengthResponseSchema, await response.json());
 
 		return new Queue(json);
