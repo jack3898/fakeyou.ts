@@ -18,3 +18,4 @@ export { Cache, type CacheKey } from './services/cache/Cache.js';
 export { Client as default, type ClientOptions } from './services/client/Client.js';
 export { Client } from './services/client/Client.js';
 export { Rest } from './services/rest/Rest.js';
+export { Comment } from './api/comment/Comment.js';
