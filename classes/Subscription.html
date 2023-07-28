@@ -15,12 +15,16 @@
 <li><a href="../modules.html">fakeyou.ts</a></li>
 <li><a href="Subscription.html">Subscription</a></li></ul>
 <h1>Class Subscription</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>The user&#39;s subscription information.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
 <li><span class="target">Subscription</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/api/subscription/Subscription.ts#L3">src/api/subscription/Subscription.ts:3</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/api/subscription/Subscription.ts#L6">src/api/subscription/Subscription.ts:6</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -47,6 +51,9 @@
 <ul class="tsd-parameter-list">
 <li>
 <h5><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">active_subscriptions</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span><span class="tsd-kind-property">namespace</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span>        </span><span class="tsd-kind-property">product_slug</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">maybe_loyalty_program</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">success</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<div class="tsd-comment tsd-typography"><p>The raw subscription data from the FakeYou API.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
 <h5><span class="tsd-kind-property">active_<wbr/>subscriptions</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">namespace</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">product_slug</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">[]</span></h5></li>
@@ -54,24 +61,32 @@
 <h5><span class="tsd-kind-property">maybe_<wbr/>loyalty_<wbr/>program</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5></li>
 <li class="tsd-parameter">
 <h5><span class="tsd-kind-property">success</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5></li></ul></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="Subscription.html" class="tsd-signature-type tsd-kind-class">Subscription</a></h4><aside class="tsd-sources">
+<h4 class="tsd-returns-title">Returns <a href="Subscription.html" class="tsd-signature-type tsd-kind-class">Subscription</a></h4>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/api/subscription/Subscription.ts#L4">src/api/subscription/Subscription.ts:4</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/api/subscription/Subscription.ts#L10">src/api/subscription/Subscription.ts:10</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="activeSubscriptions" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>active<wbr/>Subscriptions</span><a href="#activeSubscriptions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">active<wbr/>Subscriptions</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
-<div class="tsd-comment tsd-typography"><p>The key is the product namespace, and value is the product slug.</p>
+<div class="tsd-comment tsd-typography"><p>The key is the product namespace, and value is the product slug.
+The product name is an identifier for the product and the namespace is the type of product.</p>
+</div>
+<div class="tsd-comment tsd-typography">
+<h4>Example</h4><pre><code class="language-ts"><span class="hl-0">Map</span><span class="hl-1">(</span><span class="hl-9">1</span><span class="hl-1">) { </span><span class="hl-2">&#39;fakeyou&#39;</span><span class="hl-1"> </span><span class="hl-6">=&gt;</span><span class="hl-1"> </span><span class="hl-2">&#39;fakeyou_elite&#39;</span><span class="hl-1"> }</span>
+</code><button>Copy</button></pre>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/api/subscription/Subscription.ts#L21">src/api/subscription/Subscription.ts:21</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="inLoyaltyProgram" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>in<wbr/>Loyalty<wbr/>Program</span><a href="#inLoyaltyProgram" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">in<wbr/>Loyalty<wbr/>Program</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Whether the user is in the loyalty program. FakeYou has a free premium loyalty tier for contributors that upload 10 or more TTS or VC models.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/api/subscription/Subscription.ts#L12">src/api/subscription/Subscription.ts:12</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="inLoyaltyProgram" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>in<wbr/>Loyalty<wbr/>Program</span><a href="#inLoyaltyProgram" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">in<wbr/>Loyalty<wbr/>Program</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/api/subscription/Subscription.ts#L13">src/api/subscription/Subscription.ts:13</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/api/subscription/Subscription.ts#L25">src/api/subscription/Subscription.ts:25</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

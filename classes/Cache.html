@@ -18,7 +18,7 @@
 <section class="tsd-panel tsd-comment">
 <div class="tsd-comment tsd-typography"><p>A cache that can be used to store data for the lifetime of the this object.</p>
 <p>It uses LRU caching, so it will automatically remove the least recently used items when it reaches its limits.
-And also has a TTL, so it will automatically remove items that have not been used for a while.</p>
+And also has expiries, so it will automatically replace items that have not been used for a while.</p>
 <p>It&#39;s a small wrapper over LRUCache npm package.</p>
 </div>
 <div class="tsd-comment tsd-typography">
@@ -29,7 +29,7 @@ And also has a TTL, so it will automatically remove items that have not been use
 <ul class="tsd-hierarchy">
 <li><span class="target">Cache</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L37">src/services/cache/Cache.ts:37</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/services/cache/Cache.ts#L37">src/services/cache/Cache.ts:37</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -67,7 +67,7 @@ And also has a TTL, so it will automatically remove items that have not been use
 <h4>Type declaration</h4>
 <ul class="tsd-parameters"></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L45">src/services/cache/Cache.ts:45</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/services/cache/Cache.ts#L45">src/services/cache/Cache.ts:45</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="namespace" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>namespace</span><a href="#namespace" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">namespace</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-type">-</span><span class="tsd-signature-symbol">${</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">`</span><span class="tsd-signature-symbol"> = ...</span></div>
@@ -76,7 +76,7 @@ And also has a TTL, so it will automatically remove items that have not been use
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L43">src/services/cache/Cache.ts:43</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/services/cache/Cache.ts#L43">src/services/cache/Cache.ts:43</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member"><a id="dispose" class="tsd-anchor"></a>
@@ -98,7 +98,7 @@ And also has a TTL, so it will automatically remove items that have not been use
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L95">src/services/cache/Cache.ts:95</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/services/cache/Cache.ts#L95">src/services/cache/Cache.ts:95</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="disposeAll" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>dispose<wbr/>All</span><a href="#disposeAll" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -110,7 +110,7 @@ This will cause all cache items to be fetched again the next time they are reque
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L105">src/services/cache/Cache.ts:105</a></li></ul></aside></li></ul></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/services/cache/Cache.ts#L105">src/services/cache/Cache.ts:105</a></li></ul></aside></li></ul></section>
 <section class="tsd-panel tsd-member"><a id="wrap" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>wrap</span><a href="#wrap" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -149,7 +149,7 @@ If the cache is not empty, the async function will not be run and the result wil
 
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/b79e39c/src/services/cache/Cache.ts#L68">src/services/cache/Cache.ts:68</a></li></ul></aside></li></ul></section></section></div>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dd3fa1e/src/services/cache/Cache.ts#L68">src/services/cache/Cache.ts:68</a></li></ul></aside></li></ul></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
