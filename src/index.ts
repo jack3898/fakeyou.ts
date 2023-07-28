@@ -13,7 +13,7 @@ export { V2vModel } from './api/v2vModel/V2vModel.js';
 export { V2vAudioFile } from './api/v2vModel/v2vAudioFile/V2vAudioFile.js';
 export { Audio } from './implementation/Audio.js';
 export { User } from './implementation/User.js';
-export { type BaseClass } from './interface/index.js';
+export { type BaseClass } from './implementation/index.js';
 export { Cache, type CacheKey } from './services/cache/Cache.js';
 export { Client as default, type ClientOptions } from './services/client/Client.js';
 export { Client } from './services/client/Client.js';

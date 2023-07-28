@@ -1,5 +1,5 @@
 import Client from '../../index.js';
-import { type BaseClass } from '../../interface/BaseClass.js';
+import { type BaseClass } from '../../implementation/BaseClass.js';
 import type { TtsModel } from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';
 
@@ -8,6 +8,10 @@ import { type CategorySchema } from './category.schema.js';
  * Categories can also have subcategories.
  */
 export class Category implements BaseClass {
+	/**
+	 * @param client The main client.
+	 * @param data The raw category data from the FakeYou API.
+	 */
 	constructor(client: Client, data: CategorySchema) {
 		this.client = client;
 

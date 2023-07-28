@@ -113,7 +113,7 @@ export class Client {
 		return this.cache.wrap('fetch-tts-models', async () => {
 			const response = await this.rest.send(`${constants.API_URL}/tts/list`);
 			const json = prettyParse(ttsModelListSchema, await response.json());
-			const ttsModels = json.models.map((model) => new TtsModel(model, this));
+			const ttsModels = json.models.map((model) => new TtsModel(this, model));
 
 			return mapify('token', ttsModels);
 		});
@@ -142,7 +142,7 @@ export class Client {
 			const response = await this.rest.send(`${constants.API_URL}/user/${username}/tts_models`);
 			const json = prettyParse(ttsModelListSchema, await response.json());
 
-			return json.models.map((model) => new TtsModel(model, this));
+			return json.models.map((model) => new TtsModel(this, model));
 		} catch (error) {
 			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
 

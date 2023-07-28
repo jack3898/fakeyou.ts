@@ -1,5 +1,5 @@
 import Client from '../../index.js';
-import { type BaseClass } from '../../interface/index.js';
+import { type BaseClass } from '../../implementation/index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import { Badge } from '../badge/Badge.js';
 import type { TtsModel } from '../ttsModel/TtsModel.js';
@@ -18,7 +18,14 @@ export type PaginatedUserAudioFiles = {
 	results: UserAudioFile[];
 };
 
+/**
+ * A user profile, which contains their public information.
+ */
 export class ProfileUser implements BaseClass {
+	/**
+	 * @param client The main client.
+	 * @param data The data that has arrived from the FakeYou API.
+	 */
 	constructor(client: Client, data: UserProfileSchema) {
 		this.client = client;
 
@@ -72,9 +79,12 @@ export class ProfileUser implements BaseClass {
 	readonly badges: Badge[];
 
 	/**
-	 * Edit the user profile.
+	 * Edit the user profile. This will only edit the fields that you have privileges to edit.
+	 * You need to be logged in to perform this action.
 	 *
-	 * If you do not have privileges to edit other users' accounts, this will return false
+	 * @param newValues The new values to set for the user profile.
+	 * You do not need to include all values, it will only edit the values that you provide.
+	 * @returns Whether the user profile was successfully edited.
 	 */
 	async editProfile(newValues: Partial<EditUserProfileInputSchema>): Promise<boolean> {
 		try {
@@ -107,7 +117,8 @@ export class ProfileUser implements BaseClass {
 	}
 
 	/**
-	 * Fetch a user audio file by its token.
+	 * Fetch a paginated list of the user's audio files. This includes TTS audio files only.
+	 * 10 audio files are returned per page, and the results are sorted by newest first.
 	 *
 	 * @param cursor The cursor to use for pagination. If not provided, the first page will be fetched.
 	 * @returns The user audio file. Undefined if the audio file could not be fetched.

@@ -28,7 +28,7 @@ export type CacheKey =
  * A cache that can be used to store data for the lifetime of the this object.
  *
  * It uses LRU caching, so it will automatically remove the least recently used items when it reaches its limits.
- * And also has a TTL, so it will automatically remove items that have not been used for a while.
+ * And also has expiries, so it will automatically replace items that have not been used for a while.
  *
  * It's a small wrapper over LRUCache npm package.
  *
