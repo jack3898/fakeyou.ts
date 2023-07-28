@@ -11,6 +11,7 @@ import sizeof from '../../util/sizeof.js';
  * - `fetch-category-model-relationships` - The relationships between categories and models.
  * - `fetch-categories` - All of the categories from the FakeYou API.
  * - `fetch-user-profile-[username]` - The profile of a user. The profile username is appended to the key.
+ * - `fetch-user-comments-[username]` - The comments on a user's profile. The profile username is appended to the key.
  * - `fetch-leaderboard` - The FakeYou leaderboards.
  * - `fetch-v2v-models` - All of the V2V models from the FakeYou API.
  * - `fetch-tts-models` - All of the TTS models from the FakeYou API.
@@ -20,6 +21,7 @@ export type CacheKey =
 	| 'fetch-category-model-relationships'
 	| 'fetch-categories'
 	| `fetch-user-profile-${string}`
+	| `fetch-user-comments-${string}`
 	| 'fetch-leaderboard'
 	| 'fetch-v2v-models'
 	| 'fetch-tts-models';

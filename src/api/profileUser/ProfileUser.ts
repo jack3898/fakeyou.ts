@@ -11,6 +11,8 @@ import {
 } from './profileUser.schema.js';
 import { UserAudioFile } from './userAudioFile/UserAudioFile.js';
 import { userTtsListResponseSchema } from './userAudioFile/userAudioFile.schema.js';
+import { commentListResponseSchema } from '../comment/comment.schema.js';
+import { Comment } from '../comment/Comment.js';
 
 export type PaginatedUserAudioFiles = {
 	cursorNext: string | null;
@@ -153,5 +155,20 @@ export class ProfileUser implements BaseClass {
 	 */
 	fetchUserModels(): Promise<TtsModel[]> {
 		return this.client.fetchTtsModelsByUser(this.username);
+	}
+
+	/**
+	 * User profile comments. These are comments other people have left on the user's profile.
+	 *
+	 * @returns The comments on the user profile.
+	 */
+	async fetchUserComments(): Promise<Comment[]> {
+		const json = await this.client.cache.wrap(`fetch-user-comments-${this.username}`, async () => {
+			const response = await this.client.rest.send(`${constants.API_URL}/v1/comments/list/user/${this.token}`);
+
+			return prettyParse(commentListResponseSchema, await response.json());
+		});
+
+		return json.comments.map((comment) => new Comment(this.client, comment));
 	}
 }
