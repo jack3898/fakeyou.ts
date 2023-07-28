@@ -2,6 +2,9 @@ import { implFetchUser } from '../../implementation/User.js';
 import { Client, type User } from '../../index.js';
 import { CommentSchema } from './comment.schema.js';
 
+/**
+ * A comment on a user profile.
+ */
 export class Comment implements User {
 	constructor(client: Client, data: CommentSchema) {
 		this.client = client;
@@ -22,9 +25,21 @@ export class Comment implements User {
 
 	readonly client: Client;
 
+	/**
+	 * The token of the comment. This is NOT the author's user token.
+	 */
 	readonly token: string;
+	/**
+	 * The token of the user who left the comment.
+	 */
 	readonly userToken: string;
+	/**
+	 * The username of the user who left the comment.
+	 */
 	readonly username: string;
+	/**
+	 * The display name of the user who left the comment.
+	 */
 	readonly userDisplayName: string;
 	readonly userGravatarHash: string;
 	readonly defaultAvatarIndex: number;
@@ -35,5 +50,8 @@ export class Comment implements User {
 	readonly updatedAt: Date;
 	readonly maybeEditedAt: Date | null;
 
+	/**
+	 * Fetch the user profile of the user who left the comment.
+	 */
 	fetchProfile = implFetchUser;
 }
