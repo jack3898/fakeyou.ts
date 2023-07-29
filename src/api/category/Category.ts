@@ -1,5 +1,5 @@
-import Client from '../../index.js';
 import { type BaseClass } from '../../implementation/BaseClass.js';
+import Client from '../../index.js';
 import type { TtsModel } from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';
 
@@ -54,13 +54,15 @@ export class Category implements BaseClass {
 	 * @returns A list of tts models that belong to this category. The array is empty if no models belong to this category.
 	 */
 	async fetchModels(): Promise<TtsModel[]> {
-		const relationships = await this.client.fetchCategoryToModelRelationships();
-		const allModels = await this.client.fetchTtsModels();
-		const models = relationships[this.token]
-			.map((modelToken) => allModels.get(modelToken))
-			.filter((model): model is TtsModel => !!model);
+		return this.client.cache.wrap(`fetch-category-models-token-${this.token}`, async () => {
+			const relationships = await this.client.fetchCategoryToModelRelationships();
+			const allModels = await this.client.fetchTtsModels();
+			const models = relationships[this.token]
+				.map((modelToken) => allModels.get(modelToken))
+				.filter((model): model is TtsModel => !!model);
 
-		return models;
+			return models;
+		});
 	}
 
 	/**

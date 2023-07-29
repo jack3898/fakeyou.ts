@@ -1,30 +1,6 @@
 import { LRUCache } from 'lru-cache';
-import crypto from 'node:crypto';
 import * as log from '../../util/log.js';
 import sizeof from '../../util/sizeof.js';
-
-/**
- * The key to used to identify the cached data.
- *
- * Keys:
- * - `login` - The login response from the FakeYou API.
- * - `fetch-category-model-relationships` - The relationships between categories and models.
- * - `fetch-categories` - All of the categories from the FakeYou API.
- * - `fetch-user-profile-[username]` - The profile of a user. The profile username is appended to the key.
- * - `fetch-user-comments-[username]` - The comments on a user's profile. The profile username is appended to the key.
- * - `fetch-leaderboard` - The FakeYou leaderboards.
- * - `fetch-v2v-models` - All of the V2V models from the FakeYou API.
- * - `fetch-tts-models` - All of the TTS models from the FakeYou API.
- */
-export type CacheKey =
-	| 'login'
-	| 'fetch-category-model-relationships'
-	| 'fetch-categories'
-	| `fetch-user-profile-${string}`
-	| `fetch-user-comments-${string}`
-	| 'fetch-leaderboard'
-	| 'fetch-v2v-models'
-	| 'fetch-tts-models';
 
 /**
  * A cache that can be used to store data for the lifetime of the this object.
@@ -36,15 +12,8 @@ export type CacheKey =
  *
  * @see https://www.npmjs.com/package/lru-cache
  */
-export class Cache {
-	/**
-	 * The namespace to use for the cache.
-	 *
-	 * NOTE: Will be removed in the future as it is not needed.
-	 */
-	namespace = crypto.randomUUID();
-
-	lruCache = new LRUCache<string, NonNullable<unknown>>({
+export class Cache<TKeys extends string> {
+	readonly lruCache = new LRUCache<string, NonNullable<unknown>>({
 		max: 5000, // Max amount of objects
 		ttl: 1000 * 60 * 10, // 10 mins
 		maxSize: 5e8, // 500MB in bytes
@@ -61,15 +30,17 @@ export class Cache {
 	 * If the cache is empty, the async function will be run and the result will be stored in the cache.
 	 * If the cache is not empty, the async function will not be run and the result will be returned from the cache.
 	 *
-	 * This is useful for caching data that is expensive to fetch, such as data from the FakeYou API.
+	 * All the cached items are stored by reference, so if you modify the returned cached data, it will also modify the cached data internally.
+	 * Nesting this function will also forward those references up the chain, so doing a cache wrap inside a cache wrap is a great way to share data between functions
+	 * and avoid unnecessary object creation and garbage collection.
 	 *
 	 * @param key The key to used to identify the cached data.
 	 * @param operation The async function to run if the cache is empty.
+	 * @param ttl The time to live of the cached data in milliseconds.
 	 * @returns The result of the async function.
 	 */
-	async wrap<T>(key: CacheKey, operation: () => Promise<T>): Promise<T> {
-		const namespacedKey = `${this.namespace}:${key}`;
-		const cacheItem = this.lruCache.get(namespacedKey);
+	async wrap<T>(key: TKeys, operation: () => Promise<T>, ttl?: number): Promise<T> {
+		const cacheItem = this.lruCache.get(key);
 
 		if (cacheItem) {
 			log.info(`Cache hit for key ${key}`);
@@ -82,7 +53,7 @@ export class Cache {
 		const freshData = await operation();
 
 		if (freshData) {
-			this.lruCache.set(namespacedKey, freshData);
+			this.lruCache.set(key, freshData, { ttl });
 		}
 
 		return freshData;
@@ -94,10 +65,8 @@ export class Cache {
 	 * @param key The key to used to identify the cached data.
 	 * @returns Whether the cache item was invalidated.
 	 */
-	dispose(key: CacheKey): boolean {
-		const namespacedKey = `${this.namespace}:${key}`;
-
-		return this.lruCache.delete(namespacedKey);
+	dispose(key: TKeys): boolean {
+		return this.lruCache.delete(key);
 	}
 
 	/**
