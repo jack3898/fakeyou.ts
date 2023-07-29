@@ -21,7 +21,8 @@ export type CacheKey =
 	| `fetch-tts-models-name-${string}` // string = model search substring
 	| `fetch-tts-model-token-${string}` // string = model token
 	| `fetch-tts-models-user-${string}` // string = user username
-	| `fetch-tts-parent-categories-${string}`;
+	| `fetch-tts-parent-categories-${string}`
+	| `fetch-tts-result-token-${string}`; // string = tts result token;
 
 export type ClientOptions = {
 	/**
