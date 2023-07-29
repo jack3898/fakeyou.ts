@@ -17,13 +17,7 @@ import { constants, extractCookieFromHeaders, log, mapify, prettyParse } from '.
 import { Cache } from '../cache/Cache.js';
 import { Rest } from '../rest/Rest.js';
 import { loginSchema } from './client.schema.js';
-
-export type ClientOptions = {
-	/**
-	 * Whether to enable logging. This is useful for debugging or seeing what the library is doing.
-	 */
-	logging?: boolean;
-};
+import { type CacheKey, type ClientOptions } from './types.js';
 
 /**
  * The FakeYou API client. This is the main entry point for the library.
@@ -47,7 +41,7 @@ export class Client {
 	}
 
 	readonly rest = new Rest();
-	readonly cache = new Cache();
+	readonly cache = new Cache<CacheKey>();
 
 	/**
 	 * Login in with your provided credentials to take advantage of any potential premium benefits.
@@ -126,9 +120,11 @@ export class Client {
 	 * @returns The model.
 	 */
 	async fetchTtsModelByToken(token: string): Promise<TtsModel | undefined> {
-		const models = await this.fetchTtsModels();
+		return this.cache.wrap(`fetch-tts-model-token-${token}`, async () => {
+			const models = await this.fetchTtsModels();
 
-		return models.get(token);
+			return models.get(token);
+		});
 	}
 
 	/**
@@ -139,10 +135,12 @@ export class Client {
 	 */
 	async fetchTtsModelsByUser(username: string): Promise<TtsModel[]> {
 		try {
-			const response = await this.rest.send(`${constants.API_URL}/user/${username}/tts_models`);
-			const json = prettyParse(ttsModelListSchema, await response.json());
+			return this.cache.wrap(`fetch-tts-models-user-${username}`, async () => {
+				const response = await this.rest.send(`${constants.API_URL}/user/${username}/tts_models`);
+				const json = prettyParse(ttsModelListSchema, await response.json());
 
-			return json.models.map((model) => new TtsModel(this, model));
+				return json.models.map((model) => new TtsModel(this, model));
+			});
 		} catch (error) {
 			log.error(`Response from API failed validation. Is that username correct?\n${error}`);
 
@@ -161,13 +159,17 @@ export class Client {
 	 * @returns The model or undefined if no model was found.
 	 */
 	async fetchTtsModelByName(search: string): Promise<TtsModel | undefined> {
-		const models = await this.fetchTtsModels();
+		const searchLowerCase = search.toLowerCase();
 
-		for (const model of models.values()) {
-			if (model.title.toLowerCase().includes(search.toLowerCase())) {
-				return model;
+		return this.cache.wrap(`fetch-tts-models-name-${searchLowerCase}`, async () => {
+			const models = await this.fetchTtsModels();
+
+			for (const model of models.values()) {
+				if (model.title.toLowerCase().includes(searchLowerCase)) {
+					return model;
+				}
 			}
-		}
+		});
 	}
 
 	/**
@@ -195,9 +197,11 @@ export class Client {
 	 * @returns The voice conversion model.
 	 */
 	async fetchV2vModelByToken(token: string): Promise<V2vModel | undefined> {
-		const models = await this.fetchV2vModels();
+		return this.cache.wrap(`fetch-v2v-models-token-${token}`, async () => {
+			const models = await this.fetchV2vModels();
 
-		return models.get(token);
+			return models.get(token);
+		});
 	}
 
 	/**
@@ -210,13 +214,17 @@ export class Client {
 	 * @returns The model or undefined if no model was found
 	 */
 	async fetchV2vModelByName(search: string): Promise<V2vModel | undefined> {
-		const models = await this.fetchV2vModels();
+		const searchLowerCase = search.toLowerCase();
 
-		for (const model of models.values()) {
-			if (model.title.toLowerCase().includes(search.toLowerCase())) {
-				return model;
+		return this.cache.wrap(`fetch-v2v-models-name-${searchLowerCase}`, async () => {
+			const models = await this.fetchV2vModels();
+
+			for (const model of models.values()) {
+				if (model.title.toLowerCase().includes(searchLowerCase)) {
+					return model;
+				}
 			}
-		}
+		});
 	}
 
 	/**
@@ -226,9 +234,11 @@ export class Client {
 	 * @returns An array of all models created by the user
 	 */
 	async fetchV2vModelsByUser(username: string): Promise<V2vModel[]> {
-		const userModels = await this.fetchV2vModels();
+		return this.cache.wrap(`fetch-v2v-models-user-${username}`, async () => {
+			const userModels = await this.fetchV2vModels();
 
-		return Array.from(userModels.values()).filter((model) => model.username === username);
+			return Array.from(userModels.values()).filter((model) => model.username === username);
+		});
 	}
 
 	/**
@@ -254,14 +264,13 @@ export class Client {
 	 *
 	 * @returns The leaderboards.
 	 */
-	async fetchLeaderboard(): Promise<Leaderboard> {
-		const json = await this.cache.wrap('fetch-leaderboard', async () => {
+	fetchLeaderboard(): Promise<Leaderboard> {
+		return this.cache.wrap('fetch-leaderboard', async () => {
 			const response = await this.rest.send(`${constants.API_URL}/leaderboard`);
+			const json = prettyParse(leaderboardResponseSchema, await response.json());
 
-			return prettyParse(leaderboardResponseSchema, await response.json());
+			return new Leaderboard(this, json);
 		});
-
-		return new Leaderboard(this, json);
 	}
 
 	/**
@@ -272,13 +281,12 @@ export class Client {
 	 */
 	async fetchUserProfile(username: string): Promise<ProfileUser | undefined> {
 		try {
-			const json = await this.cache.wrap(`fetch-user-profile-${username}`, async () => {
+			return this.cache.wrap(`fetch-user-profile-${username}`, async () => {
 				const response = await this.rest.send(`${constants.API_URL}/user/${username}/profile`);
+				const json = prettyParse(userProfileResponseSchema, await response.json());
 
-				return prettyParse(userProfileResponseSchema, await response.json());
+				return new ProfileUser(this, json.user);
 			});
-
-			return new ProfileUser(this, json.user);
 		} catch (error) {
 			log.error(
 				`Response from API failed validation. Check the username you provided, it can be different to their display name.\n${error}`
@@ -291,13 +299,21 @@ export class Client {
 	 *
 	 * This is the number of jobs that are currently waiting to be processed by the FakeYou TTS engine.
 	 *
+	 * The result is cached for 15 seconds.
+	 *
 	 * @returns The queue.
 	 */
 	async fetchQueue(): Promise<Queue> {
-		const response = await this.rest.send(`${constants.API_URL}/tts/queue_length`);
-		const json = prettyParse(queueLengthResponseSchema, await response.json());
+		return this.cache.wrap(
+			'fetch-queue',
+			async () => {
+				const response = await this.rest.send(`${constants.API_URL}/v1/stats/queues`);
+				const json = prettyParse(queueLengthResponseSchema, await response.json());
 
-		return new Queue(json);
+				return new Queue(json);
+			},
+			15_000
+		);
 	}
 
 	/**
@@ -321,9 +337,11 @@ export class Client {
 	 * @returns A list of all root categories.
 	 */
 	async fetchRootCategories(): Promise<Category[]> {
-		const allCategories = await this.fetchCategories();
+		return this.cache.wrap('fetch-root-categories', async () => {
+			const allCategories = await this.fetchCategories();
 
-		return allCategories.filter((category) => !category.parentToken);
+			return allCategories.filter((category) => !category.parentToken);
+		});
 	}
 
 	/**
@@ -349,8 +367,10 @@ export class Client {
 	 * @returns The category or undefined if no category was found.
 	 */
 	async fetchCategoryByToken(token: string): Promise<Category | undefined> {
-		const categories = await this.fetchCategories();
+		return this.cache.wrap(`fetch-category-token-${token}`, async () => {
+			const categories = await this.fetchCategories();
 
-		return categories.find((category) => category.token === token);
+			return categories.find((category) => category.token === token);
+		});
 	}
 }

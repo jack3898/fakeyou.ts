@@ -1,5 +1,6 @@
 export { Badge } from './api/badge/Badge.js';
 export { Category } from './api/category/Category.js';
+export { Comment } from './api/comment/Comment.js';
 export { Leaderboard } from './api/leaderboard/Leaderboard.js';
 export { LeaderboardUser } from './api/leaderboard/leaderboardUser/LeaderboardUser.js';
 export { ProfileUser, type PaginatedUserAudioFiles } from './api/profileUser/ProfileUser.js';
@@ -14,7 +15,7 @@ export { V2vAudioFile } from './api/v2vModel/v2vAudioFile/V2vAudioFile.js';
 export { Audio } from './implementation/Audio.js';
 export { User } from './implementation/User.js';
 export { type BaseClass } from './implementation/index.js';
-export { Cache, type CacheKey } from './services/cache/Cache.js';
-export { Client as default, type ClientOptions } from './services/client/Client.js';
-export { Client } from './services/client/Client.js';
+export { Cache } from './services/cache/Cache.js';
+export { Client, Client as default } from './services/client/Client.js';
+export { type CacheKey, type ClientOptions } from './services/client/types.js';
 export { Rest } from './services/rest/Rest.js';

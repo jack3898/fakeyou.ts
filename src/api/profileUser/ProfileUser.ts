@@ -1,7 +1,9 @@
-import Client from '../../index.js';
 import { type BaseClass } from '../../implementation/index.js';
+import Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import { Badge } from '../badge/Badge.js';
+import { Comment } from '../comment/Comment.js';
+import { commentListResponseSchema } from '../comment/comment.schema.js';
 import type { TtsModel } from '../ttsModel/TtsModel.js';
 import {
 	editUserProfileInputSchema,
@@ -153,5 +155,19 @@ export class ProfileUser implements BaseClass {
 	 */
 	fetchUserModels(): Promise<TtsModel[]> {
 		return this.client.fetchTtsModelsByUser(this.username);
+	}
+
+	/**
+	 * User profile comments. These are comments other people have left on the user's profile.
+	 *
+	 * @returns The comments on the user profile.
+	 */
+	async fetchUserComments(): Promise<Comment[]> {
+		return this.client.cache.wrap(`fetch-user-comments-${this.username}`, async () => {
+			const response = await this.client.rest.send(`${constants.API_URL}/v1/comments/list/user/${this.token}`);
+			const json = prettyParse(commentListResponseSchema, await response.json());
+
+			return json.comments.map((comment) => new Comment(this.client, comment));
+		});
 	}
 }

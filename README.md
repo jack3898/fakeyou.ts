@@ -17,21 +17,21 @@ If you use TypeScript it is recommended to include this in your `tsconfig.json`:
 
 ```json
 {
-    "extends": "fakeyou.ts/tsconfig.recommended.json"
+	"extends": "fakeyou.ts/tsconfig.recommended.json"
 }
 ```
 
 ## Text-to-speech usage
 
 ```ts
-import Client from "fakeyou.ts";
+import Client from 'fakeyou.ts';
 
 const client = new Client();
 
-const model = await client.fetchTtsModelByToken("TM:4e2xqpwqaggr");
-const inference = await model?.infer("hello!");
+const model = await client.fetchTtsModelByToken('TM:4e2xqpwqaggr');
+const inference = await model?.infer('hello!');
 
-await inference?.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just the raw URL!
+await inference?.toDisk('./local/name.wav'); // or toBuffer, toBase64 or just the raw URL!
 ```
 
 ## Or voice-to-voice!
@@ -39,16 +39,16 @@ await inference?.toDisk("./local/name.wav"); // or toBuffer, toBase64 or just th
 Fakeyou.ts is the only Node package to support voice-to-voice!
 
 ```ts
-import Client from "fakeyou.ts";
-import { readFileSync } from "node:fs";
+import Client from 'fakeyou.ts';
+import { readFileSync } from 'node:fs';
 
 const client = new Client();
 
-const model = await client.fetchV2vModelByToken("vcm_tes015h65n6h");
-const audioFile = readFileSync("./localAudioFile.wav"); // Wav is only supported for simplicity, as validating the type is not reliable
+const model = await client.fetchV2vModelByToken('vcm_tes015h65n6h');
+const audioFile = readFileSync('./localAudioFile.wav'); // Wav is only supported for simplicity, as validating the type is not reliable
 const inference = await model?.infer(audioFile);
 
-await inference?.toDisk("./local/name.wav"); // Same API as TTS!
+await inference?.toDisk('./local/name.wav'); // Same API as TTS!
 ```
 
 ## Login to FakeYou
@@ -56,13 +56,13 @@ await inference?.toDisk("./local/name.wav"); // Same API as TTS!
 You may optionally log in to take advantage of reduced rate limits, premium benefits, faster processing times and more.
 
 ```ts
-import Client from "fakeyou.ts";
+import Client from 'fakeyou.ts';
 
 const client = new Client();
 
 await client.login({
-    username: "your username",
-    password: "your password",
+	username: 'your username',
+	password: 'your password',
 });
 ```
 
@@ -136,8 +136,10 @@ Fakeyou.js is a great project (if you haven't seen it, you can check it out [her
 
 -   [x] Safe; All API responses are validated at runtime with type-smart schemas, which provides type-safety guarantees as well as the package just being fully type-safe. When using this package you will get autocomplete for every function, types for every return and compile-time errors for improper usage. No fragile conditional checks spread throughout the code.
 -   [x] End-to-end and unit tested; Before this package is deployed or pull-requests merged, a branch must pass through user-simulated automated tests to reduce the likelihood of deploying bugs.
+-   [x] Optimised and memory safe; Memory safe?!?! For JS?? A garbage collected language?! Yes! (well sort of, you don't have the same amount of control as other languages out there but this package does what it can.) Thanks to smart use of caching, searching for a model by name OR by token will return the exact same instance of the object in memory, so you are never creating unwanted garbage in the background and doing more work than is what is required. This does not just apply to models, but all other types of data too. The cache has a maximum capacity of ~500MB, with an object TTL of 10 minutes and stores no more than 5000 objects at a time.
 -   [x] Scalable; All classes and components are all independent from one-another, making refactors and feature additions easy. Composition is favoured over inheritance with isolated implementation functions.
--   [x] Feature-rich; Not only does fakeyou.ts have pretty much the same feature set at fakeyou.js, it also supports voice-to-voice.
+-   [x] Feature-rich; Fakeyou.ts is the most powerful NPM package available for Node.js (as of writing 🤣).
 -   [x] Modern; Fakeyou.ts works with ESModules, supporting next-generation JavaScript projects and supports top-level await.
--   [x] Easy to work with; Not only does fakeyou.ts give you type-safety guarantees, it has a logging flag you can enable to inspect all of its network traffic, and if you're unfortunate enough, see nicely-formatted errors.
+-   [x] Easy to work with; Not only does fakeyou.ts give you type-safety guarantees, it has a logging flag you can enable to inspect all of its network traffic, and if you're unfortunate enough, see nicely-formatted errors. I know that unhelpful errors are an absolute pain, so this package takes is seriously so any bugs or problems can be addressed as quickly as possible.
 -   [x] Active on Discord; The maintainer (me!) of this project is active on FakeYou's official Discord! If there are any problems you are having, you can either contact me there (#api channel) or submit an issue on this GitHub page. Make sure to tag me so I don't miss you! For safety reasons I will not display my discord tag here.
+-   [x] Highly documented; The code takes big advantage of JSDoc, to not only provide inline documentation while you code, but public documentation which is generated and published by an automated CI pipeline. https://fakeyouts.js.org/.

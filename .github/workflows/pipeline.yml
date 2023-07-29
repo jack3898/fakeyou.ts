@@ -1,6 +1,7 @@
 name: "Run pipeline"
 
 on:
+    workflow_dispatch:
     pull_request:
         branches:
             - "*"
@@ -17,9 +18,10 @@ jobs:
               with:
                   node-version: 20
                   registry-url: https://registry.npmjs.org
-            - name: checks
+            - name: Install dependencies
+              run: npm ci
+            - name: Run quality checks
               run: |
-                  npm install
                   npm run test:types
                   npm run test:unit
                   npm run test:e2e

@@ -83,10 +83,12 @@ export class SessionUser implements User {
 	 */
 	async fetchSubscription(): Promise<Subscription | undefined> {
 		try {
-			const response = await this.client.rest.send(`${constants.API_URL}/v1/billing/active_subscriptions`);
-			const json = prettyParse(activeSubscriptionsResponseSchema, await response.json());
+			return this.client.cache.wrap('fetch-subscription', async () => {
+				const response = await this.client.rest.send(`${constants.API_URL}/v1/billing/active_subscriptions`);
+				const json = prettyParse(activeSubscriptionsResponseSchema, await response.json());
 
-			return new Subscription(json);
+				return new Subscription(json);
+			});
 		} catch (error) {
 			log.error(`Response from API failed validation. Are you logged in?\n${error}`);
 		}
