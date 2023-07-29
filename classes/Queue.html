@@ -25,7 +25,7 @@ The queue length is the number of jobs that are currently pending.</p>
 <ul class="tsd-hierarchy">
 <li><span class="target">Queue</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/0ee1787/src/api/queue/Queue.ts#L7">src/api/queue/Queue.ts:7</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dc2d5db/src/api/queue/Queue.ts#L7">src/api/queue/Queue.ts:7</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -38,8 +38,9 @@ The queue length is the number of jobs that are currently pending.</p>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="Queue.html#cacheTime" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-1024"><rect fill="var(--color-icon-background)" stroke="#FF984D" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="12"></rect><path d="M9.354 16V7.24H12.174C12.99 7.24 13.638 7.476 14.118 7.948C14.606 8.412 14.85 9.036 14.85 9.82C14.85 10.604 14.606 11.232 14.118 11.704C13.638 12.168 12.99 12.4 12.174 12.4H10.434V16H9.354ZM10.434 11.428H12.174C12.646 11.428 13.022 11.284 13.302 10.996C13.59 10.7 13.734 10.308 13.734 9.82C13.734 9.324 13.59 8.932 13.302 8.644C13.022 8.356 12.646 8.212 12.174 8.212H10.434V11.428Z" fill="var(--color-text)"></path></g></svg><span>cache<wbr/>Time</span></a>
-<a href="Queue.html#pendingJobCount" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>pending<wbr/>Job<wbr/>Count</span></a>
 <a href="Queue.html#refreshIntervalMillis" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>refresh<wbr/>Interval<wbr/>Millis</span></a>
+<a href="Queue.html#ttsQueued" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>tts<wbr/>Queued</span></a>
+<a href="Queue.html#v2vQueued" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>v2v<wbr/>Queued</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Constructors</h2>
@@ -52,7 +53,7 @@ The queue length is the number of jobs that are currently pending.</p>
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">cache_time</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Date</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">pending_job_count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">refresh_interval_millis</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">success</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<h5><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">cache_time</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Date</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">inference</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span><span class="tsd-kind-property">pending_job_count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">legacy_tts</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>        </span><span class="tsd-kind-property">pending_job_count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">refresh_interval_millis</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">success</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
 <div class="tsd-comment tsd-typography"><p>The raw queue data from the FakeYou API.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div>
@@ -60,7 +61,15 @@ The queue length is the number of jobs that are currently pending.</p>
 <li class="tsd-parameter">
 <h5><span class="tsd-kind-property">cache_<wbr/>time</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type ">Date</span></h5></li>
 <li class="tsd-parameter">
-<h5><span class="tsd-kind-property">pending_<wbr/>job_<wbr/>count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li>
+<h5><span class="tsd-kind-property">inference</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">pending_job_count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5><span class="tsd-kind-property">pending_<wbr/>job_<wbr/>count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li></ul></li>
+<li class="tsd-parameter">
+<h5><span class="tsd-kind-property">legacy_<wbr/>tts</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">pending_job_count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h5>
+<ul class="tsd-parameters">
+<li class="tsd-parameter">
+<h5><span class="tsd-kind-property">pending_<wbr/>job_<wbr/>count</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li></ul></li>
 <li class="tsd-parameter">
 <h5><span class="tsd-kind-property">refresh_<wbr/>interval_<wbr/>millis</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li>
 <li class="tsd-parameter">
@@ -68,30 +77,37 @@ The queue length is the number of jobs that are currently pending.</p>
 <h4 class="tsd-returns-title">Returns <a href="Queue.html" class="tsd-signature-type tsd-kind-class">Queue</a></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/0ee1787/src/api/queue/Queue.ts#L11">src/api/queue/Queue.ts:11</a></li></ul></aside></li></ul></section></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dc2d5db/src/api/queue/Queue.ts#L11">src/api/queue/Queue.ts:11</a></li></ul></aside></li></ul></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="cacheTime" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>cache<wbr/>Time</span><a href="#cacheTime" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cache<wbr/>Time</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type ">Date</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/0ee1787/src/api/queue/Queue.ts#L24">src/api/queue/Queue.ts:24</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="pendingJobCount" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>pending<wbr/>Job<wbr/>Count</span><a href="#pendingJobCount" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">pending<wbr/>Job<wbr/>Count</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>The number of jobs that are currently pending.
-The bigger this number is, the longer it will take for your job to be processed.
-If this number is above 2000 then your request may take multiple minutes.
-If this number is below 100 then your request will come through momentarily.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/0ee1787/src/api/queue/Queue.ts#L23">src/api/queue/Queue.ts:23</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dc2d5db/src/api/queue/Queue.ts#L28">src/api/queue/Queue.ts:28</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="refreshIntervalMillis" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>refresh<wbr/>Interval<wbr/>Millis</span><a href="#refreshIntervalMillis" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">refresh<wbr/>Interval<wbr/>Millis</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/0ee1787/src/api/queue/Queue.ts#L25">src/api/queue/Queue.ts:25</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dc2d5db/src/api/queue/Queue.ts#L29">src/api/queue/Queue.ts:29</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="ttsQueued" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>tts<wbr/>Queued</span><a href="#ttsQueued" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">tts<wbr/>Queued</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>The number of jobs that are currently pending.
+The bigger this number is, the longer it will take for your job to be processed.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dc2d5db/src/api/queue/Queue.ts#L22">src/api/queue/Queue.ts:22</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="v2vQueued" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagReadonly">Readonly</code> <span>v2v<wbr/>Queued</span><a href="#v2vQueued" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">v2v<wbr/>Queued</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>The number of jobs that are currently pending for the voice to voice.
+The bigger this number is, the longer it will take for your job to be processed.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/jack3898/fakeyou.ts/blob/dc2d5db/src/api/queue/Queue.ts#L27">src/api/queue/Queue.ts:27</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -113,8 +129,9 @@ If this number is below 100 then your request will come through momentarily.</p>
 <ul>
 <li><a href="#constructor" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-512"></use></svg><span>constructor</span></a></li>
 <li><a href="#cacheTime" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cache<wbr/>Time</span></a></li>
-<li><a href="#pendingJobCount" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>pending<wbr/>Job<wbr/>Count</span></a></li>
-<li><a href="#refreshIntervalMillis" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>refresh<wbr/>Interval<wbr/>Millis</span></a></li></ul></div></details></div>
+<li><a href="#refreshIntervalMillis" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>refresh<wbr/>Interval<wbr/>Millis</span></a></li>
+<li><a href="#ttsQueued" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>tts<wbr/>Queued</span></a></li>
+<li><a href="#v2vQueued" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>v2v<wbr/>Queued</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><g id="icon-4"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-namespace)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6"></rect><path d="M9.33 16V7.24H10.77L13.446 14.74C13.43 14.54 13.41 14.296 13.386 14.008C13.37 13.712 13.354 13.404 13.338 13.084C13.33 12.756 13.326 12.448 13.326 12.16V7.24H14.37V16H12.93L10.266 8.5C10.282 8.692 10.298 8.936 10.314 9.232C10.33 9.52 10.342 9.828 10.35 10.156C10.366 10.476 10.374 10.784 10.374 11.08V16H9.33Z" fill="var(--color-text)"></path></g></svg><span>fakeyou.ts</span></a>
 <ul class="tsd-small-nested-navigation">
@@ -123,6 +140,7 @@ If this number is below 100 then your request will come through momentarily.</p>
 <li><a href="Cache.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Cache</span></a></li>
 <li><a href="Category.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Category</span></a></li>
 <li><a href="Client.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Client</span></a></li>
+<li><a href="Comment.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Comment</span></a></li>
 <li><a href="Leaderboard.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Leaderboard</span></a></li>
 <li><a href="LeaderboardUser.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Leaderboard<wbr/>User</span></a></li>
 <li><a href="ProfileUser.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg><span>Profile<wbr/>User</span></a></li>
