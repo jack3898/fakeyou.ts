@@ -173,10 +173,12 @@ export class TtsModel implements User {
 	 * @returns The parent categories of this model. The array will be empty if no categories are found.
 	 */
 	async fetchParentCategories(): Promise<Category[]> {
-		const categories = await this.client.fetchCategories();
-		const categoryTokens = this.categoryTokens;
+		return this.client.cache.wrap(`fetch-tts-parent-categories-${this.token}`, async () => {
+			const categories = await this.client.fetchCategories();
+			const categoryTokens = this.categoryTokens;
 
-		return categories.filter((category) => categoryTokens?.includes(category.token));
+			return categories.filter((category) => categoryTokens?.includes(category.token));
+		});
 	}
 
 	/**

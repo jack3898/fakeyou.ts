@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest';
+import { expect, it } from 'vitest';
 import { Client } from '../../index.js';
 import { Comment } from './Comment.js';
 

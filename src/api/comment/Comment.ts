@@ -6,6 +6,10 @@ import { CommentSchema } from './comment.schema.js';
  * A comment on a user profile.
  */
 export class Comment implements User {
+	/**
+	 * @param client The main client.
+	 * @param data The raw comment data from the FakeYou API.
+	 */
 	constructor(client: Client, data: CommentSchema) {
 		this.client = client;
 
