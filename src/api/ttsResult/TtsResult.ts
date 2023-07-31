@@ -1,6 +1,8 @@
 import { implToBase64, implToBuffer, implToDisk } from '../../implementation/Audio.js';
 import { Client, type Audio } from '../../index.js';
-import { constants } from '../../util/index.js';
+import { constants, log, prettyParse } from '../../util/index.js';
+import { Spectrogram } from './Spectrogram/Spectrogram.js';
+import { melMatrix } from './Spectrogram/spectrogram.schema.js';
 import { TtsResultSchema } from './ttsResult.schema.js';
 
 /**
@@ -85,4 +87,15 @@ export class TtsResult implements Audio {
 	 * Write the audio file to disk.
 	 */
 	toDisk = implToDisk;
+
+	async fetchSpectrogram(): Promise<Spectrogram | undefined> {
+		try {
+			const response = await this.client.rest.send(this.spectrogramUrl);
+			const json = prettyParse(melMatrix, (await response.json()).mel_scaled);
+
+			return new Spectrogram(json);
+		} catch (error) {
+			log.error(`There was a problem fetching the spectrogram for ${this.ttsResultToken}.\n${error}`);
+		}
+	}
 }
