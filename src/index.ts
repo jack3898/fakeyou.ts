@@ -10,6 +10,8 @@ export { SessionUser } from './api/sessionUser/SessionUser.js';
 export { Subscription } from './api/subscription/Subscription.js';
 export { TtsModel } from './api/ttsModel/TtsModel.js';
 export { TtsAudioFile } from './api/ttsModel/ttsAudioFile/TtsAudioFile.js';
+export { Spectrogram, type RGBA } from './api/ttsResult/Spectrogram/Spectrogram.js';
+export { TtsResult } from './api/ttsResult/TtsResult.js';
 export { V2vModel } from './api/v2vModel/V2vModel.js';
 export { V2vAudioFile } from './api/v2vModel/v2vAudioFile/V2vAudioFile.js';
 export { Audio } from './implementation/Audio.js';
