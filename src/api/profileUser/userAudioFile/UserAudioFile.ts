@@ -8,6 +8,7 @@ import {
 } from '../../../implementation/index.js';
 import Client from '../../../index.js';
 import { constants } from '../../../util/index.js';
+import { type TtsResult } from '../../ttsResult/TtsResult.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
 
 export class UserAudioFile implements Audio, User {
@@ -77,4 +78,11 @@ export class UserAudioFile implements Audio, User {
 	 * Write the audio file to disk.
 	 */
 	toDisk = implToDisk;
+
+	/**
+	 * Fetch more details about this audio file.
+	 */
+	fetchFullResult(): Promise<TtsResult | undefined> {
+		return this.client.fetchTtsResultByToken(this.ttsResultToken);
+	}
 }

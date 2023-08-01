@@ -10,6 +10,8 @@ import { SessionUser } from '../../api/sessionUser/SessionUser.js';
 import { loggedInUserProfileResponseSchema } from '../../api/sessionUser/sessionUser.schema.js';
 import { TtsModel } from '../../api/ttsModel/TtsModel.js';
 import { ttsModelListSchema } from '../../api/ttsModel/ttsModel.schema.js';
+import { TtsResult } from '../../api/ttsResult/TtsResult.js';
+import { ttsResultResponseSchema } from '../../api/ttsResult/ttsResult.schema.js';
 import { V2vModel } from '../../api/v2vModel/V2vModel.js';
 import { v2vModelListSchema } from '../../api/v2vModel/v2vModel.schema.js';
 import { AuthorisationError } from '../../error/AuthorisationError.js';
@@ -371,6 +373,26 @@ export class Client {
 			const categories = await this.fetchCategories();
 
 			return categories.find((category) => category.token === token);
+		});
+	}
+
+	/**
+	 * Fetch an isolated TTS result by a result token.
+	 * The result token can be found in the object returned from an inference, or on the website!
+	 *
+	 * @param token The token of the result to fetch.
+	 * @returns The TTS result or undefined if no result was found.
+	 */
+	async fetchTtsResultByToken(token: string): Promise<TtsResult | undefined> {
+		return this.cache.wrap(`fetch-tts-result-token-${token}`, async () => {
+			try {
+				const response = await this.rest.send(`${constants.API_URL}/tts/result/${token}`);
+				const json = prettyParse(ttsResultResponseSchema, await response.json());
+
+				return new TtsResult(this, json.result);
+			} catch (error) {
+				log.error(`Response from API failed validation. Could not load TTS result. Is the token correct?\n${error}`);
+			}
 		});
 	}
 }
