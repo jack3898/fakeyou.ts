@@ -30,6 +30,7 @@ export class ProfileUser implements BaseClass {
 	 */
 	constructor(client: Client, data: UserProfileSchema) {
 		this.client = client;
+		this.webUrl = `${constants.SITE_URL}/profile/${data.username}`;
 
 		this.token = data.user_token;
 		this.username = data.username;
@@ -56,6 +57,10 @@ export class ProfileUser implements BaseClass {
 	}
 
 	readonly client: Client;
+	/**
+	 * The URL of the user's profile page.
+	 */
+	readonly webUrl: string;
 
 	readonly token: string;
 	readonly username: string;

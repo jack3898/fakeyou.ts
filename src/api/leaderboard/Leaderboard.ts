@@ -1,4 +1,5 @@
 import Client from '../../index.js';
+import { constants } from '../../util/index.js';
 import { type LeaderboardResponseSchema } from './leaderboard.schema.js';
 import { LeaderboardUser } from './leaderboardUser/LeaderboardUser.js';
 
@@ -13,7 +14,13 @@ export class Leaderboard {
 	constructor(client: Client, data: LeaderboardResponseSchema) {
 		this.ttsLeaderboard = data.tts_leaderboard.map((leaderboardUser) => new LeaderboardUser(client, leaderboardUser));
 		this.w2lLeaderboard = data.w2l_leaderboard.map((leaderboardUser) => new LeaderboardUser(client, leaderboardUser));
+		this.webUrl = `${constants.SITE_URL}/leaderboard`;
 	}
+
+	/**
+	 * The URL to the leaderboard page in the browser.
+	 */
+	readonly webUrl: string;
 
 	readonly ttsLeaderboard: LeaderboardUser[];
 	readonly w2lLeaderboard: LeaderboardUser[];

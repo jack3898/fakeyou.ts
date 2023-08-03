@@ -18,6 +18,7 @@ export class TtsResult implements Audio {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;
 		this.spectrogramUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_spectrogram_path}`;
+		this.webUrl = `${constants.SITE_URL}/tts/result/${data.tts_result_token}`;
 
 		this.ttsResultToken = data.tts_result_token;
 		this.rawInferenceText = data.raw_inference_text;
@@ -49,6 +50,10 @@ export class TtsResult implements Audio {
 	 * Raw spectrogram data, it is not an image.
 	 */
 	spectrogramUrl: string;
+	/**
+	 * The URL to the page of this result in the browser.
+	 */
+	webUrl: string;
 
 	ttsResultToken: string;
 	rawInferenceText: string;
