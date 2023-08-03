@@ -19,6 +19,7 @@ export class UserAudioFile implements Audio, User {
 	constructor(client: Client, data: UserTtsSchema) {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;
+		this.webUrl = `${constants.SITE_URL}/tts/result/${data.tts_result_token}`;
 
 		this.ttsResultToken = data.tts_result_token;
 		this.ttsModelToken = data.tts_model_token;
@@ -39,6 +40,10 @@ export class UserAudioFile implements Audio, User {
 
 	readonly client: Client;
 	readonly resourceUrl: string;
+	/**
+	 * The URL to view this audio file in a browser.
+	 */
+	readonly webUrl: string;
 
 	readonly ttsResultToken: string;
 	readonly ttsModelToken: string;
