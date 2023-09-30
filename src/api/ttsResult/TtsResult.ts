@@ -1,9 +1,9 @@
 import { implToBase64, implToBuffer, implToDisk } from '../../implementation/Audio.js';
-import { Client, type Audio } from '../../index.js';
+import { type Client, type Audio } from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import { Spectrogram } from './Spectrogram/Spectrogram.js';
 import { melMatrix } from './Spectrogram/spectrogram.schema.js';
-import { TtsResultSchema } from './ttsResult.schema.js';
+import { type TtsResultSchema } from './ttsResult.schema.js';
 
 /**
  * The complete data for a TTS result. This contains extras like the spectrogram and other metadata like

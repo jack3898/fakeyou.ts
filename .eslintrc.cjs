@@ -5,8 +5,7 @@ module.exports = {
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		ecmaVersion: 'latest',
-		sourceType: 'module',
-		emitDecoratorMetadata: true
+		sourceType: 'module'
 	},
 	plugins: ['@typescript-eslint'],
 	rules: {

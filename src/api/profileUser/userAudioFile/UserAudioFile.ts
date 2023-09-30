@@ -6,7 +6,7 @@ import {
 	type Audio,
 	type User
 } from '../../../implementation/index.js';
-import Client from '../../../index.js';
+import type Client from '../../../index.js';
 import { constants } from '../../../util/index.js';
 import { type TtsResult } from '../../ttsResult/TtsResult.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';

@@ -1,5 +1,5 @@
 import { implFetchUser, type User } from '../../../implementation/index.js';
-import Client from '../../../index.js';
+import type Client from '../../../index.js';
 import { constants } from '../../../util/index.js';
 import { type LeaderboardUserSchema } from './leaderboardUser.schema.js';
 
