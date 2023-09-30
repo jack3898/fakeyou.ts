@@ -1,4 +1,4 @@
-import Client from '../../index.js';
+import type Client from '../../index.js';
 import { constants } from '../../util/index.js';
 import { type LeaderboardResponseSchema } from './leaderboard.schema.js';
 import { LeaderboardUser } from './leaderboardUser/LeaderboardUser.js';
