@@ -1,5 +1,5 @@
 import { implFetchUser, type User } from '../../implementation/index.js';
-import Client from '../../index.js';
+import type Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import { Subscription } from '../subscription/Subscription.js';
 import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
