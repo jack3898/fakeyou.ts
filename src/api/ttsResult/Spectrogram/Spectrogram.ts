@@ -1,7 +1,7 @@
 import { createCanvas, type Canvas, type CanvasRenderingContext2D } from 'canvas';
 import fs from 'node:fs';
 import { promisify } from 'node:util';
-import { MelMatrix } from './spectrogram.schema.js';
+import { type MelMatrix } from './spectrogram.schema.js';
 
 const writeFile = promisify(fs.writeFile);
 

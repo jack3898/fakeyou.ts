@@ -1,3 +1,4 @@
+import { constants } from '../../util/index.js';
 import { type ActiveSubscriptionsResponseSchema } from './subscription.schema.js';
 
 /**
@@ -8,9 +9,16 @@ export class Subscription {
 	 * @param data The raw subscription data from the FakeYou API.
 	 */
 	constructor(data: ActiveSubscriptionsResponseSchema) {
+		this.webUrl = `${constants.SITE_URL}/pricing`;
+
 		this.inLoyaltyProgram = data.maybe_loyalty_program;
 		this.activeSubscriptions = new Map(data.active_subscriptions.map((sub) => [sub.namespace, sub.product_slug]));
 	}
+
+	/**
+	 * The URL to the pricing page.
+	 */
+	readonly webUrl: string;
 
 	/**
 	 * The key is the product namespace, and value is the product slug.

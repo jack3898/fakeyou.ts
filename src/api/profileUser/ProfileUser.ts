@@ -1,5 +1,5 @@
 import { type BaseClass } from '../../implementation/index.js';
-import Client from '../../index.js';
+import type Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import { Badge } from '../badge/Badge.js';
 import { Comment } from '../comment/Comment.js';
@@ -30,6 +30,7 @@ export class ProfileUser implements BaseClass {
 	 */
 	constructor(client: Client, data: UserProfileSchema) {
 		this.client = client;
+		this.webUrl = `${constants.SITE_URL}/profile/${data.username}`;
 
 		this.token = data.user_token;
 		this.username = data.username;
@@ -56,6 +57,10 @@ export class ProfileUser implements BaseClass {
 	}
 
 	readonly client: Client;
+	/**
+	 * The URL of the user's profile page.
+	 */
+	readonly webUrl: string;
 
 	readonly token: string;
 	readonly username: string;

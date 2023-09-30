@@ -1,5 +1,5 @@
 import { type BaseClass } from '../../implementation/BaseClass.js';
-import Client from '../../index.js';
+import type Client from '../../index.js';
 import type { TtsModel } from '../ttsModel/TtsModel.js';
 import { type CategorySchema } from './category.schema.js';
 

@@ -1,6 +1,6 @@
 import { implFetchUser } from '../../implementation/User.js';
-import { Client, type User } from '../../index.js';
-import { CommentSchema } from './comment.schema.js';
+import { type Client, type User } from '../../index.js';
+import { type CommentSchema } from './comment.schema.js';
 
 /**
  * A comment on a user profile.

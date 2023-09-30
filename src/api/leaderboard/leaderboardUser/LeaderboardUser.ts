@@ -1,5 +1,6 @@
 import { implFetchUser, type User } from '../../../implementation/index.js';
-import Client from '../../../index.js';
+import type Client from '../../../index.js';
+import { constants } from '../../../util/index.js';
 import { type LeaderboardUserSchema } from './leaderboardUser.schema.js';
 
 /**
@@ -13,6 +14,7 @@ export class LeaderboardUser implements User {
 	 */
 	constructor(client: Client, data: LeaderboardUserSchema) {
 		this.client = client;
+		this.webUrl = `${constants.SITE_URL}/profile/${data.username}`;
 
 		this.creatorUserToken = data.creator_user_token;
 		this.username = data.username;
@@ -24,6 +26,10 @@ export class LeaderboardUser implements User {
 	}
 
 	readonly client: Client;
+	/**
+	 * The URL to the user's profile in the browser.
+	 */
+	readonly webUrl: string;
 
 	readonly creatorUserToken: string;
 	readonly username: string;

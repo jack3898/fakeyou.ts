@@ -1,5 +1,5 @@
 import { implToBase64, implToBuffer, implToDisk, type Audio } from '../../../implementation/index.js';
-import { Client } from '../../../services/index.js';
+import { type Client } from '../../../services/index.js';
 import { constants } from '../../../util/index.js';
 import type { V2vModel } from '../V2vModel.js';
 import { type V2vInferenceStatusDoneSchema } from '../v2vModel.schema.js';

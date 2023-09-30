@@ -6,7 +6,7 @@ import {
 	type Audio,
 	type User
 } from '../../../implementation/index.js';
-import Client from '../../../index.js';
+import type Client from '../../../index.js';
 import { constants } from '../../../util/index.js';
 import { type TtsResult } from '../../ttsResult/TtsResult.js';
 import { type UserTtsSchema } from './userAudioFile.schema.js';
@@ -19,6 +19,7 @@ export class UserAudioFile implements Audio, User {
 	constructor(client: Client, data: UserTtsSchema) {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.public_bucket_wav_audio_path}`;
+		this.webUrl = `${constants.SITE_URL}/tts/result/${data.tts_result_token}`;
 
 		this.ttsResultToken = data.tts_result_token;
 		this.ttsModelToken = data.tts_model_token;
@@ -39,6 +40,10 @@ export class UserAudioFile implements Audio, User {
 
 	readonly client: Client;
 	readonly resourceUrl: string;
+	/**
+	 * The URL to view this audio file in a browser.
+	 */
+	readonly webUrl: string;
 
 	readonly ttsResultToken: string;
 	readonly ttsModelToken: string;

@@ -1,6 +1,6 @@
 {
     "name": "fakeyou.ts",
-    "version": "3.4.0",
+    "version": "3.4.1",
     "description": "FakeYou API made easy, with ESM and TypeScript support!",
     "type": "module",
     "main": "dist/index.js",
@@ -9,7 +9,6 @@
         "build": "tsc",
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts --max-warnings 0",
-        "test": "vitest run",
         "test:unit": "vitest run unit",
         "test:e2e": "cross-env E2E=true vitest run e2e --threads false",
         "test:types": "tsc --noEmit",
@@ -36,28 +35,28 @@
     "dependencies": {
         "canvas": "^2.11.2",
         "chalk": "^5.3.0",
-        "lru-cache": "^10.0.0",
-        "zod": "^3.21.4",
-        "zod-validation-error": "^1.3.1"
+        "lru-cache": "^10.0.1",
+        "zod": "^3.22.2",
+        "zod-validation-error": "^1.5.0"
     },
     "devDependencies": {
-        "@commitlint/cli": "^17.6.6",
-        "@commitlint/config-conventional": "^17.6.6",
-        "@types/node": "^18.16.18",
-        "@typescript-eslint/eslint-plugin": "^6.0.0",
-        "@typescript-eslint/parser": "^6.0.0",
-        "@vitest/ui": "^0.33.0",
+        "@commitlint/cli": "^17.7.2",
+        "@commitlint/config-conventional": "^17.7.0",
+        "@types/node": "^18.18.1",
+        "@typescript-eslint/eslint-plugin": "^6.7.3",
+        "@typescript-eslint/parser": "^6.7.3",
+        "@vitest/ui": "^0.34.6",
         "cross-env": "^7.0.3",
         "dotenv": "^16.3.1",
-        "eslint": "^8.44.0",
-        "eslint-config-prettier": "^8.8.0",
+        "eslint": "^8.50.0",
+        "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.0",
         "husky": "^8.0.3",
-        "prettier": "^3.0.0",
-        "typedoc": "^0.24.8",
-        "typescript": "^5.1.6",
-        "vite": "^4.4.4",
-        "vitest": "^0.33.0"
+        "prettier": "^3.0.3",
+        "typedoc": "^0.25.1",
+        "typescript": "^5.2.2",
+        "vite": "^4.4.9",
+        "vitest": "^0.34.6"
     },
     "engines": {
         "node": ">=18.x.x <=20.x.x"

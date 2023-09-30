@@ -1,5 +1,5 @@
 import { implToBase64, implToBuffer, implToDisk, type Audio } from '../../../implementation/index.js';
-import { Client } from '../../../services/client/Client.js';
+import { type Client } from '../../../services/client/Client.js';
 import { constants } from '../../../util/index.js';
 import { type TtsResult } from '../../ttsResult/TtsResult.js';
 import type { TtsModel } from '../TtsModel.js';
@@ -9,6 +9,7 @@ export class TtsAudioFile implements Audio {
 	constructor(client: Client, data: TtsInferenceStatusDoneSchema) {
 		this.client = client;
 		this.resourceUrl = `${constants.GOOGLE_STORAGE_URL}${data.maybe_public_bucket_wav_audio_path}`;
+		this.webUrl = `${constants.SITE_URL}/tts/result/${data.job_token}`;
 
 		this.token = data.job_token;
 		this.status = data.status;
@@ -26,6 +27,10 @@ export class TtsAudioFile implements Audio {
 
 	readonly client: Client;
 	readonly resourceUrl: string;
+	/**
+	 * The URL to the page of this audio file in the browser.
+	 */
+	readonly webUrl: string;
 
 	readonly token: string;
 	readonly status: string;

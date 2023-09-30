@@ -1,5 +1,5 @@
 import { implFetchUser, type User } from '../../implementation/index.js';
-import Client from '../../index.js';
+import type Client from '../../index.js';
 import { constants, log, prettyParse } from '../../util/index.js';
 import { Subscription } from '../subscription/Subscription.js';
 import { activeSubscriptionsResponseSchema } from '../subscription/subscription.schema.js';
@@ -15,6 +15,7 @@ export class SessionUser implements User {
 	 */
 	constructor(client: Client, data: SessionUserSchema) {
 		this.client = client;
+		this.webUrl = `${constants.SITE_URL}/profile/${data.username}`;
 
 		this.token = data.user_token;
 		this.username = data.username;
@@ -43,6 +44,10 @@ export class SessionUser implements User {
 	}
 
 	readonly client: Client;
+	/**
+	 * The URL to the profile of the currently logged in user's profile.
+	 */
+	readonly webUrl: string;
 
 	readonly token: string;
 	readonly username: string;

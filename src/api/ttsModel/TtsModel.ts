@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { implFetchUser, type User } from '../../implementation/index.js';
-import Client from '../../index.js';
+import type Client from '../../index.js';
 import { constants, log, poll, PollStatus, prettyParse } from '../../util/index.js';
 import type { Category } from '../category/Category.js';
 import { TtsAudioFile } from './ttsAudioFile/TtsAudioFile.js';
@@ -25,6 +25,7 @@ export class TtsModel implements User {
 	 */
 	constructor(client: Client, data: TtsModelSchema) {
 		this.client = client;
+		this.webUrl = `${constants.SITE_URL}/tts/${data.model_token}`;
 
 		this.token = data.model_token;
 		this.ttsModelType = data.tts_model_type;
@@ -45,6 +46,10 @@ export class TtsModel implements User {
 	}
 
 	readonly client: Client;
+	/**
+	 * The URL to the page of this model in the browser.
+	 */
+	readonly webUrl: string;
 
 	readonly token: string;
 	/**
