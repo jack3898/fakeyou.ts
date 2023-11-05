@@ -114,7 +114,7 @@ Nope! As an anonymous user, you can still request TTS, but you will be missing o
 
 ### What versions of Node.js do you support?
 
-Node.js v18 and up are the only versions of Node.js that this package supports. You will know if you have an invalid version, because npm will say `EBADENGINE` upon install.
+Node.JS LTS and up. You will know if you have an invalid version, because npm will say `EBADENGINE` upon install.
 
 This package aims for LTS support, and will deprecate any versions under LTS.
 
