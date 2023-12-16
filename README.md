@@ -6,6 +6,8 @@ A modern, light, 100% type-safe, and easy-to-use unofficial API wrapper for [Fak
 
 ## Installation
 
+**Make sure you install the necessary build tools for Node. Otherwise you will get an error when you try to npm install this package!**
+
 ```sh
 npm install fakeyou.ts
 npm pkg set type=module
