@@ -50,9 +50,9 @@ export const v2vInferenceStatusSchema = z.object({
 	job_token: z.string(),
 	request: z.object({
 		inference_category: z.string(),
-		maybe_model_type: z.string(),
-		maybe_model_token: z.string(),
-		maybe_model_title: z.string(),
+		maybe_model_type: z.string().nullable(),
+		maybe_model_token: z.string().nullable(),
+		maybe_model_title: z.string().nullable(),
 		maybe_raw_inference_text: z.string().nullable()
 	}),
 	status: z.object({
