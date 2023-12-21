@@ -89,7 +89,7 @@ export class Client {
 	 * @returns Whether the logout was successful.
 	 */
 	async logout(): Promise<boolean> {
-		const response = await this.rest.send(`${constants.API_URL}/logout`, { method: 'POST' });
+		const response = await this.rest.send(`${constants.API_URL}/v1/logout`, { method: 'POST' });
 		const { success } = prettyParse(loginSchema, await response.json());
 
 		this.rest.cookie = undefined;
