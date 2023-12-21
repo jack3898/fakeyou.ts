@@ -60,7 +60,7 @@ export class Client {
 		log.info('Logging in...');
 
 		const cookie = await this.cache.wrap('login', async () => {
-			const response = await this.rest.send(`${constants.API_URL}/login`, {
+			const response = await this.rest.send(`${constants.API_URL}/v1/login`, {
 				method: 'POST',
 				body: JSON.stringify({
 					username_or_email: credentials.username,
@@ -89,7 +89,7 @@ export class Client {
 	 * @returns Whether the logout was successful.
 	 */
 	async logout(): Promise<boolean> {
-		const response = await this.rest.send(`${constants.API_URL}/logout`, { method: 'POST' });
+		const response = await this.rest.send(`${constants.API_URL}/v1/logout`, { method: 'POST' });
 		const { success } = prettyParse(loginSchema, await response.json());
 
 		this.rest.cookie = undefined;
