@@ -60,7 +60,7 @@ export class Client {
 		log.info('Logging in...');
 
 		const cookie = await this.cache.wrap('login', async () => {
-			const response = await this.rest.send(`${constants.API_URL}/login`, {
+			const response = await this.rest.send(`${constants.API_URL}/v1/login`, {
 				method: 'POST',
 				body: JSON.stringify({
 					username_or_email: credentials.username,
