@@ -5,6 +5,8 @@
 		"source.fixAll.eslint": "explicit"
 	},
 
+	"typescript.tsserver.experimental.enableProjectDiagnostics": true,
+
 	"files.eol": "\n",
 
 	"prettier.tabWidth": 4,

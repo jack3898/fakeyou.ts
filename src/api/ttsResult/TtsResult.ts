@@ -44,39 +44,39 @@ export class TtsResult implements Audio {
 		this.updatedAt = data.updated_at;
 	}
 
-	client: Client;
-	resourceUrl: string;
+	readonly client: Client;
+	readonly resourceUrl: string;
 	/**
 	 * Raw spectrogram data, it is not an image.
 	 */
-	spectrogramUrl: string;
+	readonly spectrogramUrl: string;
 	/**
 	 * The URL to the page of this result in the browser.
 	 */
-	webUrl: string;
+	readonly webUrl: string;
 
-	ttsResultToken: string;
-	rawInferenceText: string;
-	ttsModelToken: string;
-	ttsModelTitle: string;
-	maybePretrainedVocoderUsed: string | null;
-	maybeCreatorUserToken: string | null;
-	maybeCreatorUsername: string | null;
-	maybeCreatorDisplayName: string | null;
-	maybeCreatorGravatarHash: string | null;
-	maybeModelCreatorUserToken: string | null;
-	maybeModelCreatorUsername: string | null;
-	maybeModelCreatorDisplayName: string | null;
-	maybeModelCreatorGravatarHash: string | null;
-	publicBucketWavAudioPath: string;
-	publicBucketSpectrogramPath: string;
-	creatorSetVisibility: string;
-	generatedByWorker: string;
-	isDebugRequest: boolean;
-	fileSizeBytes: number;
-	durationMillis: number;
-	createdAt: Date;
-	updatedAt: Date;
+	readonly ttsResultToken: string;
+	readonly rawInferenceText: string;
+	readonly ttsModelToken: string;
+	readonly ttsModelTitle: string;
+	readonly maybePretrainedVocoderUsed: string | null;
+	readonly maybeCreatorUserToken: string | null;
+	readonly maybeCreatorUsername: string | null;
+	readonly maybeCreatorDisplayName: string | null;
+	readonly maybeCreatorGravatarHash: string | null;
+	readonly maybeModelCreatorUserToken: string | null;
+	readonly maybeModelCreatorUsername: string | null;
+	readonly maybeModelCreatorDisplayName: string | null;
+	readonly maybeModelCreatorGravatarHash: string | null;
+	readonly publicBucketWavAudioPath: string;
+	readonly publicBucketSpectrogramPath: string;
+	readonly creatorSetVisibility: string;
+	readonly generatedByWorker: string;
+	readonly isDebugRequest: boolean;
+	readonly fileSizeBytes: number;
+	readonly durationMillis: number;
+	readonly createdAt: Date;
+	readonly updatedAt: Date;
 
 	/**
 	 * Fetch the audio file as a buffer.
