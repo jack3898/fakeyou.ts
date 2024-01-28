@@ -10,7 +10,7 @@
         "dev": "tsc --watch",
         "lint": "eslint **/*.ts --max-warnings 0",
         "test:unit": "vitest run unit",
-        "test:e2e": "cross-env E2E=true vitest run e2e --threads false",
+        "test:e2e": "cross-env E2E=true vitest run e2e --no-threads",
         "test:types": "tsc --noEmit",
         "prepare": "husky install",
         "docs": "typedoc"
