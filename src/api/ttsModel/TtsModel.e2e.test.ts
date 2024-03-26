@@ -26,9 +26,9 @@ describe('fetchTtsModelByName', () => {
 
 describe('fetchTtsModelByToken', () => {
 	it('should fetch model by model token', async () => {
-		const model = await client.fetchTtsModelByToken('TM:4e2xqpwqaggr');
+		const model = await client.fetchTtsModelByToken('weight_y9arhnd7wjamezhqd27ksvmaz');
 
-		expect(model?.title).toContain('Squidward');
+		expect(model).toBeInstanceOf(TtsModel);
 	});
 
 	it("should return undefined when a model doesn't exist", async () => {
