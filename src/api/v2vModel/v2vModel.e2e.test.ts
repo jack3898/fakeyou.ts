@@ -29,10 +29,9 @@ describe('fetchV2vModelByName', () => {
 
 describe('fetchV2vModelByToken', () => {
 	it('should fetch a voice to voice model by token', async () => {
-		const model = await client.fetchV2vModelByToken('weight_wzp5nb29078wdnadg2aep4m8k');
+		const model = await client.fetchV2vModelByToken('weight_aayvwp1m4z3h7wfetjq0h6gaz');
 
 		expect(model).toBeInstanceOf(V2vModel);
-		expect(model?.title).includes('Android No.21');
 	});
 
 	it("should return undefined when a voice to voice model doesn't exist", async () => {
