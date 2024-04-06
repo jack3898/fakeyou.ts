@@ -5,6 +5,7 @@ import { log } from './index.js';
 
 /**
  * Zod schema.parse wrapper that throws nicer errors than what zod gives you out of the box.
+ * @deprecated Use `validate` instead. This function will be removed in the next major version as it is less safe.
  */
 export function prettyParse<T extends ZodSchema>(schema: T, value: unknown): z.infer<T> {
 	try {
